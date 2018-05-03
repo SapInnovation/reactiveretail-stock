@@ -15,8 +15,9 @@
 
 **2. Build and run the app using Gradle**
 
+```
 ./gradlew :stock-exposer:bootRun
-
+```
 On dev-box, server will start at <http://localhost:8080> connecting to localhost Mongo DB setup at 27017 port.
 
 ## Exploring the Rest APIs
