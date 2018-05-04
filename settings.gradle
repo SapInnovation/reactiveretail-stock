@@ -1,1 +1,3 @@
-rootProject.name = 'reactiveretail-stock'
+/* Add Subprojects in this list that need to be part of the retail stock */
+
+include 'stock-exposer','stock-extractor','stock-message-generator'
