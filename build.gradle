@@ -21,28 +21,31 @@ apply plugin: 'org.junit.platform.gradle.plugin'
 group = 'com.sapient.retail.service.stock'
 version = '0.0.1-SNAPSHOT'
 
-description = """reactiveretail-stock"""
+description = 'reactiveretail-stock'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
-tasks.withType(JavaCompile) {
-	options.encoding = 'UTF-8'
-}
 
 repositories {
      mavenCentral()
 }
+
+configurations {
+    compile.exclude module: 'spring-boot-starter-tomcat'
+}
+
 dependencies {
     compile('org.springframework.boot:spring-boot-starter-actuator')
     compile('org.springframework.boot:spring-boot-starter-data-mongodb-reactive')
     compile('org.springframework.boot:spring-boot-starter-webflux')
-    compile('org.springframework.boot:spring-boot-starter-websocket')
+    compile('org.springframework.integration:spring-integration-core')
+    compile('org.springframework.integration:spring-integration-java-dsl:1.2.3.RELEASE')
 
     testCompile('org.springframework.boot:spring-boot-starter-test')
     testCompile('io.projectreactor:reactor-test')
-    testCompile("org.junit.jupiter:junit-jupiter-api")
-    testRuntime("org.junit.jupiter:junit-jupiter-engine")
-    testRuntime("org.junit.vintage:junit-vintage-engine:4.12.2")
 
-    //testCompile group: 'de.flapdoodle.embed', name: 'de.flapdoodle.embed.mongo', version:'2.0.3'
+    testCompile('org.junit.jupiter:junit-jupiter-api')
+    testRuntime('org.junit.jupiter:junit-jupiter-engine')
+
+    testRuntime('de.flapdoodle.embed:de.flapdoodle.embed.mongo:2.0.3')
 }

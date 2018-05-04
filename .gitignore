@@ -10,3 +10,5 @@
 
 # Build Files
 bin/
+build/
+out/

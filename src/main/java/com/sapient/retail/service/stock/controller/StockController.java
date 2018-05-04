@@ -41,14 +41,14 @@ public class StockController {
     }
 
     @GetMapping("/stock/{productId}")
-    public Mono<ResponseEntity<ProductStock>> getStockByProductId(@PathVariable(value = "productId") String productId) {
+    public Mono<ResponseEntity<ProductStock>> getStockByProductId(@PathVariable final String productId) {
         return productStockRepository.findById(productId)
                 .map(availableStock -> ResponseEntity.ok(availableStock))
                 .defaultIfEmpty(ResponseEntity.notFound().build());
     }
 
     @PutMapping("/stock/{productId}")
-    public Mono<ResponseEntity<ProductStock>> updateProductStock(@PathVariable(value = "productId") String productId,
+    public Mono<ResponseEntity<ProductStock>> updateProductStock(@PathVariable final String productId,
                                                    @Valid @RequestBody ProductStock productStock) {
         return productStockRepository.findById(productId)
                 .flatMap(existingStock -> {
@@ -61,14 +61,6 @@ public class StockController {
                 .map(updateStock -> new ResponseEntity<>(updateStock, HttpStatus.OK))
                 .defaultIfEmpty(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
-
-
-    // Stock for all products are Sent to the client as Server Sent Events
-    @GetMapping(value = "/stream/stock", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public Flux<ProductStock> streamAllProductStock() {
-        return productStockRepository.findAll();
-    }
-
 
     /*
         Exception Handling
