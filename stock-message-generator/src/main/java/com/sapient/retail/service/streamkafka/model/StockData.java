@@ -1,5 +1,6 @@
 package com.sapient.retail.service.streamkafka.model;
 
+
 // lombok autogenerates getters, setters, toString() and a builder (see https://projectlombok.org/):
 import lombok.Builder;
 import lombok.Getter;
