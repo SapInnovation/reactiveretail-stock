@@ -1,0 +1,64 @@
+buildscript {
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath("org.junit.platform:junit-platform-gradle-plugin:1.0.2")
+    }
+
+    description = 'reactiveretail-MessageGenerator'
+    group = 'com.sapient.retail.service.streamkafka'
+    version = '0.0.1-SNAPSHOT'
+}
+
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'org.junit.platform.gradle.plugin'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+configurations {
+    compile.exclude module: 'spring-boot-starter-tomcat'
+}
+
+plugins {
+    id 'io.franzbecker.gradle-lombok' version '1.8'
+    id 'java'
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-stream-dependencies:Brooklyn.RELEASE"
+    }
+}
+
+dependencies {
+    compile('org.springframework.boot:spring-boot-starter-actuator')
+    compile('org.springframework.boot:spring-boot-starter-data-mongodb-reactive')
+    compile('org.springframework.boot:spring-boot-starter-webflux')
+    compile('org.springframework.integration:spring-integration-core')
+    compile('org.springframework.cloud:spring-cloud-starter-stream-kafka')
+    compile('org.springframework.cloud:spring-cloud-stream')
+    compile('org.apache.kafka:kafka-streams:1.0.1')
+    compile('org.springframework.cloud:spring-cloud-starter-config')
+    compile('org.springframework.integration:spring-integration-java-dsl:1.2.3.RELEASE')
+    compile('org.springframework.cloud:spring-cloud-stream-dependencies')
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+    testCompile('io.projectreactor:reactor-test')
+
+    testCompile('org.junit.jupiter:junit-jupiter-api')
+    testRuntime('org.junit.jupiter:junit-jupiter-engine')
+
+    testRuntime('de.flapdoodle.embed:de.flapdoodle.embed.mongo:2.0.3')
+}
