@@ -5,13 +5,13 @@ import org.springframework.cloud.stream.annotation.Output;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.SubscribableChannel;
 
-public interface StockStreams {
-    String INPUT = "stockinfo-in";
-    String OUTPUT = "stockinfo-out";
+public interface StockDataStreams {
+    String INPUT = "stockdata-in";
+    String OUTPUT = "stockdata-out";
 
     @Input(INPUT)
-    SubscribableChannel inboundStockInfo();
+    SubscribableChannel inboundStockData();
 
     @Output(OUTPUT)
-    MessageChannel outboundStockInfo();
+    MessageChannel outboundStockData();
 }

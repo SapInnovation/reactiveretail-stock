@@ -3,7 +3,7 @@ spring:
     stream:
       kafka:
         binder:
-          brokers: localhost:9092
+          brokers: del2vmplcireative01:32777
       bindings:
         stockdata-in:
           destination: stockdata
