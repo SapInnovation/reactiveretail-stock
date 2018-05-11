@@ -1,0 +1,19 @@
+subprojects {
+
+    ext {
+        teamName = 'Retail Reactive'
+        springBootVersion = '2.0.1.RELEASE'
+    }
+
+
+
+    description = "reactiveretail-stock"
+    group = 'com.sapient.retail.service.stock'
+    version = '0.0.1-SNAPSHOT'
+
+    repositories {
+        mavenCentral()
+    }
+
+
+}

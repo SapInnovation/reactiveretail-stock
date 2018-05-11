@@ -1,0 +1,13 @@
+spring:
+  cloud:
+    stream:
+      kafka:
+        binder:
+          brokers: [comma separated kafka broker host:port]
+      bindings:
+        stockdata-in:
+          destination: stockdata
+          contentType: application/json
+        stockdata-out:
+          destination: stockdata
+          contentType: application/json

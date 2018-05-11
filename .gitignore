@@ -1,0 +1,14 @@
+# Gradle Files
+.gradle/
+
+# IDE Files
+.idea/
+.settings/
+.classpath
+.project
+*.iml
+
+# Build Files
+bin/
+build/
+out/
