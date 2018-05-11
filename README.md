@@ -35,3 +35,21 @@ The application defines following REST APIs
 
 4. GET /stream/stock - Stream stock updates to a browser as Server-Sent Events
 ```
+
+
+## Running Stock Message Generator
+
+```
+1. Maven Clean and Build
+mvn spring-boot:run
+
+2. Setup the Kafka Connection in Application.yaml
+
+3. To Post Messages to the Kafka Stream:
+http://localhost:8080/stockdata?message=varun
+
+The endpoint can take a JSON object as part of request
+
+4. PostMan script to Dynamically Change the Value and Post -- TBD
+
+```
