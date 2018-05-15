@@ -3,7 +3,7 @@ spring:
     stream:
       kafka:
         binder:
-          brokers: del2vmplcireative01.sapient.com:32782,del2vmplcireative01.sapient.com:32783
+          brokers: <host1:port1,host2:port2>
       bindings:
         stockdata-in:
           destination: stockdata
@@ -13,4 +13,4 @@ spring:
           contentType: application/json
   data: 
     mongodb: 
-      uri: mongodb://del2vmplcireative03.sapient.com:27017/stock
+      uri: mongodb://<host1>:<port1>/stock
