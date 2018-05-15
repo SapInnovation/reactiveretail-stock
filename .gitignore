@@ -7,8 +7,11 @@
 .classpath
 .project
 *.iml
+.DS_Store/
 
 # Build Files
 bin/
 build/
 out/
+*/bin/
+*/target/
