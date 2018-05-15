@@ -6,7 +6,7 @@ import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MimeTypeUtils;
 
-import com.sapient.retail.service.streamkafka.model.Stock;
+import com.sapient.retail.service.streamkafka.model.ProductStockInfo;
 import com.sapient.retail.service.streamkafka.stream.StockDataStreams;
 
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +20,7 @@ public class StockDataService {
         this.stockdatastreams = stockdatastreams;
     }
 
-    public void sendStockData(final Stock stockdata) {
+    public void sendStockData(final ProductStockInfo stockdata) {
         log.info("Sending stock data {}", stockdata);
 
         MessageChannel messageChannel = stockdatastreams.outboundStockData();
