@@ -9,6 +9,8 @@ data/
 .project
 .settings
 .springBeans
+.DS_Store
+*/.DS_Store
 
 ### IntelliJ IDEA ###
 .idea
