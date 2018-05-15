@@ -4,7 +4,7 @@ import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
-import com.sapient.retail.service.streamkafka.model.Stock;
+import com.sapient.retail.service.streamkafka.model.ProductStockInfo;
 import com.sapient.retail.service.streamkafka.repository.StockRepository;
 import com.sapient.retail.service.streamkafka.stream.StockDataStreams;
 
@@ -20,9 +20,14 @@ public class StockDataListener {
         this.stockRepository = stockRepository;
     }
 
+	/**
+	 * This method listens to INPUT Kafka topic and persists data in Mongo repository 
+	 * in a block mode and doesn't wait for any mono subscription.
+	 * @param stockInfo ProductStockInfo
+	 */
 	@StreamListener(StockDataStreams.INPUT)
-    public void handleGreetings(@Payload Stock stockInfo) {
-    	Stock stockUpdatedInfo = stockRepository.save(stockInfo).block();
+    public void handleGreetings(@Payload ProductStockInfo stockInfo) {
+    	ProductStockInfo stockUpdatedInfo = stockRepository.save(stockInfo).block();
     	log.info("Received stock message: {}", stockUpdatedInfo);
     }
 }
