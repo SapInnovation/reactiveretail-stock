@@ -8,7 +8,7 @@ import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MimeTypeUtils;
 
-import com.sapient.retail.model.Stock;
+import com.sapient.retail.stock.common.model.Stock;
 import com.sapient.retail.service.streamkafka.stream.StockDataStreams;
 
 @Service

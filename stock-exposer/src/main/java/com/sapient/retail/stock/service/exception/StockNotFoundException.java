@@ -1,4 +1,4 @@
-package com.sapient.retail.service.stock.exception;
+package com.sapient.retail.stock.service.exception;
 
 /**
  * @author ragarora

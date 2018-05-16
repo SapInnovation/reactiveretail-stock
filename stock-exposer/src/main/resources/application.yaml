@@ -2,3 +2,10 @@ spring:
   data: 
     mongodb: 
       uri: mongodb://localhost:27017/stock
+logging:
+  level:
+    com:
+      sapient:
+        retail:
+          stock:
+            service: debug

@@ -1,4 +1,4 @@
-package com.sapient.retail.service.stock;
+package com.sapient.retail.stock.service;
 
 import com.sapient.retail.service.stock.db.beans.ProductStock;
 import com.sapient.retail.service.stock.db.repository.ProductStockRepository;
@@ -16,9 +16,9 @@ import java.util.Collections;
 /**
  * @author ragarora
  */
-@SpringJUnitConfig(StockExposerServiceApp.class)
+@SpringJUnitConfig(Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class StockExposerServiceAppTests {
+public class ApplicationTests {
 
     @Autowired
     private WebTestClient webTestClient;

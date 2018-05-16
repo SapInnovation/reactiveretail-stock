@@ -6,8 +6,8 @@ import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
-import com.sapient.retail.model.Stock;
-import com.sapient.retail.model.StockInfo;
+import com.sapient.retail.stock.common.model.Stock;
+import com.sapient.retail.stock.common.model.StockInfo;
 import com.sapient.retail.service.streamkafka.repository.StockRepository;
 import com.sapient.retail.service.streamkafka.stream.StockDataStreams;
 

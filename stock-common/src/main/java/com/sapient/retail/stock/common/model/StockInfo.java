@@ -1,4 +1,4 @@
-package com.sapient.retail.model;
+package com.sapient.retail.stock.common.model;
 
 
 import javax.validation.constraints.NotNull;

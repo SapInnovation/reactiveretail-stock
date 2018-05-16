@@ -1,4 +1,4 @@
-package com.sapient.retail.service.stock;
+package com.sapient.retail.stock.service;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -8,10 +8,10 @@ import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRep
  * @author ragarora
  */
 @SpringBootApplication
-@EnableReactiveMongoRepositories
-public class StockExposerServiceApp {
+@EnableReactiveMongoRepositories (basePackages = {"com.sapient.retail.stock.common.repository"})
+public class Application {
 
 	public static void main(String[] args) {
-		SpringApplication.run(StockExposerServiceApp.class, args);
+		SpringApplication.run(Application.class, args);
 	}
 }

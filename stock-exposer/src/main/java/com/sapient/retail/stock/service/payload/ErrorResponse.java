@@ -1,4 +1,4 @@
-package com.sapient.retail.service.stock.payload;
+package com.sapient.retail.stock.service.payload;
 
 /**
  * @author ragarora
