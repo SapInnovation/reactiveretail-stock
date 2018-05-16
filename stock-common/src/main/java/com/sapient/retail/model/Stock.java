@@ -14,7 +14,7 @@ import java.util.List;
  * @author ragarora
  */
 @Document(collection="stock")
-public class ProductStock
+public class Stock
 {
 	@NotNull
 	@Size(min = 10, message = "UPC id cannot be so low")
@@ -22,12 +22,24 @@ public class ProductStock
 	private Long upc;
 
 	@NotNull
+	@Size(min = 3, max = 20, message = "Partnumber should be between 3 and 20 characters")
+	private String partNumber;
+
+	@NotNull
 	@Size(min = 3, max = 20, message = "Product id should be between 3 and 20 characters")
 	private String productId;
 
 	@NotNull
 	@Field("stock")
-	private List<SkuStock> stock;
+	private List<StockInfo> stock;
+
+	public String getPartNumber() {
+		return partNumber;
+	}
+
+	public void setPartNumber(String partNumber) {
+		this.partNumber = partNumber;
+	}
 
 	public Long getUpc() {
 		return upc;
@@ -45,31 +57,34 @@ public class ProductStock
 		this.productId = productId;
 	}
 
-	public List<SkuStock> getStock() {
+	public List<StockInfo> getStock() {
 		return stock;
 	}
 
-	public void setStock(List<SkuStock> stock) {
+	public void setStock(List<StockInfo> stock) {
 		this.stock = stock;
 	}
 
 	/**
 	 * Empty default constructor
 	 */
-	public ProductStock() {
+	public Stock() {
 		super();
 	}
 
 	/**
 	 * @param upc
+	 * @param partNumber
 	 * @param productId
 	 * @param stock
 	 */
-	public ProductStock(@Size(min = 10, message = "UPC id cannot be so low") Long upc,
-			@Size(min = 3, max = 20, message = "Product id should be between 3 and 20 characters") String productId,
-			List<SkuStock> stock) {
+	public Stock(@NotNull @Size(min = 10, message = "UPC id cannot be so low") Long upc,
+			@NotNull @Size(min = 3, max = 20, message = "Partnumber should be between 3 and 20 characters") String partNumber,
+			@NotNull @Size(min = 3, max = 20, message = "Product id should be between 3 and 20 characters") String productId,
+			@NotNull List<StockInfo> stock) {
 		super();
 		this.upc = upc;
+		this.partNumber = partNumber;
 		this.productId = productId;
 		this.stock = stock;
 	}

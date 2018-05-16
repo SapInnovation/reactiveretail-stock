@@ -8,7 +8,7 @@ import javax.validation.constraints.Size;
  * Bean with fields mapped to MongoDB collection and its fields as mentioned.
  * @author ragarora
  */
-public class SkuStock
+public class StockInfo
 {
 	@NotNull
 	@Size(min = 10, message = "Location id cannot be so low")
@@ -49,7 +49,7 @@ public class SkuStock
 	/**
 	 * Empty default constructor
 	 */
-	public SkuStock() {
+	public StockInfo() {
 		super();
 	}
 
@@ -58,7 +58,7 @@ public class SkuStock
 	 * @param locationName
 	 * @param availableValue
 	 */
-	public SkuStock(@Size(min = 10, message = "Location id cannot be so low") Long locationId,
+	public StockInfo(@Size(min = 10, message = "Location id cannot be so low") Long locationId,
 			@Size(min = 3, max = 256, message = "Location name should be between 3 and 256 characters") String locationName,
 			@Size(min = 0, message = "Stock value cannot be less than zero") Long availableValue) {
 		super();

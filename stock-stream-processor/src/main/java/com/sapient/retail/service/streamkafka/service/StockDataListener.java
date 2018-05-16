@@ -6,8 +6,8 @@ import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
-import com.sapient.retail.model.ProductStock;
-import com.sapient.retail.model.SkuStock;
+import com.sapient.retail.model.Stock;
+import com.sapient.retail.model.StockInfo;
 import com.sapient.retail.service.streamkafka.repository.StockRepository;
 import com.sapient.retail.service.streamkafka.stream.StockDataStreams;
 
@@ -24,30 +24,30 @@ public class StockDataListener {
 	/**
 	 * This method listens to INPUT Kafka topic and persists data in Mongo repository 
 	 * in a blocking mode and doesn't wait for any mono subscriptions.
-	 * @param newProductStockDetails ProductStock
+	 * @param newStockDetails Stock
 	 */
 	@StreamListener(StockDataStreams.INPUT)
-    public void handleStockDataFromTopic(@Payload ProductStock newProductStockDetails) {
+    public void handleStockDataFromTopic(@Payload Stock newStockDetails) {
 
-		ProductStock existingProductStockDetailsUpdated = null;
-		boolean stockExists = stockRepository.existsById(newProductStockDetails.getUpc()).block();
+		Stock existingStockDetailsUpdated = null;
+		boolean stockExists = stockRepository.existsById(newStockDetails.getUpc()).block();
 
 		if (stockExists) {
-			ProductStock existingProductStockDetails = stockRepository.findById(newProductStockDetails.getUpc()).block();
-			log.debug("New Prod Stock Details: {}", newProductStockDetails);
+			Stock existingStockDetails = stockRepository.findById(newStockDetails.getUpc()).block();
+			log.debug("New Prod Stock Details: {}", newStockDetails);
 
-			for (SkuStock newSkuStock: newProductStockDetails.getStock()) {
-				existingProductStockDetails.getStock().removeIf(
+			for (StockInfo newStockInfo: newStockDetails.getStock()) {
+				existingStockDetails.getStock().removeIf(
 						skuStock -> 
-							skuStock.getLocationId().equals(newSkuStock.getLocationId()));
+							skuStock.getLocationId().equals(newStockInfo.getLocationId()));
 			}
-			log.debug("Existing Prod Stock Details after filter: {}", existingProductStockDetails);
-			existingProductStockDetails.getStock().addAll(newProductStockDetails.getStock());
-			log.debug("Existing Prod Stock Details after merge: {}", existingProductStockDetails);
-			existingProductStockDetailsUpdated = stockRepository.save(existingProductStockDetails).block();
+			log.debug("Existing Prod Stock Details after filter: {}", existingStockDetails);
+			existingStockDetails.getStock().addAll(newStockDetails.getStock());
+			log.debug("Existing Prod Stock Details after merge: {}", existingStockDetails);
+			existingStockDetailsUpdated = stockRepository.save(existingStockDetails).block();
 		} else {
-			existingProductStockDetailsUpdated  = stockRepository.save(newProductStockDetails).block();
+			existingStockDetailsUpdated  = stockRepository.save(newStockDetails).block();
 		}
-    	log.info("Received stock message: {}", existingProductStockDetailsUpdated);
+    	log.info("Received stock message: {}", existingStockDetailsUpdated);
     }
 }

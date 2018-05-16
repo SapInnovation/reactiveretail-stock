@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sapient.retail.model.ProductStock;
+import com.sapient.retail.model.Stock;
 import com.sapient.retail.service.streamkafka.service.StockDataService;
 
 @RestController
@@ -23,8 +23,8 @@ public class StockDataController {
     @RequestMapping(value="/stockdata", method = RequestMethod.POST, 
     		consumes = "application/json; charset=utf-8")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public void StockData(@RequestBody ProductStock productStock) {
-        /*ProductStock stockdata = ProductStock.builder()
+    public void StockData(@RequestBody Stock productStock) {
+        /*Stock stockdata = Stock.builder()
         		.productId(stockInfo.getProductId())
         		.stock(stockInfo.getStock())
         		.upc(stockInfo.getUpc())
