@@ -1,5 +1,7 @@
 package com.sapient.retail.service.streamkafka.model;
 
+import java.util.List;
+
 import javax.validation.constraints.Size;
 
 import org.springframework.data.annotation.Id;
@@ -25,7 +27,7 @@ public class ProductStockInfo
 	@NotNull
 	@Size(min = 10, message = "UPC id cannot be so low")
 	@Id
-	private long upc;
+	private Long upc;
 
 	@NotNull
 	@Size(min = 3, max = 20, message = "Product id should be between 3 and 20 characters")
@@ -33,25 +35,27 @@ public class ProductStockInfo
 
 	@NotNull
 	@Field("stock")
-	private StockInfo[] stock;
-
-	/**
-	 * @param upc
-	 * @param productId
-	 * @param stock
-	 */
-	public ProductStockInfo(long upc, String productId, StockInfo[] stock) {
-		super();
-		this.upc = upc;
-		this.productId = productId;
-		this.stock = stock;
-	}
+	private List<StockInfo> stock;
 
 	/**
 	 * Empty default constructor
 	 */
 	public ProductStockInfo() {
 		super();
+	}
+
+	/**
+	 * @param upc
+	 * @param productId
+	 * @param stock
+	 */
+	public ProductStockInfo(@Size(min = 10, message = "UPC id cannot be so low") Long upc,
+			@Size(min = 3, max = 20, message = "Product id should be between 3 and 20 characters") String productId,
+			List<StockInfo> stock) {
+		super();
+		this.upc = upc;
+		this.productId = productId;
+		this.stock = stock;
 	}
 	
 }

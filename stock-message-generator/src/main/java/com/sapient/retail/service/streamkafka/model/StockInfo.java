@@ -19,7 +19,7 @@ public class StockInfo
 {
 	@NotNull
 	@Size(min = 10, message = "Location id cannot be so low")
-	private long locationId;
+	private Long locationId;
 
 	@NotNull
 	@Size(min = 3, max=256, message = "Location name should be between 3 and 256 characters")
@@ -27,24 +27,29 @@ public class StockInfo
 
 	@NotNull
 	@Size(min = 0, message = "Stock value cannot be less than zero")
-	private int availableValue;
+	private Long availableValue;
+
+	
+	/**
+	 * Empty default constructor
+	 */
+	public StockInfo() {
+		super();
+	}
+
 
 	/**
 	 * @param locationId
 	 * @param locationName
 	 * @param availableValue
 	 */
-	public StockInfo(long locationId, String locationName, int availableValue) {
+	public StockInfo(@Size(min = 10, message = "Location id cannot be so low") Long locationId,
+			@Size(min = 3, max = 256, message = "Location name should be between 3 and 256 characters") String locationName,
+			@Size(min = 0, message = "Stock value cannot be less than zero") Long availableValue) {
 		super();
 		this.locationId = locationId;
 		this.locationName = locationName;
 		this.availableValue = availableValue;
-	}
-	/**
-	 * Empty default constructor
-	 */
-	public StockInfo() {
-		super();
 	}
 
 }

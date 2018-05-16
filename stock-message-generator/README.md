@@ -1,8 +1,8 @@
 # Stock Message Processor application 
- # Exposes Rest API endpoints
- # Posts message in Kafka topic
- # Listens to messages from Kafka topic
- # Persists data in Mongo DB
+1. Exposes Rest API endpoints
+2. Posts message in Kafka topic
+3. Listens to messages from Kafka topic
+4. Persists data in Mongo DB
 
 ## Requirements
 

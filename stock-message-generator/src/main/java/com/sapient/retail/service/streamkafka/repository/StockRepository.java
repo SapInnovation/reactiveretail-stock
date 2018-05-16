@@ -7,6 +7,6 @@ import com.sapient.retail.service.streamkafka.model.ProductStockInfo;
  * ProductStockInfo Repository for Reactive MongoDB interactions
  * @author ragarora
  */
-public interface StockRepository extends ReactiveMongoRepository<ProductStockInfo, Integer> {
+public interface StockRepository extends ReactiveMongoRepository<ProductStockInfo, Long> {
 	
 }
