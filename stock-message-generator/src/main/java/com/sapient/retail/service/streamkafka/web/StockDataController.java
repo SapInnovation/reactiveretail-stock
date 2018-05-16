@@ -24,13 +24,13 @@ public class StockDataController {
     		consumes = "application/json; charset=utf-8")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public void StockData(@RequestBody ProductStockInfo stockInfo) {
-        ProductStockInfo stockdata = ProductStockInfo.builder()
+        /*ProductStockInfo stockdata = ProductStockInfo.builder()
         		.productId(stockInfo.getProductId())
         		.stock(stockInfo.getStock())
         		.upc(stockInfo.getUpc())
         		.stock(stockInfo.getStock())
-            .build();
+            .build();*/
 
-        stockdataservice.sendStockData(stockdata);
+        stockdataservice.sendStockData(stockInfo);
     }
 }
