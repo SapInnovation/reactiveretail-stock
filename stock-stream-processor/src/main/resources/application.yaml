@@ -3,7 +3,7 @@ spring:
     stream:
       kafka:
         binder:
-          brokers: <host1:port1,host2:port2>
+          brokers: <host1>:<port1>,<host2>:<port2>
       bindings:
         stockdata-in:
           destination: stockdata
