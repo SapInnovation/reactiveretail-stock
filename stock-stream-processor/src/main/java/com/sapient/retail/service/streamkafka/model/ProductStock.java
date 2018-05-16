@@ -10,19 +10,12 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 import com.esotericsoftware.kryo.NotNull;
 
-// lombok autogenerates getters, setters, toString() and a builder (see https://projectlombok.org/):
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-
 /**
  * Bean with fields mapped to MongoDB collection and its fields as mentioned.
  * @author ragarora
  */
-@Getter @Setter @ToString @Builder
 @Document(collection="stock")
-public class ProductStockInfo
+public class ProductStock
 {
 	@NotNull
 	@Size(min = 10, message = "UPC id cannot be so low")
@@ -35,12 +28,36 @@ public class ProductStockInfo
 
 	@NotNull
 	@Field("stock")
-	private List<StockInfo> stock;
+	private List<SkuStock> stock;
+
+	public Long getUpc() {
+		return upc;
+	}
+
+	public void setUpc(Long upc) {
+		this.upc = upc;
+	}
+
+	public String getProductId() {
+		return productId;
+	}
+
+	public void setProductId(String productId) {
+		this.productId = productId;
+	}
+
+	public List<SkuStock> getStock() {
+		return stock;
+	}
+
+	public void setStock(List<SkuStock> stock) {
+		this.stock = stock;
+	}
 
 	/**
 	 * Empty default constructor
 	 */
-	public ProductStockInfo() {
+	public ProductStock() {
 		super();
 	}
 
@@ -49,13 +66,13 @@ public class ProductStockInfo
 	 * @param productId
 	 * @param stock
 	 */
-	public ProductStockInfo(@Size(min = 10, message = "UPC id cannot be so low") Long upc,
+	public ProductStock(@Size(min = 10, message = "UPC id cannot be so low") Long upc,
 			@Size(min = 3, max = 20, message = "Product id should be between 3 and 20 characters") String productId,
-			List<StockInfo> stock) {
+			List<SkuStock> stock) {
 		super();
 		this.upc = upc;
 		this.productId = productId;
 		this.stock = stock;
 	}
-	
+
 }
