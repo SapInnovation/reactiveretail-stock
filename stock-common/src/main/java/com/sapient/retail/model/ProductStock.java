@@ -1,14 +1,13 @@
-package com.sapient.retail.service.streamkafka.model;
+package com.sapient.retail.model;
 
-import java.util.List;
-
-import javax.validation.constraints.Size;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import com.esotericsoftware.kryo.NotNull;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.util.List;
 
 /**
  * Bean with fields mapped to MongoDB collection and its fields as mentioned.

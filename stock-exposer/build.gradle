@@ -10,8 +10,6 @@ buildscript {
     }
 
     description = 'reactiveretail-stock'
-    group = 'com.sapient.retail.service.stock'
-    version = '0.0.1-SNAPSHOT'
 }
 
 apply plugin: 'java'

@@ -1,8 +1,8 @@
-package com.sapient.retail.service.streamkafka.model;
+package com.sapient.retail.model;
 
+
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
-import com.esotericsoftware.kryo.NotNull;
 
 /**
  * Bean with fields mapped to MongoDB collection and its fields as mentioned.

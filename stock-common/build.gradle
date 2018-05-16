@@ -1,0 +1,17 @@
+plugins {
+    id 'java'
+}
+
+description = 'stock-common'
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive:2.0.1.RELEASE'
+    compile group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
+
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
