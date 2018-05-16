@@ -26,6 +26,5 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version:'2.0.1.RELEASE'
     compile group: 'org.springframework.cloud', name: 'spring-cloud-stream', version:'2.0.0.RELEASE'
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-stream-kafka', version:'2.0.0.RELEASE'
-    compile group: 'org.projectlombok', name: 'lombok', version:'1.16.20'
     compile group: 'org.springframework.boot', name: 'spring-boot-devtools', version:'2.0.1.RELEASE'
 }
