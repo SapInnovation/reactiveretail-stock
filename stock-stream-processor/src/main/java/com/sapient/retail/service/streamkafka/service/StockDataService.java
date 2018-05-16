@@ -1,6 +1,5 @@
 package com.sapient.retail.service.streamkafka.service;
 
-import com.sapient.retail.model.ProductStock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.MessageChannel;
@@ -9,7 +8,7 @@ import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MimeTypeUtils;
 
-
+import com.sapient.retail.model.ProductStock;
 import com.sapient.retail.service.streamkafka.stream.StockDataStreams;
 
 @Service
