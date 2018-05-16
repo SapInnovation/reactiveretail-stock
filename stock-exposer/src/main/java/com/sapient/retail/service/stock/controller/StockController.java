@@ -68,7 +68,7 @@ public class StockController {
 
     @ExceptionHandler(DuplicateKeyException.class)
     public ResponseEntity handleDuplicateKeyException(DuplicateKeyException ex) {
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponse("A ProductStock with the same stock-id already exists"));
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponse("A Stock with the same stock-id already exists"));
     }
 
     @ExceptionHandler(StockNotFoundException.class)

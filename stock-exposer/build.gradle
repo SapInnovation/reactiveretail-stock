@@ -38,6 +38,8 @@ dependencies {
     compile('org.springframework.integration:spring-integration-core')
     compile('org.springframework.integration:spring-integration-java-dsl:1.2.3.RELEASE')
 
+	compile project(':stock-common')
+
     testCompile('org.springframework.boot:spring-boot-starter-test')
     testCompile('io.projectreactor:reactor-test')
 
