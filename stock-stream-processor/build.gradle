@@ -12,13 +12,12 @@ tasks.withType(JavaCompile) {
 	options.encoding = 'UTF-8'
 }
 
-
-
 repositories {
         
      maven { url "http://repo.spring.io/libs-milestone" }
      maven { url "http://repo.maven.apache.org/maven2" }
 }
+
 dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version:'2.0.1.RELEASE'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter', version:'2.0.1.RELEASE'
