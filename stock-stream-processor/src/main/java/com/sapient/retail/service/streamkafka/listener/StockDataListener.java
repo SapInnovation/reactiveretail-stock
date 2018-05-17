@@ -6,6 +6,7 @@ import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
+import com.sapient.retail.service.streamkafka.service.StockDataService;
 import com.sapient.retail.service.streamkafka.stream.StockDataStreams;
 import com.sapient.retail.stock.common.model.Stock;
 import com.sapient.retail.stock.common.repository.StockRepository;
@@ -14,11 +15,18 @@ import com.sapient.retail.stock.common.repository.StockRepository;
 public class StockDataListener {
 	
 	private final StockRepository stockRepository;
+	private final StockDataService stockDataService;
 	private Logger log = LoggerFactory.getLogger(this.getClass());
 	
-	public StockDataListener(final StockRepository stockRepository) {
-        this.stockRepository = stockRepository;
-    }
+	/**
+	 * @param stockRepository
+	 * @param stockDataService
+	 */
+	public StockDataListener(StockRepository stockRepository, StockDataService stockDataService) {
+		super();
+		this.stockRepository = stockRepository;
+		this.stockDataService = stockDataService;
+	}
 
 	/**
 	 * This method listens to INPUT Kafka topic and persists data in Mongo repository 
@@ -35,8 +43,8 @@ public class StockDataListener {
 			Stock existingStockDetails = stockRepository.findById(newStockDetails.getUpc()).block();
 			log.debug("New Prod Stock Details: {}", newStockDetails);
 
-			evaluateAvailableStock(newStockDetails, existingStockDetails);
-			//existingStockDetails.getStock().addAll(newStockDetails.getStock());
+			stockDataService.evaluateAvailableStock(newStockDetails, existingStockDetails);
+
 			log.debug("Existing Prod Stock Details after merge: {}", existingStockDetails);
 			existingStockDetailsUpdated = stockRepository.save(existingStockDetails).block();
 		} else {
@@ -45,21 +53,4 @@ public class StockDataListener {
     	log.info("Received stock message: {}", existingStockDetailsUpdated);
     }
 
-	/**
-	 * 
-	 */
-	public void evaluateAvailableStock(Stock newStockDetails, Stock existingStockDetails) {
-		newStockDetails.getStock().forEach((locationId, skuStock) -> {
-			if ("demandInfoProvider".equals(newStockDetails.getInformationSource())) {
-				Long existingSupplyForSku = existingStockDetails.getStock().get(locationId).getSupply();
-				Long newAvailableSkuStock = existingSupplyForSku - skuStock.getDemand();
-				skuStock.setAvailableStock(newAvailableSkuStock<0 ? 0 : newAvailableSkuStock);
-			} else if ("supplyInfoProvider".equals(newStockDetails.getInformationSource())) {
-				skuStock.setDemand(new Long(0));
-				skuStock.setAvailableStock(skuStock.getSupply());
-			}
-		});
-		log.debug("Existing Prod Stock Details after filter: {}", existingStockDetails);
-		existingStockDetails.getStock().putAll(newStockDetails.getStock());
-	}
 }
