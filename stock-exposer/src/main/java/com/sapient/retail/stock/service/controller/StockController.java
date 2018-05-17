@@ -11,6 +11,7 @@ import com.sapient.retail.stock.common.model.Stock;
 import com.sapient.retail.stock.service.service.StockService;
 
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @RestController
 public class StockController {
@@ -32,13 +33,19 @@ public class StockController {
 
     @GetMapping(value = "/stock/upc/{upc}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public Flux<Stock> skuStock(@PathVariable final Long upc) {
+    public Mono<Stock> skuStock(@PathVariable final Long upc) {
         return stockService.skuStock(upc);
     }
     
     @GetMapping(value = "/stock/upc/{upc}/{locationId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public Flux<Stock> skuStockForLocation(@PathVariable final Long upc, @PathVariable final Long locationId) {
+    public Mono<Stock> skuStockForLocation(@PathVariable final Long upc, @PathVariable final Long locationId) {
         return stockService.skuStockForLocation(upc, locationId);
+    }
+    
+    @GetMapping(value = "/stock/product/{productId}/{locationId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public Flux<Stock> stockForLocation(@PathVariable final String productId, @PathVariable final Long locationId) {
+        return stockService.productStockForLocation(productId, locationId);
     }
 }

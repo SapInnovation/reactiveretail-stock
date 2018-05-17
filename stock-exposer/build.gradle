@@ -45,5 +45,5 @@ dependencies {
     testCompile('org.junit.jupiter:junit-jupiter-api')
     testRuntime('org.junit.jupiter:junit-jupiter-engine')
 
-    testRuntime('de.flapdoodle.embed:de.flapdoodle.embed.mongo:2.0.3')
+    //testRuntime('de.flapdoodle.embed:de.flapdoodle.embed.mongo:2.0.3')
 }

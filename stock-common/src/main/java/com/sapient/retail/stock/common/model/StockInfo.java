@@ -4,31 +4,32 @@ package com.sapient.retail.stock.common.model;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.springframework.lang.Nullable;
+
 /**
  * Bean with fields mapped to MongoDB collection and its fields as mentioned.
  * @author ragarora
  */
 public class StockInfo
 {
-	@NotNull
-	@Size(min = 10, message = "Location id cannot be so low")
-	private Long locationId;
 
 	@NotNull
 	@Size(min = 3, max=256, message = "Location name should be between 3 and 256 characters")
 	private String locationName;
 
-	@NotNull
-	@Size(min = 0, message = "Stock value cannot be less than zero")
-	private Long availableValue;
+	@Nullable
+	@Size(min = 0, message = "Supply value cannot be less than zero")
+	private Long supply;
 	
-	public Long getLocationId() {
-		return locationId;
-	}
-
-	public void setLocationId(Long locationId) {
-		this.locationId = locationId;
-	}
+	@Nullable
+	@Size(min = 0, message = "Demand value cannot be less than zero")
+	private Long demand;
+	
+	@Nullable
+	@Size(min = 0, message = "Available Stock value cannot be less than zero")
+	private Long availableStock;
+	
+	private String stockTimestamp;
 
 	public String getLocationName() {
 		return locationName;
@@ -38,33 +39,64 @@ public class StockInfo
 		this.locationName = locationName;
 	}
 
-	public Long getAvailableValue() {
-		return availableValue;
+	public Long getSupply() {
+		return supply;
 	}
 
-	public void setAvailableValue(Long availableValue) {
-		this.availableValue = availableValue;
+	public void setSupply(Long supply) {
+		this.supply = supply;
+	}
+
+	public Long getDemand() {
+		return demand;
+	}
+
+	public void setDemand(Long demand) {
+		this.demand = demand;
+	}
+
+	public Long getAvailableStock() {
+		return availableStock;
+	}
+
+	public void setAvailableStock(Long availableStock) {
+		this.availableStock = availableStock;
+	}
+
+	public String getStockTimestamp() {
+		return stockTimestamp;
+	}
+
+	public void setStockTimestamp(String stockTimestamp) {
+		this.stockTimestamp = stockTimestamp;
 	}
 
 	/**
-	 * Empty default constructor
+	 * @param locationName
+	 * @param supply
+	 * @param demand
+	 * @param availableStock
+	 * @param stockTimestamp
+	 */
+	public StockInfo(
+			@NotNull @Size(min = 3, max = 256, message = "Location name should be between 3 and 256 characters") String locationName,
+			@Size(min = 0, message = "Supply value cannot be less than zero") Long supply,
+			@Size(min = 0, message = "Demand value cannot be less than zero") Long demand,
+			@Size(min = 0, message = "Available Stock value cannot be less than zero") Long availableStock,
+			String stockTimestamp) {
+		super();
+		this.locationName = locationName;
+		this.supply = supply;
+		this.demand = demand;
+		this.availableStock = availableStock;
+		this.stockTimestamp = stockTimestamp;
+	}
+
+	/**
+	 * 
 	 */
 	public StockInfo() {
 		super();
-	}
-
-	/**
-	 * @param locationId
-	 * @param locationName
-	 * @param availableValue
-	 */
-	public StockInfo(@Size(min = 10, message = "Location id cannot be so low") Long locationId,
-			@Size(min = 3, max = 256, message = "Location name should be between 3 and 256 characters") String locationName,
-			@Size(min = 0, message = "Stock value cannot be less than zero") Long availableValue) {
-		super();
-		this.locationId = locationId;
-		this.locationName = locationName;
-		this.availableValue = availableValue;
 	}
 
 }
