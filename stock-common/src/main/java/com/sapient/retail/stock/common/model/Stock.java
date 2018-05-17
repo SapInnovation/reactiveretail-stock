@@ -1,13 +1,13 @@
 package com.sapient.retail.stock.common.model;
 
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
+import java.util.Map;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.List;
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * Bean with fields mapped to MongoDB collection and its fields as mentioned.
@@ -28,18 +28,13 @@ public class Stock
 	@NotNull
 	@Size(min = 3, max = 20, message = "Product id should be between 3 and 20 characters")
 	private String productId;
+	
+	@NotNull
+	@Size(min = 3, max = 20, message = "Information Source should be between 3 and 20 characters")
+	private String informationSource;
 
 	@NotNull
-	@Field("stock")
-	private List<StockInfo> stock;
-
-	public String getPartNumber() {
-		return partNumber;
-	}
-
-	public void setPartNumber(String partNumber) {
-		this.partNumber = partNumber;
-	}
+	private Map<Long, StockInfo> stock;
 
 	public Long getUpc() {
 		return upc;
@@ -47,6 +42,14 @@ public class Stock
 
 	public void setUpc(Long upc) {
 		this.upc = upc;
+	}
+
+	public String getPartNumber() {
+		return partNumber;
+	}
+
+	public void setPartNumber(String partNumber) {
+		this.partNumber = partNumber;
 	}
 
 	public String getProductId() {
@@ -57,36 +60,47 @@ public class Stock
 		this.productId = productId;
 	}
 
-	public List<StockInfo> getStock() {
+	public String getInformationSource() {
+		return informationSource;
+	}
+
+	public void setInformationSource(String informationSource) {
+		this.informationSource = informationSource;
+	}
+
+	public Map<Long, StockInfo> getStock() {
 		return stock;
 	}
 
-	public void setStock(List<StockInfo> stock) {
+	public void setStock(Map<Long, StockInfo> stock) {
 		this.stock = stock;
-	}
-
-	/**
-	 * Empty default constructor
-	 */
-	public Stock() {
-		super();
 	}
 
 	/**
 	 * @param upc
 	 * @param partNumber
 	 * @param productId
+	 * @param informationSource
 	 * @param stock
 	 */
 	public Stock(@NotNull @Size(min = 10, message = "UPC id cannot be so low") Long upc,
 			@NotNull @Size(min = 3, max = 20, message = "Partnumber should be between 3 and 20 characters") String partNumber,
 			@NotNull @Size(min = 3, max = 20, message = "Product id should be between 3 and 20 characters") String productId,
-			@NotNull List<StockInfo> stock) {
+			@NotNull @Size(min = 3, max = 20, message = "Information Source should be between 3 and 20 characters") String informationSource,
+			@NotNull Map<Long, StockInfo> stock) {
 		super();
 		this.upc = upc;
 		this.partNumber = partNumber;
 		this.productId = productId;
+		this.informationSource = informationSource;
 		this.stock = stock;
 	}
 
+	/**
+	 * 
+	 */
+	public Stock() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 }
