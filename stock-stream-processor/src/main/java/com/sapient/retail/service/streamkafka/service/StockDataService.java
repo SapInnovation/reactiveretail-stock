@@ -29,4 +29,27 @@ public class StockDataService {
                 .setHeader(MessageHeaders.CONTENT_TYPE, MimeTypeUtils.APPLICATION_JSON)
                 .build());
     }
+
+    /**
+     * Method to evaluate supply, demand, available stock and persist them along with the updates to 
+	 * all objects of Stock as per request including information source.
+     * @param newStockDetails
+     * @param existingStockDetails
+     */
+	public void evaluateAvailableStock(Stock newStockDetails, Stock existingStockDetails) {
+		newStockDetails.getStock().forEach((locationId, skuStock) -> {
+			if ("demandInfoProvider".equals(newStockDetails.getInformationSource())) {
+				Long existingSupplyForSku = existingStockDetails.getStock().get(locationId).getSupply();
+				Long newAvailableSkuStock = existingSupplyForSku - skuStock.getDemand();
+				skuStock.setAvailableStock(newAvailableSkuStock<0 ? 0 : newAvailableSkuStock);
+				skuStock.setSupply(existingSupplyForSku);
+			} else if ("supplyInfoProvider".equals(newStockDetails.getInformationSource())) {
+				skuStock.setDemand(new Long(0));
+				skuStock.setAvailableStock(skuStock.getSupply());
+			}
+		});
+		logger.debug("Existing Prod Stock Details after filter: {}", existingStockDetails);
+		existingStockDetails.getStock().putAll(newStockDetails.getStock());
+		existingStockDetails.setInformationSource(newStockDetails.getInformationSource());
+	}
 }
