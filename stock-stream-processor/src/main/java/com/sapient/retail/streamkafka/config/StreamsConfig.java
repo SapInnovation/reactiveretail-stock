@@ -1,8 +1,8 @@
-package com.sapient.retail.service.streamkafka.config;
+package com.sapient.retail.streamkafka.config;
 
 import org.springframework.cloud.stream.annotation.EnableBinding;
 
-import com.sapient.retail.service.streamkafka.stream.StockDataStreams;
+import com.sapient.retail.streamkafka.stream.StockDataStreams;
 
 @EnableBinding(StockDataStreams.class)
 public class StreamsConfig {

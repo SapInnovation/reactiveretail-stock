@@ -1,4 +1,4 @@
-package com.sapient.retail.service.streamkafka.listener;
+package com.sapient.retail.streamkafka.listener.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -6,13 +6,14 @@ import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
-import com.sapient.retail.service.streamkafka.service.StockDataService;
-import com.sapient.retail.service.streamkafka.stream.StockDataStreams;
 import com.sapient.retail.stock.common.model.Stock;
 import com.sapient.retail.stock.common.repository.StockRepository;
+import com.sapient.retail.streamkafka.listener.StockDataListener;
+import com.sapient.retail.streamkafka.service.StockDataService;
+import com.sapient.retail.streamkafka.stream.StockDataStreams;
 
 @Component
-public class StockDataListener {
+public class StockDataListenerImpl implements StockDataListener {
 	
 	private final StockRepository stockRepository;
 	private final StockDataService stockDataService;
@@ -22,17 +23,16 @@ public class StockDataListener {
 	 * @param stockRepository
 	 * @param stockDataService
 	 */
-	public StockDataListener(StockRepository stockRepository, StockDataService stockDataService) {
+	public StockDataListenerImpl(StockRepository stockRepository, StockDataService stockDataService) {
 		super();
 		this.stockRepository = stockRepository;
 		this.stockDataService = stockDataService;
 	}
 
-	/**
-	 * This method listens to INPUT Kafka topic and persists data in Mongo repository 
-	 * in a blocking mode and doesn't wait for any mono subscriptions.
-	 * @param newStockDetails Stock
+	/* (non-Javadoc)
+	 * @see com.sapient.retail.streamkafka.listener.StockDataListener#handleStockDataFromTopic(com.sapient.retail.stock.common.model.Stock)
 	 */
+	@Override
 	@StreamListener(StockDataStreams.INPUT)
     public void handleStockDataFromTopic(@Payload Stock newStockDetails) {
 
