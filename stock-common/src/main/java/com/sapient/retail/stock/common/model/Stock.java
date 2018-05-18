@@ -7,6 +7,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
@@ -27,6 +28,7 @@ public class Stock
 
 	@NotNull
 	@Size(min = 3, max = 20, message = "Product id should be between 3 and 20 characters")
+	@Indexed
 	private String productId;
 	
 	@NotNull
@@ -114,4 +116,10 @@ public class Stock
 				", stock=" + stock +
 				'}';
 	}
+
+	public static Stock stockNotFound() {
+	    Stock stock = new Stock();
+	    stock.setUpc(-1000000L);
+	    return stock;
+    }
 }

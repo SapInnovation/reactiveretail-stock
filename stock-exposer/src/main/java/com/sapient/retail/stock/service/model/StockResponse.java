@@ -6,6 +6,7 @@ package com.sapient.retail.stock.service.model;
 import com.sapient.retail.stock.common.builder.GenericBuilder;
 import com.sapient.retail.stock.common.model.Stock;
 import com.sapient.retail.stock.common.model.StockInfo;
+import com.sapient.retail.stock.service.exception.StockNotFoundException;
 
 /**
  * Bean to be populated and served as API response for Stock information.
@@ -92,6 +93,10 @@ public class StockResponse {
     }
 
     public static StockResponse buildFromStock(final Stock stock, final Long locationId) {
+        if (null == stock
+                || -1000000L == stock.getUpc())
+            throw new StockNotFoundException();
+
         StockInfo stockInfo = new StockInfo();
         if (stock.getStock().containsKey(locationId))
             stockInfo = stock.getStock().get(locationId);

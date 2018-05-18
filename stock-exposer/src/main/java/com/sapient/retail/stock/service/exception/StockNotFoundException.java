@@ -1,16 +1,13 @@
 package com.sapient.retail.stock.service.exception;
 
 /**
- * @author ragarora
+ * Exception class in case Stock is not found for the given query.
  */
 public class StockNotFoundException extends RuntimeException {
 
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public StockNotFoundException(String skuId) {
-        super("Stock not found with id " + skuId);
+	public StockNotFoundException() {
+        super();
     }
 }

@@ -1,5 +1,6 @@
 package com.sapient.retail.stock.service.service;
 
+import com.sapient.retail.stock.common.model.Stock;
 import com.sapient.retail.stock.common.repository.StockRepository;
 import com.sapient.retail.stock.service.model.StockResponse;
 import org.slf4j.Logger;
@@ -28,6 +29,7 @@ public class StockService {
     public Mono<List<StockResponse>> productStock(final String productId) {
         LOGGER.debug("Fetching stock information for product: " + productId);
         return repository.findStocksByProductIdOrderByUpc(productId)
+                .switchIfEmpty(Mono.just(Stock.stockNotFound()))
                 .map(StockResponse::buildFromStock)
                 .collectList();
     }
@@ -41,6 +43,7 @@ public class StockService {
     public Mono<StockResponse> skuStock(final Long upc) {
         LOGGER.debug("Fetching stock information for UPC: " + upc);
         return repository.findStocksByUpc(upc)
+                .switchIfEmpty(Mono.just(Stock.stockNotFound()))
                 .map(StockResponse::buildFromStock);
     }
 
@@ -53,7 +56,8 @@ public class StockService {
      */
     public Mono<List<StockResponse>> productStockForLocation(final String productId, final Long locationId) {
         LOGGER.debug("Fetching stock information for Product: " + productId + " & location: " + locationId);
-        return repository.findStocksByProductAndLocationId(productId, locationId)
+        return repository.findStocksByProductIdOrderByUpc(productId)
+                .switchIfEmpty(Mono.just(Stock.stockNotFound()))
                 .map(stock -> StockResponse.buildFromStock(stock, locationId))
                 .collectList();
     }
@@ -67,7 +71,8 @@ public class StockService {
      */
     public Mono<StockResponse> skuStockForLocation(final Long upc, final Long locationId) {
         LOGGER.debug("Fetching stock information for UPC: " + upc + " & location: " + locationId);
-        return repository.findStocksByUpcAndLocationId(upc, locationId)
+        return repository.findStocksByUpc(upc)
+                .switchIfEmpty(Mono.just(Stock.stockNotFound()))
                 .map(stock -> StockResponse.buildFromStock(stock, locationId));
     }
 }
