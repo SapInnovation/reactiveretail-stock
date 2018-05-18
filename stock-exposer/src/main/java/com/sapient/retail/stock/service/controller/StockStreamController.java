@@ -1,8 +1,8 @@
 package com.sapient.retail.stock.service.controller;
 
 import com.sapient.retail.stock.common.model.Stock;
+import com.sapient.retail.stock.service.model.StockResponse;
 import com.sapient.retail.stock.service.service.StockStreamService;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,13 +21,13 @@ public class StockStreamController {
 
     @GetMapping(value = "/stream/stock/product/{productId}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public Flux<Stock> stockStream(@PathVariable final String productId) {
+    public Flux<StockResponse> stockStream(@PathVariable final String productId) {
         return stockStreamService.stockStream(productId);
     }
 
     @GetMapping(value = "/stream/stock/upc/{upc}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public Flux<Stock> skuStockStream(@PathVariable final Long upc) {
+    public Flux<StockResponse> skuStockStream(@PathVariable final Long upc) {
         return stockStreamService.skuStockStream(upc);
     }
 

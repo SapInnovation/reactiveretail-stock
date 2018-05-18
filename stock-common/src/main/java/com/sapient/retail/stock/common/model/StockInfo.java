@@ -99,4 +99,14 @@ public class StockInfo
 		super();
 	}
 
+	@Override
+	public String toString() {
+		return "StockInfo{" +
+				"locationName='" + locationName + '\'' +
+				", supply=" + supply +
+				", demand=" + demand +
+				", availableStock=" + availableStock +
+				", stockTimestamp='" + stockTimestamp + '\'' +
+				'}';
+	}
 }

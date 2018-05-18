@@ -103,4 +103,15 @@ public class Stock
 		super();
 		// TODO Auto-generated constructor stub
 	}
+
+	@Override
+	public String toString() {
+		return "Stock{" +
+				"upc=" + upc +
+				", partNumber='" + partNumber + '\'' +
+				", productId='" + productId + '\'' +
+				", informationSource='" + informationSource + '\'' +
+				", stock=" + stock +
+				'}';
+	}
 }

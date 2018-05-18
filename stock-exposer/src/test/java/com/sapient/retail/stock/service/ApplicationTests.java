@@ -1,27 +1,25 @@
 package com.sapient.retail.stock.service;
 
-import java.util.Collections;
-
+import com.sapient.retail.stock.common.builder.GenericBuilder;
+import com.sapient.retail.stock.common.model.Stock;
+import com.sapient.retail.stock.common.model.StockInfo;
+import com.sapient.retail.stock.common.repository.StockRepository;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
-import com.google.gson.Gson;
-import com.sapient.retail.stock.common.model.Stock;
-import com.sapient.retail.stock.common.repository.StockRepository;
-
-import reactor.core.publisher.Mono;
+import java.util.*;
 
 /**
  * @author ragarora
  */
 @SpringJUnitConfig(Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class ApplicationTests {
+class ApplicationTests {
 
     @Autowired
     private WebTestClient webTestClient;
@@ -29,73 +27,89 @@ public class ApplicationTests {
     @Autowired
     StockRepository stockRepository;
 
-    @Test
-    public void testCreateProductStock() {
-        String stockInput = "{ \"upc\": \"70002\", \"productId\": \"P70002\", \"stock\": [{ \"locationId\": \"10001\", \"locationName\": \"online\", \"availableValue\": \"519\" }, { \"locationId\": \"11001\", \"locationName\": \"Edgware Road\", \"availableValue\": \"175\" }, { \"locationId\": \"11002\", \"locationName\": \"Paddington\", \"availableValue\": \"57\" }] }";
-        Gson gson = new Gson();
-        Stock stock = gson.fromJson(stockInput, Stock.class);
-        //Stock productStock = new Stock("1001", 5000, "London Waterloo");
-
-        webTestClient.post().uri("/stock")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .accept(MediaType.APPLICATION_JSON_UTF8)
-                .body(Mono.just(stock), Stock.class)
-                .exchange()
-                .expectStatus().isOk()
-                .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
-                .expectBody()
-                .jsonPath("$.upc").isNotEmpty()
-                .jsonPath("$.productId").isEqualTo("P70002")
-                .jsonPath("$.stock.locationId").isEqualTo(10001);
+    @BeforeEach
+    void cleanDB() {
+        stockRepository.deleteAll().block();
     }
 
     @Test
-    public void testGetStockForAllProducts() {
-        webTestClient.get().uri("/stock")
-                .accept(MediaType.APPLICATION_JSON_UTF8)
-                .exchange()
-                .expectStatus().isOk()
-                .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
-                .expectBodyList(Stock.class);
-    }
-
-    @Test
-    public void testGetStockForProduct() {
-    	String stockInput = "{ \"upc\": \"70002\", \"productId\": \"P70002\", \"stock\": [{ \"locationId\": \"10001\", \"locationName\": \"online\", \"availableValue\": \"519\" }, { \"locationId\": \"11001\", \"locationName\": \"Edgware Road\", \"availableValue\": \"175\" }, { \"locationId\": \"11002\", \"locationName\": \"Paddington\", \"availableValue\": \"57\" }] }";
-        Gson gson = new Gson();
-        Stock stock = gson.fromJson(stockInput, Stock.class);
-    	Stock productStock = stockRepository.save(stock).block();
+    void testGetStockForProduct() {
+        saveStockInDB(10001, "P_10001", 2);
 
         webTestClient.get()
-                .uri("/stock/{productId}", Collections.singletonMap("productId", productStock.getProductId()))
+                .uri("/stock/product/{productId}",
+                        Collections.singletonMap("productId", "P_10001"))
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody()
                 .consumeWith(response ->
-                        Assertions.assertThat(response.getResponseBody()).isNotNull());
+                        Assertions.assertThat(response.getResponseBody()).isNotNull())
+                .jsonPath("$.length()").isEqualTo(2)
+                .jsonPath("$.[0].productId").isEqualTo("P_10001");
     }
 
     @Test
-    public void testUpdateProductStock() {
-    	String stockInput = "{ \"upc\": \"70002\", \"productId\": \"P70002\", \"stock\": [{ \"locationId\": \"10001\", \"locationName\": \"online\", \"availableValue\": \"519\" }, { \"locationId\": \"11001\", \"locationName\": \"Edgware Road\", \"availableValue\": \"175\" }, { \"locationId\": \"11002\", \"locationName\": \"Paddington\", \"availableValue\": \"57\" }] }";
-        Gson gson = new Gson();
-        Stock stock = gson.fromJson(stockInput, Stock.class);
-    	stockRepository.save(stock).block();
+    void testGetStockForUPC() {
+        saveStockInDB(10002, "P_10002", 1);
 
-    	String newStockInput = "{ \"upc\": \"70002\", \"productId\": \"P70002\", \"stock\": [{ \"locationId\": \"10001\", \"locationName\": \"online\", \"availableValue\": \"5\" }, { \"locationId\": \"11001\", \"locationName\": \"Edgware Road\", \"availableValue\": \"175\" }, { \"locationId\": \"11002\", \"locationName\": \"Paddington\", \"availableValue\": \"57\" }] }";
-    	Stock newStock = gson.fromJson(newStockInput, Stock.class);
-
-        webTestClient.put()
-                .uri("/stock/{productId}", Collections.singletonMap("productId", stock.getProductId()))
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .accept(MediaType.APPLICATION_JSON_UTF8)
-                .body(Mono.just(newStock), Stock.class)
+        webTestClient.get()
+                .uri("/stock/upc/{upc}",
+                        Collections.singletonMap("upc", 10002))
                 .exchange()
                 .expectStatus().isOk()
-                .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
                 .expectBody()
-                .jsonPath("$.upc").isEqualTo(70002)
-                .jsonPath("$.productId").isEqualTo("P70002")
-                .jsonPath("$.stock.locationId").isEqualTo(10001);
+                .consumeWith(response ->
+                        Assertions.assertThat(response.getResponseBody()).isNotNull())
+                .jsonPath("$.upc").isEqualTo(10002L)
+                .jsonPath("$.locationId").isEqualTo(10001L)
+                .jsonPath("$.availableStock").isEqualTo(519L);
+    }
+
+    @Test
+    void testGetSkuStockForLocation() {
+        saveStockInDB(10001, "P_10001", 1);
+        Map<String, Object> uriMap = new HashMap<>();
+        uriMap.put("upc", 10001L);
+        uriMap.put("locationId", 10002L);
+
+        webTestClient.get()
+                .uri("/stock/upc/{upc}/{locationId}", uriMap)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .consumeWith(response ->
+                        Assertions.assertThat(response.getResponseBody()).isNotNull())
+                .jsonPath("$.upc").isEqualTo(10001L)
+                .jsonPath("$.locationId").isEqualTo(10002L)
+                .jsonPath("$.availableStock").isEqualTo(175L);
+    }
+
+    private void saveStockInDB(final long upc,
+                               final String productId,
+                               final int length) {
+        List<Stock> stock = new ArrayList<>();
+        for (int i = 0; i < length; i++)
+            stock.add(getStock(upc + i, productId));
+        stockRepository.saveAll(stock).count().block();
+    }
+
+    private Stock getStock(long upc, String productId) {
+        Map<Long, StockInfo> stocks = new HashMap<>();
+        stocks.put(10001L, getStockInfo("online", 519L));
+        stocks.put(10002L, getStockInfo("Edgware Road", 175L));
+        stocks.put(10003L, getStockInfo("Paddington", 59L));
+        return GenericBuilder.of(Stock::new)
+                .with(Stock::setUpc, upc)
+                .with(Stock::setProductId, productId)
+                .with(Stock::setStock, stocks)
+                .build();
+    }
+
+    private StockInfo getStockInfo(final String locationName,
+                                   final long available) {
+        return GenericBuilder.of(StockInfo::new)
+                .with(StockInfo::setLocationName, locationName)
+                .with(StockInfo::setAvailableStock, available)
+                .build();
     }
 }
