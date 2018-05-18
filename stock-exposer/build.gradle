@@ -38,12 +38,20 @@ dependencies {
 
     compile project(':stock-common')
 
-    testCompile('com.google.code.gson:gson:2.8.4')
-    testCompile('org.springframework.boot:spring-boot-starter-test')
-    testCompile('io.projectreactor:reactor-test')
+    testCompile 'org.springframework.boot:spring-boot-starter-test'
+    testCompile 'io.projectreactor:reactor-test'
 
-    testCompile('org.junit.jupiter:junit-jupiter-api')
-    testRuntime('org.junit.jupiter:junit-jupiter-engine')
+    testCompile 'org.junit.jupiter:junit-jupiter-api'
+    testRuntime 'org.junit.jupiter:junit-jupiter-engine'
 
-    //testRuntime('de.flapdoodle.embed:de.flapdoodle.embed.mongo:2.0.3')
+    //testRuntime 'de.flapdoodle.embed:de.flapdoodle.embed.mongo:2.0.3'
+}
+
+test {
+    useJUnitPlatform {
+        excludeTags 'slow'
+        includeEngines 'junit-jupiter'
+    }
+
+    failFast = true
 }
