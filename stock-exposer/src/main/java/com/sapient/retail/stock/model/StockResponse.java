@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.sapient.retail.stock.service.model;
+package com.sapient.retail.stock.model;
 
 /**
  * Bean to be populated and served as API response for Stock information.

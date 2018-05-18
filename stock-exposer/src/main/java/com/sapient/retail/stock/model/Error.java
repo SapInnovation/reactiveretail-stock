@@ -1,4 +1,4 @@
-package com.sapient.retail.stock.service.model;
+package com.sapient.retail.stock.model;
 
 import com.sapient.retail.stock.common.builder.GenericBuilder;
 

@@ -1,5 +1,6 @@
 package com.sapient.retail.stock.service;
 
+import com.sapient.retail.stock.Application;
 import com.sapient.retail.stock.common.builder.GenericBuilder;
 import com.sapient.retail.stock.common.model.Stock;
 import com.sapient.retail.stock.common.model.StockInfo;

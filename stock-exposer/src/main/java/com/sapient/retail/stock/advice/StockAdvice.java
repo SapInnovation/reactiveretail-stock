@@ -1,11 +1,12 @@
-package com.sapient.retail.stock.service.advice;
+package com.sapient.retail.stock.advice;
 
-import com.sapient.retail.stock.service.exception.StockNotFoundException;
-import com.sapient.retail.stock.service.model.Error;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import com.sapient.retail.stock.exception.StockNotFoundException;
+import com.sapient.retail.stock.model.Error;
 
 @ControllerAdvice
 public class StockAdvice {
