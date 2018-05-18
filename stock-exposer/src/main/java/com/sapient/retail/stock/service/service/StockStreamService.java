@@ -20,15 +20,28 @@ import java.util.function.Consumer;
 import static com.mongodb.client.model.Filters.*;
 import static java.util.Arrays.asList;
 
+/**
+ * Service class for creating Flux Streams of {@link StockResponse}. These streams will be
+ * pushed to clients as SSEs (Server Sent Events).
+ */
 @Service
 public class StockStreamService {
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     private final MongoTemplate template;
     private final MongoCollection<Document> streams;
+    private final HelperService helper;
 
-    public StockStreamService(final MongoTemplate template) {
+    /**
+     * Constructor for dependency injection.
+     *
+     * @param template the Mongo Template
+     * @param helper   instance of the {@link HelperService}
+     */
+    public StockStreamService(final MongoTemplate template,
+                              final HelperService helper) {
         this.template = template;
+        this.helper = helper;
         String collectionName = Stock.class.getName().toLowerCase();
         streams = this.template.collectionExists(collectionName)
                 ? this.template.getCollection(collectionName)
@@ -39,7 +52,7 @@ public class StockStreamService {
      * Method to open stream for requested product with any SKU/location/stock getting updated in DB collection.
      *
      * @param productId the product ID
-     * @return Flux<Stock> for all updates to requested product as stream.
+     * @return Flux stream of {@link StockResponse} for all updates to requested product
      */
     public Flux<StockResponse> stockStream(final String productId) {
         LOGGER.info("Registering MongoStream for Product: " + productId);
@@ -57,7 +70,7 @@ public class StockStreamService {
                     LOGGER.debug("Full Document: " + updates);
                     LOGGER.debug("Request ProductId:" + productId +
                             ", Current Event ProductId:" + updates.getProductId());
-                    stream.next(StockResponse.buildFromStock(updates));
+                    stream.next(helper.buildFromStock(updates));
                 }));
     }
 
@@ -65,7 +78,7 @@ public class StockStreamService {
      * Method to open stream for requested UPC with any location/stock getting updated in DB collection.
      *
      * @param upc the upc for the SKU
-     * @return Flux<Stock> for all updates to requested UPC as stream.
+     * @return Flux stream of {@link StockResponse} for all updates to requested UPC
      */
     public Flux<StockResponse> skuStockStream(final Long upc) {
         LOGGER.info("Registering MongoStream for UPC: " + upc);
@@ -83,7 +96,7 @@ public class StockStreamService {
                     LOGGER.debug("Full Document: " + updates);
                     LOGGER.debug("Request UPC:" + upc +
                             ", Current Event UPC:" + updates.getUpc());
-                    stream.next(StockResponse.buildFromStock(updates));
+                    stream.next(helper.buildFromStock(updates));
                 }));
     }
 

@@ -1,6 +1,5 @@
 package com.sapient.retail.stock.service.controller;
 
-import com.sapient.retail.stock.service.model.Error;
 import com.sapient.retail.stock.service.model.StockResponse;
 import com.sapient.retail.stock.service.service.StockService;
 import org.springframework.http.HttpStatus;
@@ -9,7 +8,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
 import java.util.List;

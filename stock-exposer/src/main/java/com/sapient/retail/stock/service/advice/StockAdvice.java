@@ -1,4 +1,4 @@
-package com.sapient.retail.stock.service.controller;
+package com.sapient.retail.stock.service.advice;
 
 import com.sapient.retail.stock.service.exception.StockNotFoundException;
 import com.sapient.retail.stock.service.model.Error;
@@ -15,7 +15,7 @@ public class StockAdvice {
         return new ResponseEntity<>(Error.stockNotFound(), HttpStatus.OK);
     }
 
-    @ExceptionHandler(RuntimeException.class)
+    //@ExceptionHandler(RuntimeException.class)
     public ResponseEntity<Error> handleGenericError() {
         return new ResponseEntity<>(Error.genericError(), HttpStatus.INTERNAL_SERVER_ERROR);
     }

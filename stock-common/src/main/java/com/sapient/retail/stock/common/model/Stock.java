@@ -116,10 +116,4 @@ public class Stock
 				", stock=" + stock +
 				'}';
 	}
-
-	public static Stock stockNotFound() {
-	    Stock stock = new Stock();
-	    stock.setUpc(-1000000L);
-	    return stock;
-    }
 }

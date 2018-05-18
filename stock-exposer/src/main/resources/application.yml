@@ -4,7 +4,15 @@ spring:
       uri: mongodb://localhost:27017/stock
 logging:
   level:
-    org.springframework.web: ERROR
-    com.sapient.retail.service.streamkafka: DEBUG
+    #org.springframework.web: ERROR
+    com.sapient.retail.stock.service: DEBUG
   pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+    #console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+custom:
+  default-location: 10001
+---
+spring:
+  profiles: tests
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/test
