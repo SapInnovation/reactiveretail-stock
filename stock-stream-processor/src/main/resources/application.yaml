@@ -14,3 +14,13 @@ spring:
   data: 
     mongodb: 
       uri: mongodb://<host1>:<port1>/stock
+
+logging:
+  level:
+    org.springframework.web: ERROR
+    com.sapient.retail.service.streamkafka: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file: <path>  
+      
