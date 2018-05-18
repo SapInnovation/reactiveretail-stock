@@ -15,7 +15,7 @@ public class StockAdvice {
         return new ResponseEntity<>(Error.stockNotFound(), HttpStatus.OK);
     }
 
-    //@ExceptionHandler(RuntimeException.class)
+    @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<Error> handleGenericError() {
         return new ResponseEntity<>(Error.genericError(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
