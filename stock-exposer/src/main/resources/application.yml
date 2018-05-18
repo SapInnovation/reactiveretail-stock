@@ -4,8 +4,7 @@ spring:
       uri: mongodb://localhost:27017/stock
 logging:
   level:
-    com:
-      sapient:
-        retail:
-          stock:
-            service: debug
+    org.springframework.web: ERROR
+    com.sapient.retail.service.streamkafka: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
