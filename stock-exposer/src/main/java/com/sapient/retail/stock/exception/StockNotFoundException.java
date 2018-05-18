@@ -1,4 +1,4 @@
-package com.sapient.retail.stock.service.exception;
+package com.sapient.retail.stock.exception;
 
 /**
  * Exception class in case Stock is not found for the given query.

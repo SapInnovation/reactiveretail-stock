@@ -1,4 +1,4 @@
-package com.sapient.retail.stock.service;
+package com.sapient.retail.stock;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
