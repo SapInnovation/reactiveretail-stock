@@ -1,4 +1,4 @@
-package com.sapient.retail.service.streamkafka.stream;
+package com.sapient.retail.streamkafka.stream;
 
 import org.springframework.cloud.stream.annotation.Input;
 import org.springframework.cloud.stream.annotation.Output;

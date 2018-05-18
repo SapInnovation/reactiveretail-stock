@@ -1,10 +1,15 @@
 package com.sapient.retail.stock.common.model;
 
 
+import java.sql.Date;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.Nullable;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 /**
  * Bean with fields mapped to MongoDB collection and its fields as mentioned.
@@ -29,6 +34,9 @@ public class StockInfo
 	@Size(min = 0, message = "Available Stock value cannot be less than zero")
 	private Long availableStock;
 	
+	//@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+	//@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss.SSS")
+	//@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd@HH:mm:ss.SSSZ")
 	private String stockTimestamp;
 
 	public String getLocationName() {
@@ -69,34 +77,6 @@ public class StockInfo
 
 	public void setStockTimestamp(String stockTimestamp) {
 		this.stockTimestamp = stockTimestamp;
-	}
-
-	/**
-	 * @param locationName
-	 * @param supply
-	 * @param demand
-	 * @param availableStock
-	 * @param stockTimestamp
-	 */
-	public StockInfo(
-			@NotNull @Size(min = 3, max = 256, message = "Location name should be between 3 and 256 characters") String locationName,
-			@Size(min = 0, message = "Supply value cannot be less than zero") Long supply,
-			@Size(min = 0, message = "Demand value cannot be less than zero") Long demand,
-			@Size(min = 0, message = "Available Stock value cannot be less than zero") Long availableStock,
-			String stockTimestamp) {
-		super();
-		this.locationName = locationName;
-		this.supply = supply;
-		this.demand = demand;
-		this.availableStock = availableStock;
-		this.stockTimestamp = stockTimestamp;
-	}
-
-	/**
-	 * 
-	 */
-	public StockInfo() {
-		super();
 	}
 
 	@Override

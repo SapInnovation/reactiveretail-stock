@@ -3,7 +3,7 @@ spring:
     stream:
       kafka:
         binder:
-          brokers: <host1>:<port1>,<host2>:<port2>
+          brokers: <host1:port1>,<host1:port1>
       bindings:
         stockdata-in:
           destination: stockdata
@@ -13,7 +13,7 @@ spring:
           contentType: application/json
   data: 
     mongodb: 
-      uri: mongodb://<host1>:<port1>/stock
+      uri: mongodb://<host1:port1>/stock
 
 logging:
   level:
@@ -22,4 +22,6 @@ logging:
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
 
-      
+custom:
+  demandInfoProvider: "demandInfoProvider"
+  supplyInfoProvider: "supplyInfoProvider"
