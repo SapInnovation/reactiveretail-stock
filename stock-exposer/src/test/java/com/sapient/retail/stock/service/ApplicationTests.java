@@ -2,9 +2,10 @@ package com.sapient.retail.stock.service;
 
 import com.sapient.retail.stock.Application;
 import com.sapient.retail.stock.common.builder.GenericBuilder;
-import com.sapient.retail.stock.common.model.Stock;
-import com.sapient.retail.stock.common.model.StockInfo;
+import com.sapient.retail.stock.common.model.impl.RetailStock;
+import com.sapient.retail.stock.common.model.impl.RetailStockInfo;
 import com.sapient.retail.stock.common.repository.StockRepository;
+
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -88,29 +89,29 @@ class ApplicationTests {
     private void saveStockInDB(final long upc,
                                final String productId,
                                final int length) {
-        List<Stock> stock = new ArrayList<>();
+        List<RetailStock> retailStock = new ArrayList<>();
         for (int i = 0; i < length; i++)
-            stock.add(getStock(upc + i, productId));
-        stockRepository.saveAll(stock).count().block();
+        	retailStock.add(getStock(upc + i, productId));
+        stockRepository.saveAll(retailStock).count().block();
     }
 
-    private Stock getStock(long upc, String productId) {
-        Map<Long, StockInfo> stocks = new HashMap<>();
+    private RetailStock getStock(long upc, String productId) {
+        Map<Long, RetailStockInfo> stocks = new HashMap<>();
         stocks.put(10001L, getStockInfo("online", 519L));
         stocks.put(10002L, getStockInfo("Edgware Road", 175L));
         stocks.put(10003L, getStockInfo("Paddington", 59L));
-        return GenericBuilder.of(Stock::new)
-                .with(Stock::setUpc, upc)
-                .with(Stock::setProductId, productId)
-                .with(Stock::setStock, stocks)
+        return GenericBuilder.of(RetailStock::new)
+                .with(RetailStock::setUpc, upc)
+                .with(RetailStock::setProductId, productId)
+                .with(RetailStock::setStock, stocks)
                 .build();
     }
 
-    private StockInfo getStockInfo(final String locationName,
+    private RetailStockInfo getStockInfo(final String locationName,
                                    final long available) {
-        return GenericBuilder.of(StockInfo::new)
-                .with(StockInfo::setLocationName, locationName)
-                .with(StockInfo::setAvailableStock, available)
+        return GenericBuilder.of(RetailStockInfo::new)
+                .with(RetailStockInfo::setLocationName, locationName)
+                .with(RetailStockInfo::setAvailableStock, available)
                 .build();
     }
 }

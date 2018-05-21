@@ -4,7 +4,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Aggregates;
 import com.mongodb.client.model.changestream.ChangeStreamDocument;
 import com.mongodb.client.model.changestream.FullDocument;
-import com.sapient.retail.stock.common.model.Stock;
+import com.sapient.retail.stock.common.model.impl.RetailStock;
 import com.sapient.retail.stock.model.StockResponse;
 import com.sapient.retail.stock.service.HelperService;
 import com.sapient.retail.stock.service.StockStreamService;
@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
+
 import reactor.core.publisher.Flux;
 
 import java.util.Collections;
@@ -45,7 +46,7 @@ public class StockStreamServiceImpl implements StockStreamService {
                               final HelperService helper) {
         this.template = template;
         this.helper = helper;
-        String collectionName = Stock.class.getName().toLowerCase();
+        String collectionName = RetailStock.class.getName().toLowerCase();
         streams = this.template.collectionExists(collectionName)
                 ? this.template.getCollection(collectionName)
                 : this.template.createCollection(collectionName);
@@ -66,7 +67,7 @@ public class StockStreamServiceImpl implements StockStreamService {
                 .maxAwaitTime(10, TimeUnit.MINUTES)
                 .forEach((Consumer<ChangeStreamDocument<Document>>) document -> {
                     LOGGER.debug("Operation Type: " + document.getOperationType());
-                    Stock updates = template.getConverter().read(Stock.class,
+                    RetailStock updates = template.getConverter().read(RetailStock.class,
                             document.getFullDocument());
                     LOGGER.debug("Full Document: " + updates);
                     LOGGER.debug("Request ProductId:" + productId +
@@ -90,7 +91,7 @@ public class StockStreamServiceImpl implements StockStreamService {
                 .maxAwaitTime(10, TimeUnit.MINUTES)
                 .forEach((Consumer<ChangeStreamDocument<Document>>) document -> {
                     LOGGER.debug("Operation Type: " + document.getOperationType());
-                    Stock updates = template.getConverter().read(Stock.class,
+                    RetailStock updates = template.getConverter().read(RetailStock.class,
                             document.getFullDocument());
                     LOGGER.debug("Full Document: " + updates);
                     LOGGER.debug("Request UPC:" + upc +
@@ -103,7 +104,7 @@ public class StockStreamServiceImpl implements StockStreamService {
 	 * @see com.sapient.retail.stock.service.StockStreamService#allStockStream()
 	 */
     @Override
-	public Flux<Stock> allStockStream() {
+	public Flux<RetailStock> allStockStream() {
         LOGGER.info("Registering MongoStream for All products");
         return Flux.create(stream -> streams
                 .watch(Collections.singletonList(
@@ -113,7 +114,7 @@ public class StockStreamServiceImpl implements StockStreamService {
                 .maxAwaitTime(10, TimeUnit.MINUTES)
                 .forEach((Consumer<ChangeStreamDocument<Document>>) document -> {
                     LOGGER.debug("Operation Type: " + document.getOperationType());
-                    Stock updates = template.getConverter().read(Stock.class,
+                    RetailStock updates = template.getConverter().read(RetailStock.class,
                             document.getFullDocument());
                     LOGGER.debug("Full Document: " + updates);
                     LOGGER.debug("Current Event ProductId:" + updates.getProductId());

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sapient.retail.stock.common.model.Stock;
+import com.sapient.retail.stock.common.model.impl.RetailStock;
 import com.sapient.retail.streamkafka.service.StockDataService;
 import com.sapient.retail.streamkafka.web.StockDataController;
 
@@ -26,7 +26,7 @@ public class StockDataControllerImpl implements StockDataController {
 	@RequestMapping(value="/stockdata", method = RequestMethod.POST, 
     		consumes = "application/json")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public void StockData(@RequestBody Stock productStock) {
+    public void StockData(@RequestBody RetailStock productStock) {
 
         stockdataservice.sendStockDataToKafkaTopic(productStock);
     }

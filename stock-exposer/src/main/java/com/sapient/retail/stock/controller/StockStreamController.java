@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.sapient.retail.stock.common.model.Stock;
+import com.sapient.retail.stock.common.model.impl.RetailStock;
 import com.sapient.retail.stock.model.StockResponse;
 
 import reactor.core.publisher.Flux;
@@ -17,6 +17,6 @@ public interface StockStreamController {
 
 	Flux<StockResponse> skuStockStream(Long upc);
 
-	Flux<Stock> stockStream();
+	Flux<RetailStock> stockStream();
 
 }

@@ -9,7 +9,7 @@ import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MimeTypeUtils;
 
-import com.sapient.retail.stock.common.model.Stock;
+import com.sapient.retail.stock.common.model.impl.RetailStock;
 import com.sapient.retail.streamkafka.service.StockDataService;
 import com.sapient.retail.streamkafka.stream.StockDataStreams;
 
@@ -32,7 +32,7 @@ public class StockDataServiceImpl implements StockDataService {
 	 * @see com.sapient.retail.streamkafka.service.StockDataService#sendStockDataToKafkaTopic(com.sapient.retail.stock.common.model.Stock)
 	 */
     @Override
-	public void sendStockDataToKafkaTopic(final Stock productStock) {
+	public void sendStockDataToKafkaTopic(final RetailStock productStock) {
     	logger.info("Sending stock data {}", productStock);
 
         MessageChannel messageChannel = stockdatastreams.outboundStockData();
@@ -46,7 +46,7 @@ public class StockDataServiceImpl implements StockDataService {
 	 * @see com.sapient.retail.streamkafka.service.StockDataService#evaluateAvailableStock(com.sapient.retail.stock.common.model.Stock, com.sapient.retail.stock.common.model.Stock)
 	 */
 	@Override
-	public void evaluateAvailableStock(Stock newStockDetails, Stock existingStockDetails) {
+	public void evaluateAvailableStock(RetailStock newStockDetails, RetailStock existingStockDetails) {
 		newStockDetails.getStock().forEach((locationId, skuStock) -> {
 			if (demandInfoProvider.equals(newStockDetails.getInformationSource())) {
 				Long existingSupplyForSku = existingStockDetails.getStock().get(locationId).getSupply();

@@ -1,6 +1,6 @@
 package com.sapient.retail.stock.controller.impl;
 
-import com.sapient.retail.stock.common.model.Stock;
+import com.sapient.retail.stock.common.model.impl.RetailStock;
 import com.sapient.retail.stock.controller.StockStreamController;
 import com.sapient.retail.stock.model.StockResponse;
 import com.sapient.retail.stock.service.StockStreamService;
@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
 import reactor.core.publisher.Flux;
 
 @RestController
@@ -47,7 +48,7 @@ public class StockStreamControllerImpl implements StockStreamController {
     @Override
 	@GetMapping(value = "/stream/stock/product/all", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public Flux<Stock> stockStream() {
+    public Flux<RetailStock> stockStream() {
         return stockStreamService.allStockStream();
     }
 
