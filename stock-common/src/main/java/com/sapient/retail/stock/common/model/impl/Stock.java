@@ -10,14 +10,14 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.sapient.retail.stock.common.model.StockInterface;
+import com.sapient.retail.stock.common.model.Stocks;
 
 /**
  * Bean with fields mapped to MongoDB collection and its fields as mentioned.
  * @author ragarora
  */
 @Document(collection="stock")
-public class Stock implements StockInterface
+public class Stock implements Stocks
 {
 	@NotNull
 	@Size(min = 10, message = "UPC id cannot be so low")

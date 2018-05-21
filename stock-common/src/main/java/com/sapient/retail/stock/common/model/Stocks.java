@@ -7,6 +7,6 @@ package com.sapient.retail.stock.common.model;
  * @author neeagarw
  *
  */
-public interface StockInfoInterface {
+public interface Stocks {
 
 }

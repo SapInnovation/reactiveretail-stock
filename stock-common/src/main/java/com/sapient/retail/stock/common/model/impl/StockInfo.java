@@ -6,13 +6,13 @@ import javax.validation.constraints.Size;
 
 import org.springframework.lang.Nullable;
 
-import com.sapient.retail.stock.common.model.StockInfoInterface;
+import com.sapient.retail.stock.common.model.StockInformation;
 
 /**
  * Bean with fields mapped to MongoDB collection and its fields as mentioned.
  * @author ragarora
  */
-public class StockInfo implements StockInfoInterface
+public class StockInfo implements StockInformation
 {
 
 	@NotNull
