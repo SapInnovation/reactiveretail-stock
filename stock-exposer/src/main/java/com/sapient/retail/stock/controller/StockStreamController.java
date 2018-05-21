@@ -1,15 +1,9 @@
 package com.sapient.retail.stock.controller;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseStatus;
-
-import com.sapient.retail.stock.common.model.Stock;
-import com.sapient.retail.stock.model.StockResponse;
-
 import reactor.core.publisher.Flux;
+
+import com.sapient.retail.stock.common.model.impl.Stock;
+import com.sapient.retail.stock.model.StockResponse;
 
 public interface StockStreamController {
 

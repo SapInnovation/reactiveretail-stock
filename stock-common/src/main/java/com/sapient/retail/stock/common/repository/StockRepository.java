@@ -3,7 +3,7 @@ package com.sapient.retail.stock.common.repository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 
-import com.sapient.retail.stock.common.model.Stock;
+import com.sapient.retail.stock.common.model.impl.Stock;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
