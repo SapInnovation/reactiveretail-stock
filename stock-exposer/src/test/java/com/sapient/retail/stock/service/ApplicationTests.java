@@ -2,8 +2,8 @@ package com.sapient.retail.stock.service;
 
 import com.sapient.retail.stock.Application;
 import com.sapient.retail.stock.common.builder.GenericBuilder;
-import com.sapient.retail.stock.common.model.Stock;
-import com.sapient.retail.stock.common.model.StockInfo;
+import com.sapient.retail.stock.common.model.impl.Stock;
+import com.sapient.retail.stock.common.model.impl.StockInfo;
 import com.sapient.retail.stock.common.repository.StockRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

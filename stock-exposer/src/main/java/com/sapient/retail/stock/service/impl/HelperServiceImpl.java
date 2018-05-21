@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.sapient.retail.stock.common.builder.GenericBuilder;
-import com.sapient.retail.stock.common.model.Stock;
-import com.sapient.retail.stock.common.model.StockInfo;
+import com.sapient.retail.stock.common.model.impl.Stock;
+import com.sapient.retail.stock.common.model.impl.StockInfo;
 import com.sapient.retail.stock.exception.StockNotFoundException;
 import com.sapient.retail.stock.model.StockResponse;
 import com.sapient.retail.stock.service.HelperService;

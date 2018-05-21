@@ -1,6 +1,6 @@
 package com.sapient.retail.stock.service;
 
-import com.sapient.retail.stock.common.model.Stock;
+import com.sapient.retail.stock.common.model.impl.Stock;
 import com.sapient.retail.stock.model.StockResponse;
 
 import reactor.core.publisher.Flux;

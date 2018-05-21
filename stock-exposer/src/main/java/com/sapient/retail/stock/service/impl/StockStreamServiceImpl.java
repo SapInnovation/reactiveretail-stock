@@ -4,7 +4,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Aggregates;
 import com.mongodb.client.model.changestream.ChangeStreamDocument;
 import com.mongodb.client.model.changestream.FullDocument;
-import com.sapient.retail.stock.common.model.Stock;
+import com.sapient.retail.stock.common.model.impl.Stock;
 import com.sapient.retail.stock.model.StockResponse;
 import com.sapient.retail.stock.service.HelperService;
 import com.sapient.retail.stock.service.StockStreamService;

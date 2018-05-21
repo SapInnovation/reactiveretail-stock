@@ -1,6 +1,6 @@
 package com.sapient.retail.stock.controller.impl;
 
-import com.sapient.retail.stock.common.model.Stock;
+import com.sapient.retail.stock.common.model.impl.Stock;
 import com.sapient.retail.stock.controller.StockStreamController;
 import com.sapient.retail.stock.model.StockResponse;
 import com.sapient.retail.stock.service.StockStreamService;

@@ -1,10 +1,6 @@
 package com.sapient.retail.streamkafka.listener;
 
-import org.springframework.cloud.stream.annotation.StreamListener;
-import org.springframework.messaging.handler.annotation.Payload;
-
-import com.sapient.retail.stock.common.model.Stock;
-import com.sapient.retail.streamkafka.stream.StockDataStreams;
+import com.sapient.retail.stock.common.model.impl.Stock;
 
 public interface StockDataListener {
 

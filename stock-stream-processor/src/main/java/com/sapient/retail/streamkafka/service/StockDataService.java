@@ -1,6 +1,6 @@
 package com.sapient.retail.streamkafka.service;
 
-import com.sapient.retail.stock.common.model.Stock;
+import com.sapient.retail.stock.common.model.impl.Stock;
 
 public interface StockDataService {
 
