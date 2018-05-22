@@ -6,6 +6,7 @@ import com.sapient.retail.stock.common.model.Stock;
 import com.sapient.retail.stock.common.model.StockInfo;
 import com.sapient.retail.stock.common.repository.StockRepository;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,11 +31,17 @@ class ApplicationTests {
 
     @BeforeEach
     void cleanDB() {
+        saveStockInDB(10001, "P_10001", 1);
+    }
+
+    @AfterEach
+    void tearDown() {
         stockRepository.deleteAll().block();
     }
 
     @Test
-    void testGetStockForProduct() {
+    void api_StockByProduct_ValidProductId_ShouldComplete() {
+        tearDown();
         saveStockInDB(10001, "P_10001", 2);
 
         webTestClient.get()
@@ -50,25 +57,70 @@ class ApplicationTests {
     }
 
     @Test
-    void testGetStockForUPC() {
-        saveStockInDB(10002, "P_10002", 1);
-
+    void api_StockByProduct_InvalidProductId_ShouldSend404() {
         webTestClient.get()
-                .uri("/stock/upc/{upc}",
-                        Collections.singletonMap("upc", 10002))
+                .uri("/stock/product/{productId}",
+                        Collections.singletonMap("productId", "P_Invalid"))
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody()
                 .consumeWith(response ->
                         Assertions.assertThat(response.getResponseBody()).isNotNull())
-                .jsonPath("$.upc").isEqualTo(10002L)
+                .jsonPath("$.code").isEqualTo(404);
+    }
+
+    @Test
+    void api_StockByUPC_ValidUPC_ShouldComplete() {
+        webTestClient.get()
+                .uri("/stock/upc/{upc}",
+                        Collections.singletonMap("upc", 10001))
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .consumeWith(response ->
+                        Assertions.assertThat(response.getResponseBody()).isNotNull())
+                .jsonPath("$.upc").isEqualTo(10001L)
                 .jsonPath("$.locationId").isEqualTo(10001L)
                 .jsonPath("$.availableStock").isEqualTo(519L);
     }
 
     @Test
-    void testGetSkuStockForLocation() {
-        saveStockInDB(10001, "P_10001", 1);
+    void api_StockByUPC_InvalidUPC_ShouldSend404() {
+        webTestClient.get()
+                .uri("/stock/upc/{upc}",
+                        Collections.singletonMap("upc", 1))
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .consumeWith(response ->
+                        Assertions.assertThat(response.getResponseBody()).isNotNull())
+                .jsonPath("$.code").isEqualTo(404);
+    }
+
+    @Test
+    void api_StockByUPC_MissingUPC_ShouldSend404() {
+        webTestClient.get()
+                .uri("/stock/upc/{upc}",
+                        Collections.singletonMap("upc", ""))
+                .exchange()
+                .expectStatus().is4xxClientError();
+    }
+
+    @Test
+    void api_StockByUPC_InvalidUPC_ShouldSend400() {
+        webTestClient.get()
+                .uri("/stock/upc/{upc}",
+                        Collections.singletonMap("upc", "abc"))
+                .exchange()
+                .expectStatus().is4xxClientError()
+                .expectBody()
+                .consumeWith(response ->
+                        Assertions.assertThat(response.getResponseBody()).isNotNull())
+                .jsonPath("$.code").isEqualTo(400);
+    }
+
+    @Test
+    void api_StockByUPCAndLocation_ValidUPC_ValidLocation() {
         Map<String, Object> uriMap = new HashMap<>();
         uriMap.put("upc", 10001L);
         uriMap.put("locationId", 10002L);
@@ -83,6 +135,72 @@ class ApplicationTests {
                 .jsonPath("$.upc").isEqualTo(10001L)
                 .jsonPath("$.locationId").isEqualTo(10002L)
                 .jsonPath("$.availableStock").isEqualTo(175L);
+    }
+
+    @Test
+    void api_StockByUPCAndLocation_InvalidUPC_ShouldSend404() {
+        Map<String, Object> uriMap = new HashMap<>();
+        uriMap.put("upc", 1L);
+        uriMap.put("locationId", 10002L);
+
+        webTestClient.get()
+                .uri("/stock/upc/{upc}/{locationId}", uriMap)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .consumeWith(response ->
+                        Assertions.assertThat(response.getResponseBody()).isNotNull())
+                .jsonPath("$.code").isEqualTo(404);
+    }
+
+    @Test
+    void api_StockByUPCAndLocation_IncorrectUPC_ShouldSend400() {
+        Map<String, Object> uriMap = new HashMap<>();
+        uriMap.put("upc", "abc");
+        uriMap.put("locationId", 10002L);
+
+        webTestClient.get()
+                .uri("/stock/upc/{upc}/{locationId}", uriMap)
+                .exchange()
+                .expectStatus().is4xxClientError()
+                .expectBody()
+                .consumeWith(response ->
+                        Assertions.assertThat(response.getResponseBody()).isNotNull())
+                .jsonPath("$.code").isEqualTo(400);
+    }
+
+    @Test
+    void api_StockByUPCAndLocation_IncorrectLocation_ShouldSend400() {
+        Map<String, Object> uriMap = new HashMap<>();
+        uriMap.put("upc", 10001L);
+        uriMap.put("locationId", "abc");
+
+        webTestClient.get()
+                .uri("/stock/upc/{upc}/{locationId}", uriMap)
+                .exchange()
+                .expectStatus().is4xxClientError()
+                .expectBody()
+                .consumeWith(response ->
+                        Assertions.assertThat(response.getResponseBody()).isNotNull())
+                .jsonPath("$.code").isEqualTo(400);
+    }
+
+    @Test
+    void api_StockByUPCAndLocation_InvalidLocation_ShouldGetNullLocation() {
+        Map<String, Object> uriMap = new HashMap<>();
+        uriMap.put("upc", 10001L);
+        uriMap.put("locationId", 10L);
+
+        webTestClient.get()
+                .uri("/stock/upc/{upc}/{locationId}", uriMap)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .consumeWith(response ->
+                        Assertions.assertThat(response.getResponseBody()).isNotNull())
+                .jsonPath("$.upc").isEqualTo(10001L)
+                .jsonPath("$.locationName").isEmpty()
+                .jsonPath("$.availableStock").isEmpty();
     }
 
     private void saveStockInDB(final long upc,

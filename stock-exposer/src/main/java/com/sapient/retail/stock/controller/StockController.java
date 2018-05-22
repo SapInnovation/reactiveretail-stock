@@ -1,25 +1,53 @@
 package com.sapient.retail.stock.controller;
 
-import java.util.List;
-
+import com.sapient.retail.stock.model.StockResponse;
+import com.sapient.retail.stock.service.StockService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseStatus;
-
-import com.sapient.retail.stock.model.StockResponse;
-
+import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
-public interface StockController {
+import javax.validation.Valid;
+import java.util.List;
 
-	Mono<List<StockResponse>> productStock(String productId);
+@RestController
+public class StockController {
+    private final StockService stockService;
 
-	Mono<StockResponse> skuStock(Long upc);
+    /**
+     * @param stockService
+     */
+    public StockController(final StockService stockService) {
+        super();
+        this.stockService = stockService;
+    }
 
-	Mono<StockResponse> skuStockForLocation(Long upc, Long locationId);
+    @GetMapping(value = "/stock/product/{productId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public Mono<List<StockResponse>> productStock(@PathVariable final String productId) {
+        return stockService.productStock(productId);
+    }
 
-	Mono<List<StockResponse>> stockForLocation(String productId, Long locationId);
+    @GetMapping(value = "/stock/upc/{upc}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public Mono<StockResponse> skuStock(@Valid @PathVariable final Long upc) {
+        return stockService.skuStock(upc);
+    }
 
+    @GetMapping(value = "/stock/upc/{upc}/{locationId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public Mono<StockResponse> skuStockForLocation(@Valid @PathVariable final Long upc,
+                                                   @Valid @PathVariable final Long locationId) {
+        return stockService.skuStockForLocation(upc, locationId);
+    }
+
+    @GetMapping(value = "/stock/product/{productId}/{locationId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public Mono<List<StockResponse>> stockForLocation(@Valid @PathVariable final String productId,
+                                                      @Valid @PathVariable final Long locationId) {
+        return stockService.productStockForLocation(productId, locationId);
+    }
 }
