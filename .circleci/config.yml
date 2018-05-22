@@ -40,6 +40,9 @@ jobs:
         
       # run tests!
       - run: gradle test
+      
+      # Upload coverage
+      - run: bash <(curl -s https://codecov.io/bash)
 
 
 
