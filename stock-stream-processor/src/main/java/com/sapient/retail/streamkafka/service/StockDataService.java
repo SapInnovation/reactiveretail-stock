@@ -1,10 +1,10 @@
 package com.sapient.retail.streamkafka.service;
 
-import com.sapient.retail.stock.common.model.Stock;
+import com.sapient.retail.stock.common.model.impl.RetailStock;
 
 public interface StockDataService {
 
-	void sendStockDataToKafkaTopic(Stock productStock);
+	void sendStockDataToKafkaTopic(RetailStock productStock);
 
 	/**
 	 * Method to evaluate supply, demand, available stock and persist them along with the updates to 
@@ -12,6 +12,6 @@ public interface StockDataService {
 	 * @param newStockDetails
 	 * @param existingStockDetails
 	 */
-	void evaluateAvailableStock(Stock newStockDetails, Stock existingStockDetails);
+	void evaluateAvailableStock(RetailStock newStockDetails, RetailStock existingStockDetails);
 
 }

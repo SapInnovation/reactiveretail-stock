@@ -6,7 +6,7 @@ import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
-import com.sapient.retail.stock.common.model.Stock;
+import com.sapient.retail.stock.common.model.impl.RetailStock;
 import com.sapient.retail.stock.common.repository.StockRepository;
 import com.sapient.retail.streamkafka.listener.StockDataListener;
 import com.sapient.retail.streamkafka.service.StockDataService;
@@ -34,13 +34,13 @@ public class StockDataListenerImpl implements StockDataListener {
 	 */
 	@Override
 	@StreamListener(StockDataStreams.INPUT)
-    public void handleStockDataFromTopic(@Payload Stock newStockDetails) {
+    public void handleStockDataFromTopic(@Payload RetailStock newStockDetails) {
 
-		Stock existingStockDetailsUpdated = null;
+		RetailStock existingStockDetailsUpdated = null;
 		boolean stockExists = stockRepository.existsById(newStockDetails.getUpc()).block();
 
 		if (stockExists) {
-			Stock existingStockDetails = stockRepository.findById(newStockDetails.getUpc()).block();
+			RetailStock existingStockDetails = stockRepository.findById(newStockDetails.getUpc()).block();
 			log.debug("New Prod Stock Details: {}", newStockDetails);
 
 			stockDataService.evaluateAvailableStock(newStockDetails, existingStockDetails);

@@ -1,6 +1,6 @@
 package com.sapient.retail.stock.service;
 
-import com.sapient.retail.stock.common.model.Stock;
+import com.sapient.retail.stock.common.model.impl.RetailStock;
 import com.sapient.retail.stock.exception.StockNotFoundException;
 import com.sapient.retail.stock.model.StockResponse;
 
@@ -13,7 +13,7 @@ public interface HelperService {
 	 *
 	 * @return Mono object
 	 */
-	Mono<Stock> stockNotFound();
+	Mono<RetailStock> stockNotFound();
 
 	/**
 	 * Method to build {@link StockResponse} from DB response for default store.
@@ -23,7 +23,7 @@ public interface HelperService {
 	 * @param stock the DB stock response object
 	 * @return the {@link StockResponse} object
 	 */
-	StockResponse buildFromStock(Stock stock);
+	StockResponse buildFromStock(RetailStock retailStock);
 
 	/**
 	 * Method to build {@link StockResponse} from DB response for given store.
@@ -33,6 +33,6 @@ public interface HelperService {
 	 * @param stock the DB stock response object
 	 * @return the {@link StockResponse} object
 	 */
-	StockResponse buildFromStock(Stock stock, Long locationId);
+	StockResponse buildFromStock(RetailStock retailStock, Long locationId);
 
 }
