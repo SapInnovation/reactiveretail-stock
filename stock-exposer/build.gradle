@@ -18,6 +18,7 @@ apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'org.junit.platform.gradle.plugin'
+apply plugin: 'jacoco'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -44,7 +45,7 @@ dependencies {
     testCompile 'org.junit.jupiter:junit-jupiter-api'
     testRuntime 'org.junit.jupiter:junit-jupiter-engine'
 
-    //testRuntime 'de.flapdoodle.embed:de.flapdoodle.embed.mongo:2.0.3'
+    testRuntime 'de.flapdoodle.embed:de.flapdoodle.embed.mongo:2.0.3'
 }
 
 test {
@@ -54,4 +55,26 @@ test {
     }
 
     failFast = true
+}
+
+jacoco {
+    toolVersion = '0.7.9'
+    applyTo junitPlatformTest
+}
+
+junitPlatformTest {
+    jacoco {
+      destinationFile = file("$buildDir/jacoco/test.exec")
+    }
+  }
+
+// Generate code coverage reports ... run with jacoco
+jacocoTestReport{
+    additionalSourceDirs = files(sourceSets.main.allJava.srcDirs)
+    reports {
+        xml.enabled true
+        csv.enabled false
+        html.enabled false
+    }
+    executionData = files("$buildDir/jacoco/test.exec")
 }
