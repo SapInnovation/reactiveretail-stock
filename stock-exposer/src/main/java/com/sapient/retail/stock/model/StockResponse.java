@@ -20,29 +20,6 @@ public class StockResponse {
 
     private Long availableStock;
 
-    /**
-     * Empty default constructor
-     */
-    public StockResponse() {
-        super();
-    }
-
-    /**
-     * @param upc
-     * @param productId
-     * @param locationId
-     * @param locationName
-     * @param availableStock
-     */
-    public StockResponse(Long upc, String productId, Long locationId, String locationName, Long availableStock) {
-        super();
-        this.upc = upc;
-        this.productId = productId;
-        this.locationId = locationId;
-        this.locationName = locationName;
-        this.availableStock = availableStock;
-    }
-
     public Long getUpc() {
         return upc;
     }
