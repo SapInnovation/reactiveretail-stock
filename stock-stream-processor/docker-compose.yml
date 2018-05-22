@@ -1,0 +1,11 @@
+version: '3.3'
+
+services:
+  stock-stream-processor:
+    image: stock-stream-processor
+    build: .
+    ports:
+      - 8080:8080
+    deploy:
+      replicas: 2
+    
