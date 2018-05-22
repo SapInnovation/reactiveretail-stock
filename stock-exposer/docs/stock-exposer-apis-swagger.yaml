@@ -1,0 +1,550 @@
+swagger: "2.0"
+info:
+  title: Reactive Stock Service API
+  version: 1.0.0
+  description: "Provides stock information on a per product/UPC or per store basis"
+  contact:
+    email: rarora9@sapient.com
+    
+host: localhost:8080
+#basePath: /stock
+schemes:
+ - http
+ - https
+
+paths:
+  /stock/product/{productId}:
+    get:
+      summary: Retrieve available stock for a given product.
+      description: Provides information on available stock for a given product in default location (online)
+      operationId: productStock
+      tags:
+        - productStock
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: productId
+          required: true
+          type: string
+          description: 'The products SAP article ID.'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/StockResponse"
+          examples:
+            application/json:
+              - productId: "P_70002"
+                upc: 70002
+                locationId: 10001
+                locationName: "online"
+                availableStock: 1005
+              - productId: "P_70002"
+                upc: 70003
+                locationId: 10001
+                locationName: "online"
+                availableStock: 105
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+          examples:
+            application/json:
+              - key: "BAD_REQUEST"
+                message: "stock not found"
+        401:
+          description: Authorization information is missing or invalid.
+        404:
+          description: Stock not found.
+          schema:
+            $ref: "#/definitions/Error"
+          examples:
+            application/json:
+              - key: "STOCK_NOT_FOUND"
+                message: "stock not found"
+        500:
+          description: Internal Server Error
+          schema:
+            $ref: "#/definitions/Error"
+          examples:
+            application/json:
+              - key: "Internal_Server_Error"
+                message: "Something went wrong, please try again in some time"
+  /stock/upc/{upcId}:
+    get:
+      summary: Retrieve available stock for a given UPC.
+      description: Provides information on available stock for a given UPC in default location (online)
+      operationId: skuStock
+      tags:
+        - skuStock
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: upcId
+          required: true
+          type: number
+          description: 'Unique identifier of physical unit as UPC/Item/SKU'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/StockResponse"
+          examples:
+            application/json:
+              - productId: "P_70002"
+                upc: 70002
+                locationId: 10001
+                locationName: "online"
+                availableStock: 1005
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+          examples:
+            application/json:
+              - key: "BAD_REQUEST"
+                message: "stock not found"
+        401:
+          description: Authorization information is missing or invalid.
+        404:
+          description: Stock not found.
+          schema:
+            $ref: "#/definitions/Error"
+          examples:
+            application/json:
+              - key: "STOCK_NOT_FOUND"
+                message: "stock not found"
+        500:
+          description: Internal Server Error
+          schema:
+            $ref: "#/definitions/Error"
+          examples:
+            application/json:
+              - key: "Internal_Server_Error"
+                message: "Something went wrong, please try again in some time"
+  /stock/upc/{upcId}/{locationId}:
+    get:
+      summary: Retrieve available stock for a given UPC and location.
+      description: Provides information on available stock for a given UPC at requested location
+      operationId: skuStockForLocation
+      tags:
+        - skuStockForLocation
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: upcId
+          required: true
+          type: number
+          description: 'Unique identifier of physical unit as UPC/Item/SKU'
+        - in: path
+          name: locationId
+          required: true
+          type: number
+          description: 'Physical location that has ability to hold stock'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/StockResponse"
+          examples:
+            application/json:
+              - productId: "P_70002"
+                upc: 70002
+                locationId: 11001
+                locationName: "Paddington"
+                availableStock: 1005
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+          examples:
+            application/json:
+              - key: "BAD_REQUEST"
+                message: "stock not found"
+        401:
+          description: Authorization information is missing or invalid.
+        404:
+          description: Stock not found.
+          schema:
+            $ref: "#/definitions/Error"
+          examples:
+            application/json:
+              - key: "STOCK_NOT_FOUND"
+                message: "stock not found"
+        500:
+          description: Internal Server Error
+          schema:
+            $ref: "#/definitions/Error"
+          examples:
+            application/json:
+              - key: "Internal_Server_Error"
+                message: "Something went wrong, please try again in some time"
+  /stock/product/{productId}/{locationId}:
+    get:
+      summary: Retrieve available stock for a given Product and location.
+      description: Provides information on available stock for a given Product at requested location
+      operationId: stockForLocation
+      tags:
+        - stockForLocation
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: productId
+          required: true
+          type: string
+          description: 'The products SAP article ID.'
+        - in: path
+          name: locationId
+          required: true
+          type: number
+          description: 'Physical location that has ability to hold stock'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/StockResponse"
+          examples:
+            application/json:
+              - productId: "P_70002"
+                upc: 70002
+                locationId: 11001
+                locationName: "Paddington"
+                availableStock: 1005
+              - productId: "P_70002"
+                upc: 70003
+                locationId: 10001
+                locationName: "Paddington"
+                availableStock: 105
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+          examples:
+            application/json:
+              - key: "BAD_REQUEST"
+                message: "stock not found"
+        401:
+          description: Authorization information is missing or invalid.
+        404:
+          description: Stock not found.
+          schema:
+            $ref: "#/definitions/Error"
+          examples:
+            application/json:
+              - key: "STOCK_NOT_FOUND"
+                message: "stock not found"
+        500:
+          description: Internal Server Error
+          schema:
+            $ref: "#/definitions/Error"
+          examples:
+            application/json:
+              - key: "Internal_Server_Error"
+                message: "Something went wrong, please try again in some time"
+  /stream/stock/product/{productId}:
+    get:
+      summary: Retrieve available stock for requested product at default location (online) & open Server side event stream.
+      description: Provides information on available stock for a given Product & open Server side event stream
+      operationId: stockStream
+      tags:
+        - stockStream
+      consumes:
+        - application/json
+      produces:
+        - text/event-stream
+      parameters:
+        - in: path
+          name: productId
+          required: true
+          type: string
+          description: 'The products SAP article ID.'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/StockResponse"
+          examples:
+            application/json:
+              - productId: "P_70002"
+                upc: 70002
+                locationId: 10001
+                locationName: "online"
+                availableStock: 1005
+              - productId: "P_70002"
+                upc: 70003
+                locationId: 10001
+                locationName: "online"
+                availableStock: 105
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+          examples:
+            application/json:
+              - key: "BAD_REQUEST"
+                message: "stock not found"
+        401:
+          description: Authorization information is missing or invalid.
+        404:
+          description: Stock not found.
+          schema:
+            $ref: "#/definitions/Error"
+          examples:
+            application/json:
+              - key: "STOCK_NOT_FOUND"
+                message: "stock not found"
+        500:
+          description: Internal Server Error
+          schema:
+            $ref: "#/definitions/Error"
+          examples:
+            application/json:
+              - key: "Internal_Server_Error"
+                message: "Something went wrong, please try again in some time"
+  /stream/stock/upc/{upcId}:
+    get:
+      summary: Retrieve available stock for requested product at default location (online) & open Server side event stream.
+      description: Provides information on available stock for a given Product & open Server side event stream
+      operationId: skuStockStream
+      tags:
+        - skuStockStream
+      consumes:
+        - application/json
+      produces:
+        - text/event-stream
+      parameters:
+        - in: path
+          name: upcId
+          required: true
+          type: number
+          description: 'Unique identifier of physical unit as UPC/Item/SKU'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/StockResponse"
+          examples:
+            application/json:
+              - productId: "P_70002"
+                upc: 70002
+                locationId: 10001
+                locationName: "online"
+                availableStock: 1005
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+          examples:
+            application/json:
+              - key: "BAD_REQUEST"
+                message: "stock not found"
+        401:
+          description: Authorization information is missing or invalid.
+        404:
+          description: Stock not found.
+          schema:
+            $ref: "#/definitions/Error"
+          examples:
+            application/json:
+              - key: "STOCK_NOT_FOUND"
+                message: "stock not found"
+        500:
+          description: Internal Server Error
+          schema:
+            $ref: "#/definitions/Error"
+          examples:
+            application/json:
+              - key: "Internal_Server_Error"
+                message: "Something went wrong, please try again in some time"
+  /stream/stock/upc/{upcId}/{locationId}:
+    get:
+      summary: Retrieve available stock for requested product and location & open Server side event stream.
+      description: Provides information on available stock for a given Product and location & open Server side event stream
+      operationId: skuStockStreamForLocation
+      tags:
+        - skuStockStreamForLocation
+      consumes:
+        - application/json
+      produces:
+        - text/event-stream
+      parameters:
+        - in: path
+          name: upcId
+          required: true
+          type: number
+          description: 'Unique identifier of physical unit as UPC/Item/SKU'
+        - in: path
+          name: locationId
+          required: true
+          type: number
+          description: 'Physical location that has ability to hold stock'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/StockResponse"
+          examples:
+            application/json:
+              - productId: "P_70002"
+                upc: 70002
+                locationId: 11001
+                locationName: "Paddington"
+                availableStock: 1005
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+          examples:
+            application/json:
+              - key: "BAD_REQUEST"
+                message: "stock not found"
+        401:
+          description: Authorization information is missing or invalid.
+        404:
+          description: Stock not found.
+          schema:
+            $ref: "#/definitions/Error"
+          examples:
+            application/json:
+              - key: "STOCK_NOT_FOUND"
+                message: "stock not found"
+        500:
+          description: Internal Server Error
+          schema:
+            $ref: "#/definitions/Error"
+          examples:
+            application/json:
+              - key: "Internal_Server_Error"
+                message: "Something went wrong, please try again in some time"
+  /stream/stock/product/{productId}/{locationId}:
+    get:
+      summary: Retrieve available stock for requested product and location & open Server side event stream.
+      description: Provides information on available stock for a given Product and location & open Server side event stream
+      operationId: stockStreamForLocation
+      tags:
+        - stockStreamForLocation
+      consumes:
+        - application/json
+      produces:
+        - text/event-stream
+      parameters:
+        - in: path
+          name: productId
+          required: true
+          type: string
+          description: 'The products SAP article ID.'
+        - in: path
+          name: locationId
+          required: true
+          type: number
+          description: 'Physical location that has ability to hold stock'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/StockResponse"
+          examples:
+            application/json:
+              - productId: "P_70002"
+                upc: 70002
+                locationId: 11001
+                locationName: "Paddington"
+                availableStock: 1005
+              - productId: "P_70002"
+                upc: 70003
+                locationId: 11001
+                locationName: "Paddington"
+                availableStock: 105
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+          examples:
+            application/json:
+              - key: "BAD_REQUEST"
+                message: "stock not found"
+        401:
+          description: Authorization information is missing or invalid.
+        404:
+          description: Stock not found.
+          schema:
+            $ref: "#/definitions/Error"
+          examples:
+            application/json:
+              - key: "STOCK_NOT_FOUND"
+                message: "stock not found"
+        500:
+          description: Internal Server Error
+          schema:
+            $ref: "#/definitions/Error"
+          examples:
+            application/json:
+              - key: "Internal_Server_Error"
+                message: "Something went wrong, please try again in some time"
+
+definitions:
+  ProductID:
+    type: string
+    description: "A unique identifier of a physical product. This is also known as the SAP article number."
+    minLength: 3
+    maxLength: 20
+  LocationID:
+    type: string
+    description: "A physical location that has the ability to hold stock."
+    minLength: 3
+    maxLength: 20
+    example: "10001"
+  LocationName:
+    type: string
+    description: "Description of a physical location that has the ability to hold stock with id under LocationID"
+    minLength: 3
+    maxLength: 256
+    example: "online"
+  UPC:
+    type: number
+    description: "A unique identifier of a physical SKU which identifies an item"
+    minimum: 10
+    example: "70002"
+  AvailableStock:
+    type: integer
+    description: "The available stock/quantity of the product"
+    format: int64
+  StockResponse:
+    type: object
+    properties:
+      productId:
+        $ref: "#/definitions/ProductID"
+      upc:
+        $ref: "#/definitions/UPC"
+      locationId:
+        $ref: "#/definitions/LocationID"
+      locationName:
+        $ref: "#/definitions/LocationName"
+      availableStock:
+        $ref: "#/definitions/AvailableStock"
+  Error:
+    type: object
+    description: "The error code and message"
+    properties:
+      key:
+        type: string
+        description: "An error key for the error"
+      message:
+        type: string
+        description: "A message describing the error"
+
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"
