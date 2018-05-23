@@ -8,7 +8,7 @@ subprojects {
 
     description = "reactiveretail-stock"
     group = 'com.sapient.retail.stock'
-    version = '0.0.1-SNAPSHOT'
+    version = 'latest'
 
     repositories {
         mavenCentral()
