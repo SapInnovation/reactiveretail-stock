@@ -2,30 +2,30 @@ buildscript {
 
     repositories {
         mavenCentral()
+
     }
 
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
         classpath("org.junit.platform:junit-platform-gradle-plugin:1.0.2")
+        classpath("se.transmode.gradle:gradle-docker:1.2")
+
     }
 
     description = 'exposer'
 }
-
+apply plugin: 'docker'
 apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'org.junit.platform.gradle.plugin'
-apply plugin: 'jacoco'
+
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-repositories {
-     mavenCentral()
-}
 
 configurations {
     compile.exclude module: 'spring-boot-starter-tomcat'
@@ -36,6 +36,8 @@ dependencies {
     compile 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
     compile 'org.springframework.boot:spring-boot-starter-actuator'
     compile 'org.springframework.boot:spring-boot-devtools'
+
+    compile 'org.glassfish.jersey.inject:jersey-hk2:2.26'
 
     compile project(':stock-common')
 
@@ -48,33 +50,18 @@ dependencies {
     testRuntime 'de.flapdoodle.embed:de.flapdoodle.embed.mongo:2.0.3'
 }
 
-test {
-    useJUnitPlatform {
-        excludeTags 'slow'
-        includeEngines 'junit-jupiter'
-    }
 
-    failFast = true
+task buildDocker(type: Docker) {
+    baseImage = 'openjdk:8u121-jdk'
+    push = project.hasProperty('push')
+    registry='https://hub.docker.com/r/reactiveretail'
+    tag = 'reactiveretail/stockservice'
+    addFile {
+        from jar
+        rename {'stock-exposer.jar'}
+    }
+    entryPoint(['java', '-Djava.security.egd=file:/dev/./urandom', '-jar', '/stock-exposer.jar'])
+
 }
 
-jacoco {
-    toolVersion = '0.7.9'
-    applyTo junitPlatformTest
-}
-
-junitPlatformTest {
-    jacoco {
-      destinationFile = file("$buildDir/jacoco/test.exec")
-    }
-  }
-
-// Generate code coverage reports ... run with jacoco
-jacocoTestReport{
-    additionalSourceDirs = files(sourceSets.main.allJava.srcDirs)
-    reports {
-        xml.enabled true
-        csv.enabled false
-        html.enabled false
-    }
-    executionData = files("$buildDir/jacoco/test.exec")
-}
+buildDocker.dependsOn(build)
