@@ -64,9 +64,4 @@ jobs:
         inputs:
           - name: git-repo-exposer
         run:
-          dir: git-repo-exposer
-          path: bash
-          args:
-          - docker login -u reactiveretail -p passw0rd
-          - |
-            ./gradlew :stock-exposer-service:build --no-daemon
+          path: ./git-repo-exposer/ci/kafka_remote_setup.sh
