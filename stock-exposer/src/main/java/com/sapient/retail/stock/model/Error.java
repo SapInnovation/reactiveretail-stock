@@ -1,6 +1,7 @@
 package com.sapient.retail.stock.model;
 
 import com.sapient.retail.stock.common.builder.GenericBuilder;
+import org.springframework.util.StringUtils;
 
 public class Error {
     private int code = 200;
@@ -33,6 +34,16 @@ public class Error {
         return GenericBuilder.of(Error::new)
                 .with(Error::setCode, 500)
                 .with(Error::setMessage, "something went wrong, please try again in some time.")
+                .build();
+    }
+
+    public static Error badInput(final String propertyName) {
+        String message = "";
+        if(StringUtils.hasText(propertyName))
+            message = " Invalid input for field: " + propertyName;
+        return GenericBuilder.of(Error::new)
+                .with(Error::setCode, 400)
+                .with(Error::setMessage, "Bad request." + message)
                 .build();
     }
 }
