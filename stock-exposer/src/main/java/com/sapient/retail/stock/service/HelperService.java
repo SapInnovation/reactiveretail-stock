@@ -3,12 +3,16 @@ package com.sapient.retail.stock.service;
 import com.sapient.retail.stock.common.builder.GenericBuilder;
 import com.sapient.retail.stock.common.model.Stock;
 import com.sapient.retail.stock.common.model.StockInfo;
+import com.sapient.retail.stock.common.model.impl.RetailStock;
+import com.sapient.retail.stock.common.model.impl.RetailStockInfo;
 import com.sapient.retail.stock.exception.StockNotFoundException;
 import com.sapient.retail.stock.model.StockResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
 import reactor.core.publisher.Mono;
 
 /**
@@ -27,8 +31,8 @@ public class HelperService {
      *
      * @return Mono object
      */
-    public Mono<Stock> stockNotFound() {
-        return Mono.just(GenericBuilder.of(Stock::new)
+    public Mono<RetailStock> stockNotFound() {
+        return Mono.just(GenericBuilder.of(RetailStock::new)
                 .with(Stock::setUpc, -1000000L)
                 .build());
     }
@@ -59,12 +63,12 @@ public class HelperService {
         }
 
         StockInfo stockInfo = new StockInfo();
-        if (stock.getStock().containsKey(locationId)) {
+        if ((stock instanceof RetailStock) && ((RetailStock)stock).getStock().containsKey(locationId)) {
             LOGGER.debug(new StringBuilder("Stock Response getting built from Stock for UPC: ")
                     .append(stock.getUpc())
                     .append(" & Product: ").append(stock.getProductId())
                     .append(" & location: ").append(locationId).toString());
-            stockInfo = stock.getStock().get(locationId);
+            stockInfo = ((RetailStock)stock).getStock().get(locationId);
         }
         return GenericBuilder.of(StockResponse::new)
                 .with(StockResponse::setUpc, stock.getUpc())

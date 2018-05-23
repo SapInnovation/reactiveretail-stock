@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.MimeTypeUtils;
 
 import com.sapient.retail.stock.common.model.Stock;
+import com.sapient.retail.stock.common.model.impl.RetailStock;
 import com.sapient.retail.streamkafka.service.StockDataService;
 import com.sapient.retail.streamkafka.stream.StockDataStreams;
 
@@ -47,21 +48,23 @@ public class StockDataServiceImpl implements StockDataService {
 	 */
 	@Override
 	public void evaluateAvailableStock(Stock newStockDetails, Stock existingStockDetails) {
-		newStockDetails.getStock().forEach((locationId, skuStock) -> {
-			if (demandInfoProvider.equals(newStockDetails.getInformationSource())) {
-				Long existingSupplyForSku = existingStockDetails.getStock().get(locationId).getSupply();
-				Long newAvailableSkuStock = existingSupplyForSku - skuStock.getDemand();
-				skuStock.setAvailableStock(newAvailableSkuStock<0 ? 0 : newAvailableSkuStock);
-				skuStock.setSupply(existingSupplyForSku);
-			} else if (supplyInfoProvider.equals(newStockDetails.getInformationSource())) {
-				skuStock.setDemand(new Long(0));
-				skuStock.setAvailableStock(skuStock.getSupply());
-			}
-		});
-		logger.debug("Existing Prod Stock Details after filter: {}", existingStockDetails);
-		existingStockDetails.getStock().putAll(newStockDetails.getStock());
-		existingStockDetails.setInformationSource(newStockDetails.getInformationSource());
-		existingStockDetails.setProductId(newStockDetails.getProductId());
-		existingStockDetails.setPartNumber(newStockDetails.getPartNumber());
+		if((newStockDetails instanceof RetailStock) && (existingStockDetails instanceof RetailStock)){
+			((RetailStock)newStockDetails).getStock().forEach((locationId, skuStock) -> {
+				if (demandInfoProvider.equals(((RetailStock)newStockDetails).getInformationSource())) {
+					Long existingSupplyForSku = ((RetailStock)newStockDetails).getStock().get(locationId).getSupply();
+					Long newAvailableSkuStock = existingSupplyForSku - skuStock.getDemand();
+					skuStock.setAvailableStock(newAvailableSkuStock<0 ? 0 : newAvailableSkuStock);
+					skuStock.setSupply(existingSupplyForSku);
+				} else if (supplyInfoProvider.equals(((RetailStock)newStockDetails).getInformationSource())) {
+					skuStock.setDemand(new Long(0));
+					skuStock.setAvailableStock(skuStock.getSupply());
+				}
+			});
+			logger.debug("Existing Prod Stock Details after filter: {}", existingStockDetails);
+			((RetailStock)existingStockDetails).getStock().putAll(((RetailStock)newStockDetails).getStock());
+			((RetailStock)existingStockDetails).setInformationSource(((RetailStock)newStockDetails).getInformationSource());
+			existingStockDetails.setProductId(newStockDetails.getProductId());
+			existingStockDetails.setPartNumber(newStockDetails.getPartNumber());
+		}
 	}
 }

@@ -7,6 +7,7 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
 import com.sapient.retail.stock.common.model.Stock;
+import com.sapient.retail.stock.common.model.impl.RetailStock;
 import com.sapient.retail.stock.common.repository.StockRepository;
 import com.sapient.retail.streamkafka.listener.StockDataListener;
 import com.sapient.retail.streamkafka.service.StockDataService;
@@ -46,9 +47,9 @@ public class StockDataListenerImpl implements StockDataListener {
 			stockDataService.evaluateAvailableStock(newStockDetails, existingStockDetails);
 
 			log.debug("Existing Prod Stock Details after merge: {}", existingStockDetails);
-			existingStockDetailsUpdated = stockRepository.save(existingStockDetails).block();
+			existingStockDetailsUpdated = stockRepository.save((RetailStock)existingStockDetails).block();
 		} else {
-			existingStockDetailsUpdated  = stockRepository.save(newStockDetails).block();
+			existingStockDetailsUpdated  = stockRepository.save((RetailStock)newStockDetails).block();
 		}
     	log.info("Received stock message: {}", existingStockDetailsUpdated);
     }

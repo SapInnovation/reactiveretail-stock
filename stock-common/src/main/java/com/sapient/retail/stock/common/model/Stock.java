@@ -1,21 +1,18 @@
 package com.sapient.retail.stock.common.model;
 
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Document;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.Map;
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 
 /**
  * Bean with fields mapped to MongoDB collection and its fields as mentioned.
  *
  * @author ragarora
  */
-@Document(collection = "stock")
-public class Stock {
+public abstract class Stock {
     @NotNull
     @Size(min = 10, message = "UPC id cannot be so low")
     @Id
@@ -29,13 +26,6 @@ public class Stock {
     @Size(min = 3, max = 20, message = "Product id should be between 3 and 20 characters")
     @Indexed
     private String productId;
-
-    @NotNull
-    @Size(min = 3, max = 20, message = "Information Source should be between 3 and 20 characters")
-    private String informationSource;
-
-    @NotNull
-    private Map<Long, StockInfo> stock;
 
     public Long getUpc() {
         return upc;
@@ -61,30 +51,12 @@ public class Stock {
         this.productId = productId;
     }
 
-    public String getInformationSource() {
-        return informationSource;
-    }
-
-    public void setInformationSource(String informationSource) {
-        this.informationSource = informationSource;
-    }
-
-    public Map<Long, StockInfo> getStock() {
-        return stock;
-    }
-
-    public void setStock(Map<Long, StockInfo> stock) {
-        this.stock = stock;
-    }
-
     @Override
     public String toString() {
         return "Stock{" +
                 "upc=" + upc +
                 ", partNumber='" + partNumber + '\'' +
-                ", productId='" + productId + '\'' +
-                ", informationSource='" + informationSource + '\'' +
-                ", stock=" + stock +
+                ", productId='" + productId +
                 '}';
     }
 }
