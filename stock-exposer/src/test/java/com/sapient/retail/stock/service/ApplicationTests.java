@@ -16,9 +16,6 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 
 import java.util.*;
 
-/**
- * @author ragarora
- */
 @SpringJUnitConfig(Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class ApplicationTests {
@@ -27,7 +24,7 @@ class ApplicationTests {
     private WebTestClient webTestClient;
 
     @Autowired
-    StockRepository stockRepository;
+    private StockRepository stockRepository;
 
     @BeforeEach
     void cleanDB() {
@@ -120,7 +117,7 @@ class ApplicationTests {
     }
 
     @Test
-    void api_StockByUPCAndLocation_ValidUPC_ValidLocation() {
+    void api_StockByUPCAndLocation_ShouldComplete() {
         Map<String, Object> uriMap = new HashMap<>();
         uriMap.put("upc", 10001L);
         uriMap.put("locationId", 10002L);
@@ -202,6 +199,78 @@ class ApplicationTests {
                 .jsonPath("$.locationName").isEmpty()
                 .jsonPath("$.availableStock").isEmpty();
     }
+
+    @Test
+    void api_StockByProductAndLocation_ShouldComplete() {
+        Map<String, Object> uriMap = new HashMap<>();
+        uriMap.put("productId", "P_10001");
+        uriMap.put("locationId", 10002L);
+
+        webTestClient.get()
+                .uri("/stock/product/{productId}/{locationId}", uriMap)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .consumeWith(response ->
+                        Assertions.assertThat(response.getResponseBody()).isNotNull())
+                .jsonPath("$.[0].upc").isEqualTo(10001L)
+                .jsonPath("$.[0].productId").isEqualTo("P_10001")
+                .jsonPath("$.[0]locationId").isEqualTo(10002L)
+                .jsonPath("$.[0]availableStock").isEqualTo(175L);
+    }
+
+    @Test
+    void api_StockByProductAndLocation_InvalidProduct_ShouldSend404() {
+        Map<String, Object> uriMap = new HashMap<>();
+        uriMap.put("productId", "P_1");
+        uriMap.put("locationId", 10002L);
+
+        webTestClient.get()
+                .uri("/stock/product/{productId}/{locationId}", uriMap)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .consumeWith(response ->
+                        Assertions.assertThat(response.getResponseBody()).isNotNull())
+                .jsonPath("$.code").isEqualTo(404);
+    }
+
+    @Test
+    void api_StockByProductAndLocation_InvalidLocation_ShouldGetNullLocation() {
+        Map<String, Object> uriMap = new HashMap<>();
+        uriMap.put("productId", "P_10001");
+        uriMap.put("locationId", 1L);
+
+        webTestClient.get()
+                .uri("/stock/product/{productId}/{locationId}", uriMap)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .consumeWith(response ->
+                        Assertions.assertThat(response.getResponseBody()).isNotNull())
+                .jsonPath("$.[0].upc").isEqualTo(10001L)
+                .jsonPath("$.[0].productId").isEqualTo("P_10001")
+                .jsonPath("$.[0]locationId").isEqualTo(1L)
+                .jsonPath("$.[0]locationName").isEmpty()
+                .jsonPath("$.[0]availableStock").isEmpty();
+    }
+
+    @Test
+    void api_StockByProductAndLocation_IncorrectLocation_ShouldSend400() {
+        Map<String, Object> uriMap = new HashMap<>();
+        uriMap.put("productId", "P_10001");
+        uriMap.put("locationId", "abc");
+
+        webTestClient.get()
+                .uri("/stock/product/{productId}/{locationId}", uriMap)
+                .exchange()
+                .expectStatus().is4xxClientError()
+                .expectBody()
+                .consumeWith(response ->
+                        Assertions.assertThat(response.getResponseBody()).isNotNull())
+                .jsonPath("$.code").isEqualTo(400);
+    }
+
 
     private void saveStockInDB(final long upc,
                                final String productId,
