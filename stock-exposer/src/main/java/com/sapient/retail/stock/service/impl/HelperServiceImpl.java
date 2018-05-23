@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import com.sapient.retail.stock.common.builder.GenericBuilder;
 import com.sapient.retail.stock.common.model.Stock;
 import com.sapient.retail.stock.common.model.StockInfo;
+import com.sapient.retail.stock.common.model.impl.RetailStock;
+import com.sapient.retail.stock.common.model.impl.RetailStockInfo;
 import com.sapient.retail.stock.exception.StockNotFoundException;
 import com.sapient.retail.stock.model.StockResponse;
 import com.sapient.retail.stock.service.HelperService;
@@ -29,8 +31,8 @@ public class HelperServiceImpl implements HelperService {
 	 * @see com.sapient.retail.stock.service.HelperService#stockNotFound()
 	 */
     @Override
-	public Mono<Stock> stockNotFound() {
-        return Mono.just(GenericBuilder.of(Stock::new)
+	public Mono<RetailStock> stockNotFound() {
+        return Mono.just(GenericBuilder.of(RetailStock::new)
                 .with(Stock::setUpc, -1000000L)
                 .build());
     }
@@ -53,7 +55,7 @@ public class HelperServiceImpl implements HelperService {
         	throw new StockNotFoundException();
         }
 
-        StockInfo stockInfo = new StockInfo();
+        StockInfo stockInfo = new RetailStockInfo();
         if (stock.getStock().containsKey(locationId)) {
         	LOGGER.debug(new StringBuilder("Stock Response getting built from Stock for UPC: ")
         			.append(stock.getUpc())

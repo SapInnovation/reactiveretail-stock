@@ -1,6 +1,7 @@
 package com.sapient.retail.stock.service;
 
 import com.sapient.retail.stock.common.model.Stock;
+import com.sapient.retail.stock.common.model.impl.RetailStock;
 import com.sapient.retail.stock.exception.StockNotFoundException;
 import com.sapient.retail.stock.model.StockResponse;
 
@@ -13,7 +14,7 @@ public interface HelperService {
 	 *
 	 * @return Mono object
 	 */
-	Mono<Stock> stockNotFound();
+	Mono<RetailStock> stockNotFound();
 
 	/**
 	 * Method to build {@link StockResponse} from DB response for default store.
