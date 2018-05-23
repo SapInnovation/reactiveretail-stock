@@ -1,28 +1,75 @@
+buildscript {
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath("org.junit.platform:junit-platform-gradle-plugin:1.0.2")
+    }
+
+    description = 'stock-stream-processor'
+}
+
+
 apply plugin: 'java'
 apply plugin: 'maven'
-
-description = 'stock-stream-processor'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'org.junit.platform.gradle.plugin'
+apply plugin: 'jacoco'
+apply plugin: 'findbugs'
+apply plugin: 'pmd'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
-tasks.withType(JavaCompile) {
-	options.encoding = 'UTF-8'
-}
+
 
 repositories {
-        
-     maven { url "http://repo.spring.io/libs-milestone" }
-     maven { url "http://repo.maven.apache.org/maven2" }
+    mavenCentral()
 }
 
 dependencies {
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version:'2.0.1.RELEASE'
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter', version:'2.0.1.RELEASE'
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-mongodb-reactive', version:'2.0.1.RELEASE'
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version:'2.0.1.RELEASE'
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-stream', version:'2.0.0.RELEASE'
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-stream-kafka', version:'2.0.0.RELEASE'
-    compile group: 'org.springframework.boot', name: 'spring-boot-devtools', version:'2.0.1.RELEASE'
+    compile 'org.springframework.boot:spring-boot-starter-web'
+    compile 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
+    compile 'org.springframework.boot:spring-boot-starter-actuator'
+    compile 'org.springframework.boot:spring-boot-devtools'
+
+    compile 'org.springframework.cloud:spring-cloud-stream:2.0.0.RELEASE'
+    compile 'org.springframework.cloud:spring-cloud-starter-stream-kafka:2.0.0.RELEASE'
 
     compile project(':stock-common')
+
+    compileOnly 'com.google.code.findbugs:annotations:3.0.1'
+    compileOnly 'com.google.code.findbugs:jsr305:3.0.1'
+
+    testCompile 'org.springframework.boot:spring-boot-starter-test'
+    testCompile 'org.springframework.kafka:spring-kafka-test'
+    testCompile 'io.projectreactor:reactor-test'
+
+    testCompile 'org.junit.jupiter:junit-jupiter-api'
+    testRuntime 'org.junit.jupiter:junit-jupiter-engine'
+
+    testRuntime 'de.flapdoodle.embed:de.flapdoodle.embed.mongo:2.0.3'
+}
+
+test {
+    useJUnitPlatform {
+        includeEngines 'junit-jupiter'
+    }
+
+    failFast = true
+}
+
+jacoco {
+    toolVersion = '0.7.9'
+    applyTo junitPlatformTest
+}
+
+tasks.withType(FindBugs) {
+    reports {
+        xml.enabled = false
+        html.enabled = true
+    }
 }

@@ -64,4 +64,4 @@ jobs:
         inputs:
           - name: git-repo-exposer
         run:
-          path: ./git-repo-exposer/ci/kafka_remote_setup.sh
+          path: ./git-repo-exposer/ci/scripts/dockerbuild.sh

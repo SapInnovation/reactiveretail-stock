@@ -17,21 +17,21 @@ import java.util.Map;
 @Document(collection = "stock")
 public class Stock {
     @NotNull
-    @Size(min = 10, message = "UPC id cannot be so low")
+    //@Size(min = 10, message = "UPC id cannot be so low")
     @Id
     private Long upc;
 
     @NotNull
-    @Size(min = 3, max = 20, message = "Partnumber should be between 3 and 20 characters")
+    //@Size(min = 3, max = 20, message = "Partnumber should be between 3 and 20 characters")
     private String partNumber;
 
     @NotNull
-    @Size(min = 3, max = 20, message = "Product id should be between 3 and 20 characters")
+    //@Size(min = 3, max = 20, message = "Product id should be between 3 and 20 characters")
     @Indexed
     private String productId;
 
     @NotNull
-    @Size(min = 3, max = 20, message = "Information Source should be between 3 and 20 characters")
+    //@Size(min = 3, max = 20, message = "Information Source should be between 3 and 20 characters")
     private String informationSource;
 
     @NotNull
