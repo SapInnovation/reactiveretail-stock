@@ -44,8 +44,14 @@ dependencies {
     compileOnly 'com.google.code.findbugs:annotations:3.0.1'
     compileOnly 'com.google.code.findbugs:jsr305:3.0.1'
 
+    testCompile 'org.springframework.boot:spring-boot-starter-test'
+    testCompile 'org.springframework.kafka:spring-kafka-test'
+    testCompile 'io.projectreactor:reactor-test'
+
     testCompile 'org.junit.jupiter:junit-jupiter-api'
     testRuntime 'org.junit.jupiter:junit-jupiter-engine'
+
+    testRuntime 'de.flapdoodle.embed:de.flapdoodle.embed.mongo:2.0.3'
 }
 
 test {

@@ -75,7 +75,7 @@ jacocoTestReport {
     reports {
         xml.enabled = true
         csv.enabled = false
-        html.enabled = false
+        html.enabled = true
     }
     executionData = files("$buildDir/jacoco/test.exec")
 }

@@ -54,12 +54,12 @@ public class StockDataService {
             } else if (supplyInfoProvider.equals(newStockDetails.getInformationSource())) {
                 skuStock.setDemand(0L);
                 skuStock.setAvailableStock(skuStock.getSupply());
+                existingStockDetails.setProductId(newStockDetails.getProductId());
+                existingStockDetails.setPartNumber(newStockDetails.getPartNumber());
             }
         });
         logger.debug("Existing Prod Stock Details after filter: {}", existingStockDetails);
         existingStockDetails.getStock().putAll(newStockDetails.getStock());
         existingStockDetails.setInformationSource(newStockDetails.getInformationSource());
-        existingStockDetails.setProductId(newStockDetails.getProductId());
-        existingStockDetails.setPartNumber(newStockDetails.getPartNumber());
     }
 }
