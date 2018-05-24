@@ -44,6 +44,7 @@ dependencies {
     compileOnly 'com.google.code.findbugs:annotations:3.0.1'
     compileOnly 'com.google.code.findbugs:jsr305:3.0.1'
 
+    testCompile('log4j:log4j:1.2.17')
     testCompile 'org.springframework.boot:spring-boot-starter-test'
     testCompile 'org.springframework.kafka:spring-kafka-test'
     testCompile 'io.projectreactor:reactor-test'

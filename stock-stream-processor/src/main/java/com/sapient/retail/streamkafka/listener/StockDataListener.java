@@ -52,6 +52,7 @@ public class StockDataListener {
             log.debug("Existing Prod Stock Details after merge: {}", existingStockDetails);
             existingStockDetailsUpdated = stockRepository.save(existingStockDetails).block();
         } else {
+        	stockDataService.evaluateNewStock(newStockDetails);
             existingStockDetailsUpdated = stockRepository.save(newStockDetails).block();
         }
 

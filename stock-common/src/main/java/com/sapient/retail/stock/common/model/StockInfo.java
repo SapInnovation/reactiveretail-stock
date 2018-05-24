@@ -3,6 +3,7 @@ package com.sapient.retail.stock.common.model;
 
 import org.springframework.lang.Nullable;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -18,15 +19,15 @@ public class StockInfo {
     private String locationName;
 
     @Nullable
-    @Size(min = 0, message = "Supply value cannot be less than zero")
+    @Min(value=0L, message = "Supply value cannot be less than zero")
     private Long supply;
 
     @Nullable
-    @Size(min = 0, message = "Demand value cannot be less than zero")
+    @Min(value=0L, message = "Demand value cannot be less than zero")
     private Long demand;
 
     @Nullable
-    @Size(min = 0, message = "Available Stock value cannot be less than zero")
+    @Min(value=0L, message = "Available Stock cannot be less than zero")
     private Long availableStock;
 
     //@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
