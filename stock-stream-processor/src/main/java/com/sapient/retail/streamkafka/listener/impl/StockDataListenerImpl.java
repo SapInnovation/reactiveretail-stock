@@ -6,7 +6,6 @@ import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
-import com.sapient.retail.stock.common.model.Stock;
 import com.sapient.retail.stock.common.model.impl.RetailStock;
 import com.sapient.retail.stock.common.repository.StockRepository;
 import com.sapient.retail.streamkafka.listener.StockDataListener;
@@ -14,10 +13,10 @@ import com.sapient.retail.streamkafka.service.StockDataService;
 import com.sapient.retail.streamkafka.stream.StockDataStreams;
 
 @Component
-public class StockDataListenerImpl implements StockDataListener {
+public class StockDataListenerImpl implements StockDataListener<RetailStock> {
 	
 	private final StockRepository<RetailStock> stockRepository;
-	private final StockDataService stockDataService;
+	private final StockDataService<RetailStock> stockDataService;
 	private Logger log = LoggerFactory.getLogger(this.getClass());
 	
 	/**
@@ -25,7 +24,7 @@ public class StockDataListenerImpl implements StockDataListener {
 	 * @param stockDataService
 	 */
 	public StockDataListenerImpl(final StockRepository<RetailStock> stockRepository,
-								 final StockDataService stockDataService) {
+								 final StockDataService<RetailStock> stockDataService) {
 		super();
 		this.stockRepository = stockRepository;
 		this.stockDataService = stockDataService;
@@ -36,13 +35,13 @@ public class StockDataListenerImpl implements StockDataListener {
 	 */
 	@Override
 	@StreamListener(StockDataStreams.INPUT)
-    public void handleStockDataFromTopic(@Payload Stock newStockDetails) {
+    public void handleStockDataFromTopic(@Payload RetailStock newStockDetails) {
 
-		Stock existingStockDetailsUpdated = null;
+		RetailStock existingStockDetailsUpdated = null;
 		boolean stockExists = stockRepository.existsById(newStockDetails.getUpc()).block();
 
 		if (stockExists) {
-			Stock existingStockDetails = stockRepository.findById(newStockDetails.getUpc()).block();
+			RetailStock existingStockDetails = stockRepository.findById(newStockDetails.getUpc()).block();
 			log.debug("New Prod Stock Details: {}", newStockDetails);
 
 			stockDataService.evaluateAvailableStock(newStockDetails, existingStockDetails);

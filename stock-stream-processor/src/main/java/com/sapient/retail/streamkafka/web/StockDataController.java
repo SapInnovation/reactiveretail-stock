@@ -1,10 +1,9 @@
 package com.sapient.retail.streamkafka.web;
 
 import com.sapient.retail.stock.common.model.Stock;
-import com.sapient.retail.stock.common.model.impl.RetailStock;
 
-public interface StockDataController {
+public interface StockDataController<T extends Stock> {
 
-	void StockData(RetailStock productStock);
+	void StockData(T productStock);
 
 }
