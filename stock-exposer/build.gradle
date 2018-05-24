@@ -7,13 +7,11 @@ buildscript {
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
         classpath("org.junit.platform:junit-platform-gradle-plugin:1.0.2")
-        classpath("se.transmode.gradle:gradle-docker:1.2")
 
     }
 
     description = 'exposer'
 }
-apply plugin: 'docker'
 apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: 'eclipse'
@@ -23,6 +21,7 @@ apply plugin: 'org.junit.platform.gradle.plugin'
 apply plugin: 'jacoco'
 apply plugin: 'findbugs'
 apply plugin: 'pmd'
+apply plugin: 'maven-publish'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -89,17 +88,10 @@ tasks.withType(FindBugs) {
     }
 }
 
-task buildDocker(type: Docker) {
-    baseImage = 'openjdk:8u121-jdk'
-    push = project.hasProperty('push')
-    registry='https://hub.docker.com/r/reactiveretail'
-    tag = 'reactiveretail/stockservice'
-    addFile {
-        from jar
-        rename {'stock-exposer.jar'}
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
     }
-    entryPoint(['java', '-Djava.security.egd=file:/dev/./urandom', '-jar', '/stock-exposer.jar'])
-
 }
-
-buildDocker.dependsOn(build)
