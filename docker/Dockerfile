@@ -8,7 +8,6 @@ ENV VERTICLE_HOME /usr/opt
 EXPOSE 8080
 
 # Copy your fat jar to the container
-RUN cd build
 RUN ls -ltrh
 COPY ./build/libs/$VERTICLE_FILE $VERTICLE_HOME/
 
