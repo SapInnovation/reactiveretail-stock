@@ -1,6 +1,7 @@
 package com.sapient.retail.stock.controller;
 
-import com.sapient.retail.stock.model.StockResponse;
+import com.sapient.retail.stock.common.model.impl.RetailStock;
+import com.sapient.retail.stock.common.model.impl.StockResponse;
 import com.sapient.retail.stock.service.StockService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,12 +16,12 @@ import java.util.List;
 
 @RestController
 public class StockController {
-    private final StockService stockService;
+    private final StockService<RetailStock, StockResponse> stockService;
 
     /**
      * @param stockService
      */
-    public StockController(final StockService stockService) {
+    public StockController(final StockService<RetailStock, StockResponse> stockService) {
         super();
         this.stockService = stockService;
     }
