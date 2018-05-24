@@ -13,7 +13,11 @@ buildscript {
 
     description = 'exposer'
 }
-apply plugin: 'docker'
+
+plugins {
+    id 'com.palantir.docker' version '0.19.2'
+}
+
 apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: 'eclipse'
@@ -89,17 +93,10 @@ tasks.withType(FindBugs) {
     }
 }
 
-task buildDocker(type: Docker) {
-    baseImage = 'openjdk:8u121-jdk'
-    push = project.hasProperty('push')
-    registry='https://hub.docker.com/r/reactiveretail'
-    tag = 'reactiveretail/stockservice'
-    addFile {
-        from jar
-        rename {'stock-exposer.jar'}
-    }
-    entryPoint(['java', '-Djava.security.egd=file:/dev/./urandom', '-jar', '/stock-exposer.jar'])
-
+docker {
+    name 'reactiveretail/stockservice'
+    tags 'latest'
+    dockerfile file('Dockerfile')
+    files "$buildDir/libs/stock-exposer-latest.jar"
+    pull true
 }
-
-buildDocker.dependsOn(build)
