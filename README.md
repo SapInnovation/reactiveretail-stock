@@ -1,6 +1,6 @@
 # Reactive Stock Exposer Service exposing Rest APIs with Spring WebFlux and Reactive MongoDB
 
-[![CircleCI](https://circleci.com/gh/SapInnovation/reactiveretail-stock.svg?style=svg)](https://circleci.com/gh/SapInnovation/reactiveretail-stock)
+[![Build Status](https://travis-ci.com/SapInnovation/reactiveretail-stock.svg?branch=master)](https://travis-ci.com/SapInnovation/reactiveretail-stock)
 [![codecov](https://codecov.io/gh/SapInnovation/reactiveretail-stock/branch/master/graph/badge.svg)](https://codecov.io/gh/SapInnovation/reactiveretail-stock)
 [![BCH compliance](https://bettercodehub.com/edge/badge/SapInnovation/reactiveretail-stock?branch=master)](https://bettercodehub.com/)
 
