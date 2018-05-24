@@ -5,9 +5,7 @@ import com.sapient.retail.stock.common.builder.GenericBuilder;
 import com.sapient.retail.stock.common.model.Stock;
 import com.sapient.retail.stock.common.model.StockInfo;
 import com.sapient.retail.stock.common.model.impl.RetailStock;
-import com.sapient.retail.stock.common.model.impl.RetailStockInfo;
 import com.sapient.retail.stock.common.repository.StockRepository;
-
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

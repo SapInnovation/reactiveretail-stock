@@ -1,5 +1,6 @@
 package com.sapient.retail.streamkafka.web.impl;
 
+import com.sapient.retail.stock.common.model.impl.RetailStock;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +27,7 @@ public class StockDataControllerImpl implements StockDataController {
 	@RequestMapping(value="/stockdata", method = RequestMethod.POST, 
     		consumes = "application/json")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public void StockData(@RequestBody Stock productStock) {
+    public void StockData(@RequestBody RetailStock productStock) {
 
         stockdataservice.sendStockDataToKafkaTopic(productStock);
     }

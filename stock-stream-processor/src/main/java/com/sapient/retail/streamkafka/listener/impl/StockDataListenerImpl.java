@@ -16,7 +16,7 @@ import com.sapient.retail.streamkafka.stream.StockDataStreams;
 @Component
 public class StockDataListenerImpl implements StockDataListener {
 	
-	private final StockRepository stockRepository;
+	private final StockRepository<RetailStock> stockRepository;
 	private final StockDataService stockDataService;
 	private Logger log = LoggerFactory.getLogger(this.getClass());
 	
@@ -24,7 +24,8 @@ public class StockDataListenerImpl implements StockDataListener {
 	 * @param stockRepository
 	 * @param stockDataService
 	 */
-	public StockDataListenerImpl(StockRepository stockRepository, StockDataService stockDataService) {
+	public StockDataListenerImpl(final StockRepository<RetailStock> stockRepository,
+								 final StockDataService stockDataService) {
 		super();
 		this.stockRepository = stockRepository;
 		this.stockDataService = stockDataService;
