@@ -1,0 +1,17 @@
+---
+platform: linux
+
+inputs:
+- name: source
+
+outputs:
+- name: build
+
+image_resource:
+  type: docker-image
+  source: {repository: gradle, tag: 3.4-jdk-alpine}
+
+run:
+  user: root
+  path: sh
+  args: [source/ci/gradle.sh]
