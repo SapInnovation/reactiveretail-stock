@@ -1,5 +1,7 @@
 package com.sapient.retail.streamkafka.web.impl;
 
+import javax.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,15 +21,16 @@ public class StockDataControllerImpl implements StockDataController<RetailStock>
         this.stockdataservice = stockdataservice;
     }
 
-    /* (non-Javadoc)
-	 * @see com.sapient.retail.streamkafka.web.StockDataController#StockData(com.sapient.retail.stock.common.model.Stock)
-	 */
+    /**
+     * Rest API endpoint for stock updates.
+     *
+     * @param productStock the stock update
+     */
     @Override
-	@RequestMapping(value="/stockdata", method = RequestMethod.POST, 
-    		consumes = "application/json")
+    @RequestMapping(value = "/stockdata", method = RequestMethod.POST,
+            consumes = "application/json")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public void StockData(@RequestBody RetailStock productStock) {
-
+    public void updateStock(@Valid @RequestBody RetailStock productStock) {
         stockdataservice.sendStockDataToKafkaTopic(productStock);
     }
 }

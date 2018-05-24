@@ -1,0 +1,67 @@
+resource_types:
+
+  - name: slack-notification
+    type: docker-image
+    source:
+      repository: cfcommunity/slack-notification-resource
+      tag: latest
+
+  - name: pull-request
+    type: docker-image
+    source:
+      repository: jtarchie/pr
+
+
+resources:
+
+  - name: java-docker-image
+    type: docker-image
+    source:
+      repository: nimmis/java
+      tag: openjdk-8-jdk
+
+  - name: git-repo-exposer
+    type: git
+    source: &git-repo-source
+      uri: https://github.com/SapInnovation/reactiveretail-stock.git
+      branch: master
+      paths:
+        - stock-exposer/**
+
+jobs:
+
+  # Perform a full gradle build
+  - name: build-test-exposer
+    plan:
+    - get: git-repo-exposer
+      trigger: true
+    - get: java-docker-image
+    - task: build-and-test-artifacts
+      image: java-docker-image
+      config:
+        platform: linux
+        inputs:
+          - name: git-repo-exposer
+        run:
+          dir: git-repo-exposer
+          path: ./gradlew
+          args:
+          - check
+          - --no-daemon
+
+
+
+  - name: build-exposer
+    plan:
+    - get: git-repo-exposer
+      passed: [build-test-exposer]
+      trigger: true
+    - get: java-docker-image
+    - task: build-and-test-artifacts
+      image: java-docker-image
+      config:
+        platform: linux
+        inputs:
+          - name: git-repo-exposer
+        run:
+          path: ./git-repo-exposer/ci/scripts/dockerbuild.sh

@@ -4,6 +4,6 @@ import com.sapient.retail.stock.common.model.Stock;
 
 public interface StockDataController<T extends Stock> {
 
-	void StockData(T productStock);
+	void updateStock(T productStock);
 
 }

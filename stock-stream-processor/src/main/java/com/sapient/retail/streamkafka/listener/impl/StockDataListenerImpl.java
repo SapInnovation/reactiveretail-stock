@@ -12,6 +12,8 @@ import com.sapient.retail.streamkafka.listener.StockDataListener;
 import com.sapient.retail.streamkafka.service.StockDataService;
 import com.sapient.retail.streamkafka.stream.StockDataStreams;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 @Component
 public class StockDataListenerImpl implements StockDataListener<RetailStock> {
 	
@@ -32,9 +34,13 @@ public class StockDataListenerImpl implements StockDataListener<RetailStock> {
 
 	/* (non-Javadoc)
 	 * @see com.sapient.retail.streamkafka.listener.StockDataListener#handleStockDataFromTopic(com.sapient.retail.stock.common.model.Stock)
+	 * This method listens to INPUT Kafka topic and persists data in Mongo repository 
+	 * in a blocking mode and doesn't wait for any mono subscriptions.
+	 * @param newStockDetails Stock
 	 */
 	@Override
 	@StreamListener(StockDataStreams.INPUT)
+	@SuppressFBWarnings("NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE")
     public void handleStockDataFromTopic(@Payload RetailStock newStockDetails) {
 
 		RetailStock existingStockDetailsUpdated = null;
@@ -47,9 +53,10 @@ public class StockDataListenerImpl implements StockDataListener<RetailStock> {
 			stockDataService.evaluateAvailableStock(newStockDetails, existingStockDetails);
 
 			log.debug("Existing Prod Stock Details after merge: {}", existingStockDetails);
-			existingStockDetailsUpdated = stockRepository.save((RetailStock)existingStockDetails).block();
+			existingStockDetailsUpdated = stockRepository.save(existingStockDetails).block();
 		} else {
-			existingStockDetailsUpdated  = stockRepository.save((RetailStock)newStockDetails).block();
+			stockDataService.evaluateNewStock(newStockDetails);
+			existingStockDetailsUpdated  = stockRepository.save(newStockDetails).block();
 		}
     	log.info("Received stock message: {}", existingStockDetailsUpdated);
     }

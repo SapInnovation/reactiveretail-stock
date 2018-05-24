@@ -47,21 +47,70 @@ public class StockDataServiceImpl implements StockDataService<RetailStock> {
 	 */
 	@Override
 	public void evaluateAvailableStock(RetailStock newStockDetails, RetailStock existingStockDetails) {
+        if (demandInfoProvider.equals(newStockDetails.getInformationSource())) {
+        	
+        	evaluateStockForDemandProvider(newStockDetails, existingStockDetails);
+        } else if (supplyInfoProvider.equals(newStockDetails.getInformationSource())) {
+        	
+        	evaluateStockForSupplyProvider(newStockDetails, existingStockDetails);
+        }
+        logger.debug("Existing Prod Stock Details after filter: {}", existingStockDetails);
+        existingStockDetails.getStock().putAll(newStockDetails.getStock());
+        existingStockDetails.setInformationSource(newStockDetails.getInformationSource());
+	}
+	
+	/**
+     * Method to evaluate stock and its properties if requested from Supply information source.
+     * @param newStockDetails Stock
+     * @param existingStockDetails Stock
+     */
+	private void evaluateStockForSupplyProvider(final RetailStock newStockDetails, final RetailStock existingStockDetails) {
 		newStockDetails.getStock().forEach((locationId, skuStock) -> {
-			if (demandInfoProvider.equals(newStockDetails.getInformationSource())) {
-				Long existingSupplyForSku = newStockDetails.getStock().get(locationId).getSupply();
-				Long newAvailableSkuStock = existingSupplyForSku - skuStock.getDemand();
-				skuStock.setAvailableStock(newAvailableSkuStock<0 ? 0 : newAvailableSkuStock);
-				skuStock.setSupply(existingSupplyForSku);
-			} else if (supplyInfoProvider.equals(newStockDetails.getInformationSource())) {
-				skuStock.setDemand(new Long(0));
-				skuStock.setAvailableStock(skuStock.getSupply());
-			}
+			skuStock.setDemand(0L);
+		    skuStock.setSupply((null == skuStock.getSupply() 
+		    		|| skuStock.getSupply() < 0L) ? 0
+		    				: skuStock.getSupply());
+		    skuStock.setAvailableStock(skuStock.getSupply());
+		    existingStockDetails.setProductId(newStockDetails.getProductId());
+		    existingStockDetails.setPartNumber(newStockDetails.getPartNumber());
 		});
-		logger.debug("Existing Prod Stock Details after filter: {}", existingStockDetails);
-		existingStockDetails.getStock().putAll(newStockDetails.getStock());
-		existingStockDetails.setInformationSource(newStockDetails.getInformationSource());
-		existingStockDetails.setProductId(newStockDetails.getProductId());
-		existingStockDetails.setPartNumber(newStockDetails.getPartNumber());
+	}
+
+	/**
+     * Method to evaluate stock and its properties if requested from Demand information source.
+     * @param newStockDetails Stock
+     * @param existingStockDetails Stock
+     */
+	private void evaluateStockForDemandProvider(final RetailStock newStockDetails, final RetailStock existingStockDetails) {
+		newStockDetails.getStock().forEach((locationId, skuStock) -> {
+			Long existingSupplyForSku = existingStockDetails.getStock().get(locationId).getSupply();
+		    skuStock.setDemand((null == skuStock.getDemand() 
+		    		|| skuStock.getDemand() < 0L) ? 0
+		    				: skuStock.getDemand());
+		    Long newAvailableSkuStock = ((null == existingSupplyForSku 
+		    		|| existingSupplyForSku < 0L) ? 0
+		    				: (existingSupplyForSku - skuStock.getDemand()));
+		    skuStock.setAvailableStock(newAvailableSkuStock);
+		    skuStock.setSupply(existingSupplyForSku);
+		});
+	}
+
+    /**
+     * Method to evaluate supply, demand, available stock for new UPC/Location and persist them
+     * along with the updates to all objects of Stock as per request including information source.
+     * @param newStockDetails Stock
+     */
+	public void evaluateNewStock(RetailStock newStockDetails) {
+		newStockDetails.getStock().forEach((locationId, skuStock) -> {
+			skuStock.setSupply((null == skuStock.getSupply() 
+            		|| skuStock.getSupply() < 0L) ? 0
+            				: skuStock.getSupply());
+			if (demandInfoProvider.equals(newStockDetails.getInformationSource())) {
+				skuStock.setAvailableStock(0L);
+            } else if (supplyInfoProvider.equals(newStockDetails.getInformationSource())) {
+                skuStock.setDemand(0L);
+                skuStock.setAvailableStock(skuStock.getSupply());
+            }
+		});
 	}
 }

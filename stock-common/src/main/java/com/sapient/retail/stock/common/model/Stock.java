@@ -1,6 +1,7 @@
 package com.sapient.retail.stock.common.model;
 
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -14,8 +15,9 @@ import org.springframework.data.mongodb.core.index.Indexed;
  */
 public abstract class Stock {
     @NotNull
-    @Size(min = 10, message = "UPC id cannot be so low")
+    //@Size(min = 10, message = "UPC id cannot be so low")
     @Id
+    @Min(value=10L, message = "UPC id cannot be so low")
     private Long upc;
 
     @NotNull

@@ -13,5 +13,7 @@ public interface StockDataService<T extends Stock> {
 	 * @param existingStockDetails
 	 */
 	void evaluateAvailableStock(T newStockDetails, T existingStockDetails);
+	
+	void evaluateNewStock(T newStockDetails);
 
 }

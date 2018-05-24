@@ -3,7 +3,7 @@ spring:
     stream:
       kafka:
         binder:
-          brokers: <host1:port1>,<host1:port1>
+          brokers: <>
       bindings:
         stockdata-in:
           destination: stockdata
@@ -13,15 +13,33 @@ spring:
           contentType: application/json
   data: 
     mongodb: 
-      uri: mongodb://<host1:port1>/stock
+      uri: mongodb://localhost:27017/stock
 
 logging:
   level:
-    org.springframework.web: ERROR
+    #org.springframework.web: ERROR
     com.sapient.retail.service.streamkafka: DEBUG
   pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+    #console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
 
 custom:
   demandInfoProvider: "demandInfoProvider"
   supplyInfoProvider: "supplyInfoProvider"
+---
+spring:
+  profiles: test
+  data:
+    mongodb:
+      database: test
+  cloud:
+    stream:
+      kafka:
+        binder:
+          brokers: ${spring.embedded.kafka.brokers}
+      bindings:
+        stockdata-in:
+          destination: stockdata
+          contentType: application/json
+        stockdata-out:
+          destination: stockdata
+          contentType: application/json
