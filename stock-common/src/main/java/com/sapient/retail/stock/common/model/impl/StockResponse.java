@@ -1,14 +1,16 @@
 /**
  *
  */
-package com.sapient.retail.stock.model;
+package com.sapient.retail.stock.common.model.impl;
+
+import com.sapient.retail.stock.common.model.Response;
 
 /**
  * Bean to be populated and served as API response for Stock information.
  *
  * @author ragarora
  */
-public class StockResponse {
+public class StockResponse extends Response {
 
     private Long upc;
 

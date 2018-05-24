@@ -4,6 +4,7 @@ import com.sapient.retail.stock.Application;
 import com.sapient.retail.stock.common.builder.GenericBuilder;
 import com.sapient.retail.stock.common.model.Stock;
 import com.sapient.retail.stock.common.model.StockInfo;
+import com.sapient.retail.stock.common.model.impl.RetailStock;
 import com.sapient.retail.stock.common.repository.StockRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
@@ -275,9 +276,9 @@ class ApplicationTests {
     private void saveStockInDB(final long upc,
                                final String productId,
                                final int length) {
-        List<Stock> stock = new ArrayList<>();
+        List<RetailStock> stock = new ArrayList<>();
         for (int i = 0; i < length; i++)
-            stock.add(getStock(upc + i, productId));
+            stock.add((RetailStock)getStock(upc + i, productId));
         stockRepository.saveAll(stock).count().block();
     }
 
@@ -286,10 +287,10 @@ class ApplicationTests {
         stocks.put(10001L, getStockInfo("online", 519L));
         stocks.put(10002L, getStockInfo("Edgware Road", 175L));
         stocks.put(10003L, getStockInfo("Paddington", 59L));
-        return GenericBuilder.of(Stock::new)
+        return GenericBuilder.of(RetailStock::new)
                 .with(Stock::setUpc, upc)
                 .with(Stock::setProductId, productId)
-                .with(Stock::setStock, stocks)
+                .with(RetailStock::setStock, stocks)
                 .build();
     }
 

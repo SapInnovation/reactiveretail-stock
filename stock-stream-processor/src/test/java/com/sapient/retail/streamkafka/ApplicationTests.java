@@ -29,6 +29,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sapient.retail.stock.common.builder.GenericBuilder;
 import com.sapient.retail.stock.common.model.Stock;
 import com.sapient.retail.stock.common.model.StockInfo;
+import com.sapient.retail.stock.common.model.impl.RetailStock;
 import com.sapient.retail.stock.common.repository.StockRepository;
 
 
@@ -43,7 +44,7 @@ class ApplicationTests {
     public static KafkaEmbedded embeddedKafka = new KafkaEmbedded(1, true, "topic");
 
     @Autowired
-    private StockRepository repository;
+    private StockRepository<RetailStock> repository;
 
     @Autowired
     private MockMvc client;
@@ -80,13 +81,13 @@ class ApplicationTests {
     @Test
     @Tag(value = "test_with_wait")
     void api_StockByProduct_ValidSupplyStock_ShouldComplete() throws Exception {
-        Stock supplyStock = supplyStock();
+        RetailStock supplyStock = supplyStock();
         client.perform(post("/stockdata")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asString(supplyStock)))
                 .andExpect(status().isAccepted());
         Thread.sleep(2000);
-        Stock dbStock = repository.findStocksByUpc(supplyStock.getUpc())
+        RetailStock dbStock = repository.findStocksByUpc(supplyStock.getUpc())
                 .block();
         assertNotNull(dbStock);
         assertEquals(supplyStock.getUpc(), dbStock.getUpc());
@@ -102,15 +103,15 @@ class ApplicationTests {
     @Test
     @Tag(value = "test_with_wait")
     void api_StockByProduct_ValidDemandStock_ShouldComplete() throws Exception {
-        Stock supplStock = supplyStock();
+        RetailStock supplStock = supplyStock();
         repository.save(supplStock).block();
-        Stock demandStock = demandStock();
+        RetailStock demandStock = demandStock();
         client.perform(post("/stockdata")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asString(demandStock)))
                 .andExpect(status().isAccepted());
         Thread.sleep(2000);
-        Stock dbStock = repository.findStocksByUpc(demandStock.getUpc())
+        RetailStock dbStock = repository.findStocksByUpc(demandStock.getUpc())
                 .block();
         assertNotNull(dbStock);
         assertEquals(demandStock.getUpc(), dbStock.getUpc());
@@ -131,35 +132,35 @@ class ApplicationTests {
     }
 
     private Stock incompleteStock() {
-        return GenericBuilder.of(Stock::new)
+        return GenericBuilder.of(RetailStock::new)
                 .with(Stock::setUpc, 10L)
                 .build();
     }
 
-    private Stock supplyStock() {
+    private RetailStock supplyStock() {
         Map<Long, StockInfo> stocks = new HashMap<>();
         stocks.put(10001L, getStockInfo("online", 519L, 0L));
         stocks.put(10002L, getStockInfo("Edgware Road", 175L, 0L));
         stocks.put(10003L, getStockInfo("Paddington", -89L, 0L));
         stocks.put(10004L, getStockInfo("Uxbridge", 100L, 50L));
-        return GenericBuilder.of(Stock::new)
+        return GenericBuilder.of(RetailStock::new)
                 .with(Stock::setUpc, 10001L)
                 .with(Stock::setProductId, "P_10001")
                 .with(Stock::setPartNumber, "UPC10001")
-                .with(Stock::setInformationSource, supplyProvider)
-                .with(Stock::setStock, stocks)
+                .with(RetailStock::setInformationSource, supplyProvider)
+                .with(RetailStock::setStock, stocks)
                 .build();
     }
 
-    private Stock demandStock() {
+    private RetailStock demandStock() {
         Map<Long, StockInfo> stocks = new HashMap<>();
         stocks.put(10001L, getStockInfo("online", 230L, 20L));
-        return GenericBuilder.of(Stock::new)
+        return GenericBuilder.of(RetailStock::new)
                 .with(Stock::setUpc, 10001L)
                 .with(Stock::setProductId, "P_10002")
                 .with(Stock::setPartNumber, "UPC10002")
-                .with(Stock::setInformationSource, demandProvider)
-                .with(Stock::setStock, stocks)
+                .with(RetailStock::setInformationSource, demandProvider)
+                .with(RetailStock::setStock, stocks)
                 .build();
     }
 

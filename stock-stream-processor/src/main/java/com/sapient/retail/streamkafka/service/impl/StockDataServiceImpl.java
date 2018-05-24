@@ -9,27 +9,31 @@ import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MimeTypeUtils;
 
-import com.sapient.retail.stock.common.model.Stock;
+import com.sapient.retail.stock.common.model.impl.RetailStock;
+import com.sapient.retail.streamkafka.service.StockDataService;
 import com.sapient.retail.streamkafka.stream.StockDataStreams;
 
 @Service
-public class StockDataService {
+public class StockDataServiceImpl implements StockDataService<RetailStock> {
     private final StockDataStreams stockdatastreams;
     private Logger logger = LoggerFactory.getLogger(this.getClass());
-
+    
     @Value(value = "${custom.demandInfoProvider}")
     private String demandInfoProvider;
 
     @Value(value = "${custom.supplyInfoProvider}")
     private String supplyInfoProvider;
-
-    public StockDataService(final StockDataStreams stockdatastreams) {
+    
+    public StockDataServiceImpl(StockDataStreams stockdatastreams) {
         this.stockdatastreams = stockdatastreams;
     }
 
-
-    public void sendStockDataToKafkaTopic(final Stock productStock) {
-        logger.info("Sending stock data {}", productStock);
+    /* (non-Javadoc)
+	 * @see com.sapient.retail.streamkafka.service.StockDataService#sendStockDataToKafkaTopic(com.sapient.retail.stock.common.model.Stock)
+	 */
+    @Override
+	public void sendStockDataToKafkaTopic(final RetailStock productStock) {
+    	logger.info("Sending stock data {}", productStock);
 
         MessageChannel messageChannel = stockdatastreams.outboundStockData();
         messageChannel.send(MessageBuilder
@@ -38,14 +42,11 @@ public class StockDataService {
                 .build());
     }
 
-    /**
-     * Method to evaluate supply, demand, available stock and persist them along with the updates to
-     * all objects of Stock as per request including information source.
-     *
-     * @param newStockDetails      updated stock
-     * @param existingStockDetails existing stock
-     */
-    public void evaluateAvailableStock(final Stock newStockDetails, final Stock existingStockDetails) {
+    /* (non-Javadoc)
+	 * @see com.sapient.retail.streamkafka.service.StockDataService#evaluateAvailableStock(com.sapient.retail.stock.common.model.Stock, com.sapient.retail.stock.common.model.Stock)
+	 */
+	@Override
+	public void evaluateAvailableStock(RetailStock newStockDetails, RetailStock existingStockDetails) {
         if (demandInfoProvider.equals(newStockDetails.getInformationSource())) {
         	
         	evaluateStockForDemandProvider(newStockDetails, existingStockDetails);
@@ -56,15 +57,14 @@ public class StockDataService {
         logger.debug("Existing Prod Stock Details after filter: {}", existingStockDetails);
         existingStockDetails.getStock().putAll(newStockDetails.getStock());
         existingStockDetails.setInformationSource(newStockDetails.getInformationSource());
-    }
-
-
-    /**
+	}
+	
+	/**
      * Method to evaluate stock and its properties if requested from Supply information source.
      * @param newStockDetails Stock
      * @param existingStockDetails Stock
      */
-	private void evaluateStockForSupplyProvider(final Stock newStockDetails, final Stock existingStockDetails) {
+	private void evaluateStockForSupplyProvider(final RetailStock newStockDetails, final RetailStock existingStockDetails) {
 		newStockDetails.getStock().forEach((locationId, skuStock) -> {
 			skuStock.setDemand(0L);
 		    skuStock.setSupply((null == skuStock.getSupply() 
@@ -81,7 +81,7 @@ public class StockDataService {
      * @param newStockDetails Stock
      * @param existingStockDetails Stock
      */
-	private void evaluateStockForDemandProvider(final Stock newStockDetails, final Stock existingStockDetails) {
+	private void evaluateStockForDemandProvider(final RetailStock newStockDetails, final RetailStock existingStockDetails) {
 		newStockDetails.getStock().forEach((locationId, skuStock) -> {
 			Long existingSupplyForSku = existingStockDetails.getStock().get(locationId).getSupply();
 		    skuStock.setDemand((null == skuStock.getDemand() 
@@ -100,7 +100,7 @@ public class StockDataService {
      * along with the updates to all objects of Stock as per request including information source.
      * @param newStockDetails Stock
      */
-	public void evaluateNewStock(Stock newStockDetails) {
+	public void evaluateNewStock(RetailStock newStockDetails) {
 		newStockDetails.getStock().forEach((locationId, skuStock) -> {
 			skuStock.setSupply((null == skuStock.getSupply() 
             		|| skuStock.getSupply() < 0L) ? 0
