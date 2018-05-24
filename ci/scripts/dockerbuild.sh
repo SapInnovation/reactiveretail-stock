@@ -9,5 +9,5 @@ sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubun
 sudo apt-get update
 sudo apt-get install docker-ce
 sleep 10s
-docker login -u reactiveretail -p passw0rd
-./gradlew :stock-exposer-service:build --no-daemon
+docker login -u ${REGISTRY_USER} -p ${REGISTRY_PASSWORD}
+./gradlew :stock-exposer:build :stock-exposer:docker :stock-exposer:dockerPush --no-daemon

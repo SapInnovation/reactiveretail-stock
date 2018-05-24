@@ -59,6 +59,9 @@ jobs:
     - get: java-docker-image
     - task: build-and-test-artifacts
       image: java-docker-image
+      params:
+        REGISTRY_USER: (( auth-data.DOCKER_REG_USERNAME ))
+        REGISTRY_PASSWORD: (( auth-data.DOCKER_REG_USERNAME ))
       config:
         platform: linux
         inputs:
