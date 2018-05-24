@@ -1,14 +1,15 @@
 package com.sapient.retail.streamkafka;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sapient.retail.stock.common.builder.GenericBuilder;
-import com.sapient.retail.stock.common.model.Stock;
-import com.sapient.retail.stock.common.model.StockInfo;
-import com.sapient.retail.stock.common.repository.StockRepository;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import org.junit.ClassRule;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +24,12 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sapient.retail.stock.common.builder.GenericBuilder;
+import com.sapient.retail.stock.common.model.Stock;
+import com.sapient.retail.stock.common.model.StockInfo;
+import com.sapient.retail.stock.common.repository.StockRepository;
 
 
 @EnableKafka
@@ -79,7 +79,6 @@ class ApplicationTests {
 
     @Test
     @Tag(value = "test_with_wait")
-    @Disabled
     void api_StockByProduct_ValidSupplyStock_ShouldComplete() throws Exception {
         Stock supplyStock = supplyStock();
         client.perform(post("/stockdata")
