@@ -1,10 +1,6 @@
 FROM openjdk:8-jdk-alpine
 
 ENV VERTICLE_FILE stock-exposer-latest.jar
-
-# Set the location of the verticles
-ENV VERTICLE_HOME /usr/opt
-
 EXPOSE 8080
 
 # Copy your fat jar to the container
@@ -14,7 +10,7 @@ RUN  git clone https://github.com/SapInnovation/reactiveretail-stock.git
 RUN  cd reactiveretail-stock && git checkout pipeline
 RUN  ls -ltrh
 RUN  cd reactiveretail-stock && ./gradlew :stock-exposer:build --no-daemon
-COPY ./reactiveretail-stock/docker/$VERTICLE_FILE $VERTICLE_HOME/
+ENV VERTICLE_HOME /reactiveretail-stock/stock-exposer/build/libs
 
 # Launch the verticle
 WORKDIR $VERTICLE_HOME
