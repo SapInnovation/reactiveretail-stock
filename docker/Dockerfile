@@ -8,7 +8,9 @@ ENV VERTICLE_HOME /usr/opt
 EXPOSE 8080
 
 # Copy your fat jar to the container
-RUN  apk update && apk add git
+RUN  apk update
+RUN  apk add git
+RUN  git clone https://github.com/SapInnovation/reactiveretail-stock.git
 COPY ./$VERTICLE_FILE $VERTICLE_HOME/
 
 # Launch the verticle
