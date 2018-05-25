@@ -4,14 +4,14 @@ resources:
     type: git
     source:
       uri: https://github.com/SapInnovation/reactiveretail-stock.git
-      branch: pipeline
+      branch: master
   - name: docker-hub
     type: docker-image
     source:
-      email: rsingh24@sapient.com #((auth-data.DOCKER_HUB_EMAIL))
-      username: reativeretail #((auth-data.DOCKER_HUB_USERNAME))
-      password: passw0rd #((auth-data.DOCKER_HUB_PWD))
-      repository: reactiveretail/stockservice #((auth-data.DOCKER_HUB_REPO))
+      email: rsingh24@sapient.com
+      username: reactiveretail
+      password: passw0rd
+      repository: reactiveretail/stockservice
 
 jobs:
   - name: build-image
@@ -21,26 +21,26 @@ jobs:
       trigger: true
     - put: docker-hub
       params:
-        repository: source
         build: source/docker
-   - name: deploy-image
-     public: true
-     plan:
-     - get: source
-       trigger: true
-     - task: deploy
-          config:
-              inputs:
-              - name: source
-              platform: linux
-              image_resource:
-                type: docker-image
-                source:
-                  repository: frolvlad/alpine-bash
-              run:
-                path: ./git-repo/ci/deploy.sh
 
-                params:
-                  USER_NAME: root #((auth-data.DESTINATION_SERVER_USER))
-                  USER_PASS: sapient@123 #((auth-data.DESTINATION_SERVER_PASSWORD))
-                  HOST_NAME: del2vmplcireative04.sapient.com #((auth-data.DESTINATION_SERVER))
+  - name: deploy-image
+    public: true
+    plan:
+    - get: source
+      trigger: true
+      passed: [build-image]
+    - task: deploy
+      config:
+        inputs:
+        - name: source
+        platform: linux
+        image_resource:
+          type: docker-image
+          source:
+            repository: frolvlad/alpine-bash
+        run:
+          path: ./source/ci/deploy.sh
+        params:
+            USER_NAME: root
+            USER_PASS: sapient@123
+            HOST_NAME: del2vmplcireative05.sapient.com
