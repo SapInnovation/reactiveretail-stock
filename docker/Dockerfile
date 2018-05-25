@@ -8,8 +8,9 @@ ENV VERTICLE_HOME /usr/opt
 EXPOSE 8080
 
 # Copy your fat jar to the container
-RUN ls -ltrh
-COPY ./$VERTICLE_FILE $VERTICLE_HOME/
+RUN sudo apt-get update
+RUN sudo apt-get install git
+sudo COPY ./$VERTICLE_FILE $VERTICLE_HOME/
 
 # Launch the verticle
 WORKDIR $VERTICLE_HOME
