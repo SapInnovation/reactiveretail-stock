@@ -45,7 +45,4 @@ dependencies {
     testRuntime 'de.flapdoodle.embed:de.flapdoodle.embed.mongo:2.0.3'
 }
 
-task copyJar(type: Copy) {
-    from "$buildDir/libs/stock-exposer-latest.jar"
-    into "${buildDir}/../docker/"
-}
+
