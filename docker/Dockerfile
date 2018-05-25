@@ -13,9 +13,8 @@ RUN  apk add git
 RUN  git clone https://github.com/SapInnovation/reactiveretail-stock.git
 RUN  cd reactiveretail-stock
 RUN  ls -ltrh
-RUN  ./gradlew build:stock-exposer
-COPY ./docker/$VERTICLE_FILE $VERTICLE_HOME/
-
+RUN  ./reactiveretail-stock/gradlew build:stock-exposer
+COPY ./reactiveretail-stock/docker/$VERTICLE_FILE $VERTICLE_HOME/
 
 # Launch the verticle
 WORKDIR $VERTICLE_HOME
