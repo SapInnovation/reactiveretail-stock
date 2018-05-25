@@ -12,6 +12,7 @@ RUN  apk update
 RUN  apk add git
 RUN  git clone https://github.com/SapInnovation/reactiveretail-stock.git
 RUN  cd reactiveretail-stock
+RUN  ls -ltrh
 RUN  ./gradlew build:stock-exposer
 COPY ./docker/$VERTICLE_FILE $VERTICLE_HOME/
 
