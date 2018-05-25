@@ -1,67 +1,46 @@
-resource_types:
-
-  - name: slack-notification
-    type: docker-image
-    source:
-      repository: cfcommunity/slack-notification-resource
-      tag: latest
-
-  - name: pull-request
-    type: docker-image
-    source:
-      repository: jtarchie/pr
-
 
 resources:
-
-  - name: java-docker-image
+  - name: source
+    type: git
+    source:
+      uri: https://github.com/SapInnovation/reactiveretail-stock.git
+      branch: pipeline
+  - name: docker-hub
     type: docker-image
     source:
-      repository: nimmis/java
-      tag: openjdk-8-jdk
-
-  - name: git-repo-exposer
-    type: git
-    source: &git-repo-source
-      uri: https://github.com/SapInnovation/reactiveretail-stock.git
-      branch: master
-      paths:
-        - stock-exposer/**
+      email: rsingh24@sapient.com #((auth-data.DOCKER_HUB_EMAIL))
+      username: reativeretail #((auth-data.DOCKER_HUB_USERNAME))
+      password: passw0rd #((auth-data.DOCKER_HUB_PWD))
+      repository: reactiveretail/stockservice #((auth-data.DOCKER_HUB_REPO))
 
 jobs:
-
-  # Perform a full gradle build
-  - name: build-test-exposer
+  - name: build-image
+    public: true
     plan:
-    - get: git-repo-exposer
+    - get: source
       trigger: true
-    - get: java-docker-image
-    - task: build-and-test-artifacts
-      image: java-docker-image
-      config:
-        platform: linux
-        inputs:
-          - name: git-repo-exposer
-        run:
-          dir: git-repo-exposer
-          path: ./gradlew
-          args:
-          - check
-          - --no-daemon
+    - put: docker-hub
+      params:
+        repository: source
+        build: source/docker
+   - name: deploy-image
+     public: true
+     plan:
+     - get: source
+       trigger: true
+     - task: deploy
+          config:
+              inputs:
+              - name: source
+              platform: linux
+              image_resource:
+                type: docker-image
+                source:
+                  repository: frolvlad/alpine-bash
+              run:
+                path: ./git-repo/ci/deploy.sh
 
-
-
-  - name: build-exposer
-    plan:
-    - get: git-repo-exposer
-      passed: [build-test-exposer]
-      trigger: true
-    - get: java-docker-image
-    - task: build-and-test-artifacts
-      image: java-docker-image
-      config:
-        platform: linux
-        inputs:
-          - name: git-repo-exposer
-        run:
-          path: ./git-repo-exposer/ci/scripts/dockerbuild.sh
+                params:
+                  USER_NAME: root #((auth-data.DESTINATION_SERVER_USER))
+                  USER_PASS: sapient@123 #((auth-data.DESTINATION_SERVER_PASSWORD))
+                  HOST_NAME: del2vmplcireative04.sapient.com #((auth-data.DESTINATION_SERVER))
