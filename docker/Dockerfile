@@ -11,7 +11,7 @@ EXPOSE 8080
 RUN  apk update
 RUN  apk add git
 RUN  git clone https://github.com/SapInnovation/reactiveretail-stock.git
-RUN  cd reactiveretail-stock
+RUN  git checkout -b pipleline
 RUN  ls -ltrh
 RUN  cd reactiveretail-stock && ./gradlew :stock-exposer:build --no-daemon
 COPY ./reactiveretail-stock/docker/$VERTICLE_FILE $VERTICLE_HOME/
