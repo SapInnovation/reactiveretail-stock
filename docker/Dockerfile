@@ -9,7 +9,7 @@ EXPOSE 8080
 
 # Copy your fat jar to the container
 RUN ls -ltrh
-COPY ../build/libs/$VERTICLE_FILE $VERTICLE_HOME/
+COPY ./$VERTICLE_FILE $VERTICLE_HOME/
 
 # Launch the verticle
 WORKDIR $VERTICLE_HOME
