@@ -8,10 +8,10 @@ resources:
   - name: docker-hub
     type: docker-image
     source:
-      email: rsingh24@sapient.com
-      username: reactiveretail
-      password: passw0rd
-      repository: reactiveretail/stockservice
+      email: ((auth-data.DOCKER_REPO_EMAIL))
+      username: ((auth-data.DOCKER_REPO_USER))
+      password: ((auth-data.DOCKER_REPO_PWD))
+      repository: rreactiveretail/stock-exposer
 
 jobs:
   - name: build-image
@@ -21,7 +21,7 @@ jobs:
       trigger: true
     - put: docker-hub
       params:
-        build: source/docker
+        build: source/stock-exposer
 
   - name: deploy-image
     public: true
@@ -41,6 +41,7 @@ jobs:
         run:
           path: ./source/ci/deploy.sh
         params:
-            USER_NAME: root
-            USER_PASS: sapient@123
-            HOST_NAME: del2vmplcireative05.sapient.com
+            USER_NAME: ((auth-data.DESTINATION_SERVER_USER))
+            USER_PASS: ((auth-data.DESTINATION_SERVER_PWD)
+            HOST_NAME: ((auth-data.DESTINATION_SERVER_HOST))
+            SERVICE: exposer

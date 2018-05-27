@@ -1,11 +1,16 @@
-
 FROM openjdk:8-jdk-alpine
 
-ARG JAVA_OPTS
-ENV JAVA_OPTS=$JAVA_OPTS
+ENV EXPOSER_FILE stock-exposer-latest.jar
+EXPOSE 8081
 
-ADD stock-exposer-latest.jar stock-exposer.jar
-EXPOSE 8080
+# build jar
+RUN  apk update
+RUN  apk add git
+RUN  git clone https://github.com/SapInnovation/reactiveretail-stock.git
+RUN  cd reactiveretail-stock && ./gradlew :stock-exposer:build --no-daemon -x test
+ENV EXPOSER_HOME /reactiveretail-stock/stock-exposer/build/libs
 
-# For Spring-Boot project, use the entrypoint below to reduce Tomcat startup time.
-ENTRYPOINT exec java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom -jar stock-exposer.jar
+# Launch the application
+WORKDIR $EXPOSER_HOME
+ENTRYPOINT ["sh", "-c"]
+CMD ["exec java -jar $EXPOSER_FILE"]

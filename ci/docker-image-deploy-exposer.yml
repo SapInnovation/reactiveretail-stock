@@ -1,8 +1,8 @@
 version: '3.3'
 
 services:
-  reactiveretail-stock:
-    image: reactiveretail-stock
+  reactiveretail-stock-exposer:
+    image: reactiveretail/stock-exposer
     build: .
     ports:
       - 8181:8080

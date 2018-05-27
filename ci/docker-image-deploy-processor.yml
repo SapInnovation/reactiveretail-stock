@@ -1,0 +1,9 @@
+version: '3.3'
+
+services:
+  reactiveretail-stock-processor:
+    image: reactiveretail/stock-processor
+    build: .
+    ports:
+      - 8383:8080
+    relication: 2
