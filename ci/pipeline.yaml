@@ -8,9 +8,9 @@ resources:
   - name: docker-hub
     type: docker-image
     source:
-      email: rsingh24@sapient.com
-      username: reactiveretail
-      password: passw0rd
+      email: ((authdata.DOCKER_HUB_EMAIL))
+      username:((authdata.DOCKER_HUB_USER))
+      password: ((authdata.DOCKER_HUB_PWD))
       repository: reactiveretail/stockservice
 
 jobs:
@@ -41,6 +41,6 @@ jobs:
         run:
           path: ./source/ci/deploy.sh
         params:
-            USER_NAME: root
-            USER_PASS: sapient@123
-            HOST_NAME: del2vmplcireative05.sapient.com
+            USER_NAME: ((authdata.REMOTE_SERVER_USER))
+            USER_PASS: ((authdata.REMOTE_SERVER_PWD))
+            HOST_NAME: ((authdata.REMOTE_SERVER_HOST))
