@@ -6,4 +6,5 @@ services:
     build: .
     ports:
       - 8181:8080
-    replication: 2
+    deploy:
+      replicas: 2
