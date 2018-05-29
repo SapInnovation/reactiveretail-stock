@@ -5,7 +5,7 @@ FROM openjdk:8-jdk-alpine
 RUN  apk update
 RUN  apk add git
 RUN  git clone https://github.com/SapInnovation/reactiveretail-stock.git
-RUN  cd reactiveretail-stock && ./gradlew :stock-exposer:build --no-daemon -x test
+RUN  cd reactiveretail-stock && ./gradlew :stock-exposer:assemble --no-daemon
 
 # Stage 1
 FROM openjdk:8-jdk-alpine
@@ -18,4 +18,4 @@ COPY --from=0 $EXPOSER_HOME/$EXPOSER_FILE $EXPOSER_FILE
 EXPOSE 8080
 
 ENTRYPOINT ["sh", "-c"]
-CMD ["exec java -jar $EXPOSER_FILE -Dspring.data.mongodb:.uri=$DB_HOST"]
+CMD ["exec java -jar $EXPOSER_FILE -Dspring.data.mongodb.uri=$DB_HOST"]
