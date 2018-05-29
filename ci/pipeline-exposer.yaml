@@ -43,5 +43,5 @@ jobs:
         params:
             USER_NAME: root
             USER_PASS: sapient@123
-            HOST_NAME: del2vmplcireative05.sapient.com
+              HOST_NAME: del2vmplcireative05.sapient.com
             SERVICE: exposer
