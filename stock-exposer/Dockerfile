@@ -18,4 +18,4 @@ COPY --from=0 $EXPOSER_HOME/$EXPOSER_FILE $EXPOSER_FILE
 EXPOSE 8080
 
 ENTRYPOINT ["sh", "-c"]
-CMD ["exec java -jar $EXPOSER_FILE -Dspring.data.mongodb.uri=$DB_HOST"]
+CMD ["exec java -jar $EXPOSER_FILE --spring.data.mongodb.uri=$DB_HOST"]
