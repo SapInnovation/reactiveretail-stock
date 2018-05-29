@@ -15,7 +15,7 @@ buildscript {
 }
 
 plugins {
-    id 'com.palantir.docker' version '0.19.2'
+    id "com.jfrog.bintray" version "1.7.3"
 }
 
 apply plugin: 'java'
@@ -27,6 +27,7 @@ apply plugin: 'org.junit.platform.gradle.plugin'
 apply plugin: 'jacoco'
 apply plugin: 'findbugs'
 apply plugin: 'pmd'
+apply plugin: 'maven-publish'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -93,10 +94,31 @@ tasks.withType(FindBugs) {
     }
 }
 
-docker {
-    name 'reactiveretail/stockservice'
-    tags 'latest'
-    dockerfile file('Dockerfile')
-    files "$buildDir/libs/stock-exposer-latest.jar"
-    pull true
+bintray {
+    user = System.getenv('BINTRAY_USER')
+    key = System.getenv('BINTRAY_KEY')
+    publications = ['MyPublication']
+    publish = true
+    pkg {
+        repo = 'sapinnovation'
+        name = 'retailstock'
+        licenses = ['Apache-2.0']
+        vcsUrl = 'https://github.com/SapInnovation/reactiveretail-stock.git'
+		version {
+			name = '1.0-Final'
+			desc = 'retail-stock-final'
+			vcsTag = '1.3.0'
+		}
+    }
+}
+
+publishing {
+    publications {
+        MyPublication(MavenPublication) {
+            from components.java
+            groupId 'sap.reactiveretail'
+            artifactId 'stock-exposer'
+            version '1.1'
+        }
+    }
 }
