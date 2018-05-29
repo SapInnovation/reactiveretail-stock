@@ -1,5 +1,5 @@
 # Stage 0
-FROM openjdk:8-jdk-alpine
+FROM openjdk:8-jdk-alpine AS base_alpine_jdk8
 
 # build jar
 RUN  apk update && \
@@ -13,7 +13,7 @@ ENV EXPOSER_FILE stock-exposer-latest.jar
 ENV EXPOSER_HOME /reactiveretail-stock/stock-exposer/build/libs
 
 # Copy jar from previous stage
-COPY --from=0 $EXPOSER_HOME/$EXPOSER_FILE $EXPOSER_FILE
+COPY --from=base_alpine_jdk8 $EXPOSER_HOME/$EXPOSER_FILE $EXPOSER_FILE
 
 EXPOSE 8080
 
