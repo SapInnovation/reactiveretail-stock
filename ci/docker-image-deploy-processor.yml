@@ -6,4 +6,4 @@ services:
     build: .
     ports:
       - 8383:8080
-    relication: 2
+    replication: 2
