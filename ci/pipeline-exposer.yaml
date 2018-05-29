@@ -44,4 +44,5 @@ jobs:
             USER_NAME: ((auth-data.DESTINATION_SERVER_USER))
             USER_PASS: ((auth-data.DESTINATION_SERVER_PWD)
             HOST_NAME: ((auth-data.DESTINATION_SERVER_HOST))
-            SERVICE: exposer
+            SERVICE: exposer)
+            DB_HOST: ((auth-data.DB_HOST))
