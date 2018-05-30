@@ -5,7 +5,7 @@ FROM openjdk:8-jdk-alpine AS base_alpine_jdk8
 RUN  apk update && \
      apk add git
 RUN  git clone https://github.com/SapInnovation/reactiveretail-stock.git
-RUN  cd reactiveretail-stock && ./gradlew :stock-steam-processor:assemble --no-daemon
+RUN  cd reactiveretail-stock && ./gradlew :stock-stream-processor:assemble --no-daemon
 
 # Stage 1
 FROM openjdk:8-jdk-alpine
