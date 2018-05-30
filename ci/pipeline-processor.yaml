@@ -46,8 +46,8 @@ jobs:
           path: ./source/ci/deploy.sh
         params:
             USER_NAME: ((auth-data.DESTINATION_SERVER_USER))
-            USER_PASS: ((auth-data.DESTINATION_SERVER_PWD)
+            USER_PASS: ((auth-data.DESTINATION_SERVER_PWD))
             HOST_NAME: ((auth-data.DESTINATION_SERVER_HOST))
-            SERVICE: stream-processor
+            SERVICE: processor
             KAFKA_HOST: ((auth-data.KAFKA_HOST))
             DB_HOST: ((auth-data.DB_HOST))
