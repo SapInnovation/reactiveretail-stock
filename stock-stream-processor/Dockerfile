@@ -18,4 +18,4 @@ COPY --from=base_alpine_jdk8 $PROCESSOR_HOME/$PROCESSOR_FILE $PROCESSOR_FILE
 EXPOSE 8080
 
 ENTRYPOINT ["sh", "-c"]
-CMD ["exec java -jar $PROCESSOR_FILE --spring.data.mongodb.uri=$DB_HOST" --spring.cloud.stream.kafka.binders.brokers=$KAFKA_HOST"]
+CMD ["exec java -jar $PROCESSOR_FILE --spring.data.mongodb.uri=$DB_HOST --spring.cloud.stream.kafka.binders.brokers=$KAFKA_HOST"]
