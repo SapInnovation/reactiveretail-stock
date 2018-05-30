@@ -23,7 +23,6 @@ jobs:
     plan:
     - get: source
       trigger: true
-    - get: version
     - put: docker-hub
       params:
         build: source/stock-exposer

@@ -49,3 +49,5 @@ jobs:
             USER_PASS: ((auth-data.DESTINATION_SERVER_PWD)
             HOST_NAME: ((auth-data.DESTINATION_SERVER_HOST))
             SERVICE: stream-processor
+            KAFKA_HOST: ((auth-data.KAFKA_HOST))
+            DB_HOST: ((auth-data.DB_HOST))
