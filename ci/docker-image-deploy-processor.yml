@@ -8,3 +8,6 @@ services:
       - 8383:8080
     deploy:
       replicas: 2
+    environment:
+      KAFKA_HOST: $KAFKA_HOST
+      DB_HOST: $DB_HOST

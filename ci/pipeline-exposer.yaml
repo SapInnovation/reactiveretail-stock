@@ -5,6 +5,10 @@ resources:
     source:
       uri: https://github.com/SapInnovation/reactiveretail-stock.git
       branch: master
+      path:
+        - ci/**
+        - stock-common/**
+        - stock-exposer/**
   - name: docker-hub
     type: docker-image
     source:
@@ -19,6 +23,7 @@ jobs:
     plan:
     - get: source
       trigger: true
+    - get: version
     - put: docker-hub
       params:
         build: source/stock-exposer
