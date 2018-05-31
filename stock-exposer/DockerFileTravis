@@ -6,8 +6,8 @@ ENV EXPOSER_HOME /reactiveretail-stock/stock-exposer/build/libs
 # Copy jar from previous stage
 ADD stock-exposer /stock-exposer-1
 
-RUN ls -R stock-exposer
-RUN ls -R /stock-exposer
+RUN ls -R stock-exposer-1
+RUN ls -R /stock-exposer-1
 RUN ls stock-exposer-latest.jar
 
 #EXPOSE 8080
