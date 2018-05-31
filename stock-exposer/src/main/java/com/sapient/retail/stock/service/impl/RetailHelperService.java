@@ -10,7 +10,9 @@ import com.sapient.retail.stock.service.HelperService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.messaging.Message;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /**
@@ -77,5 +79,10 @@ public class RetailHelperService implements HelperService<RetailStock, StockResp
                 .with(StockResponse::setLocationName, stockInfo.getLocationName())
                 .with(StockResponse::setAvailableStock, stockInfo.getAvailableStock())
                 .build();
+    }
+
+    @Override
+    public Class<RetailStock> getTargetClass() {
+        return RetailStock.class;
     }
 }

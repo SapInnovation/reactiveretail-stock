@@ -37,6 +37,7 @@ repositories {
 
 configurations {
     compile.exclude module: 'spring-boot-starter-tomcat'
+    compile.exclude module: 'logbook-httpclient'
 }
 
 dependencies {
@@ -44,6 +45,9 @@ dependencies {
     compile 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
     compile 'org.springframework.boot:spring-boot-starter-actuator'
     compile 'org.springframework.boot:spring-boot-devtools'
+    compile 'org.zalando:logbook-spring-boot-starter:1.8.0'
+    compile 'org.springframework.boot:spring-boot-starter-integration'
+    compile 'org.springframework.integration:spring-integration-java-dsl:1.2.3.RELEASE'
 
     compile project(':stock-common')
 
@@ -91,12 +95,4 @@ tasks.withType(FindBugs) {
         xml.enabled = false
         html.enabled = true
     }
-}
-
-docker {
-    name 'reactiveretail/stockservice'
-    tags 'latest'
-    dockerfile file('Dockerfile')
-    files "$buildDir/libs/stock-exposer-latest.jar"
-    pull true
 }

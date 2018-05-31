@@ -8,6 +8,7 @@ import com.sapient.retail.stock.service.impl.RetailHelperService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -54,7 +55,6 @@ public class StockService<T extends Stock, R extends Response> {
     public Mono<R> skuStock(final Long upc) {
         LOGGER.debug("Fetching stock information for UPC: " + upc);
         return repository.findByUpc(upc)
-                .log()
                 .switchIfEmpty(helperService.stockNotFound())
                 .map(helperService::buildFromStock);
     }
