@@ -9,4 +9,4 @@ services:
     deploy:
       replicas: 2
     environment:
-      DB_HOST: $DB_HOST
+      DB_HOST:
