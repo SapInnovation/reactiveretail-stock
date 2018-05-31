@@ -1,0 +1,12 @@
+# Stage 1
+FROM openjdk:8-jdk-alpine AS base_alpine_jdk8
+ENV EXPOSER_FILE stock-exposer-latest.jar
+ENV EXPOSER_HOME /reactiveretail-stock/stock-exposer/build/libs
+
+# Copy jar from previous stage
+COPY --from=base_alpine_jdk8 $EXPOSER_HOME/$EXPOSER_FILE $EXPOSER_FILE
+
+EXPOSE 8080
+
+ENTRYPOINT ["sh", "-c"]
+CMD ["exec java -jar $EXPOSER_FILE --spring.data.mongodb.uri=$DB_HOST"]
