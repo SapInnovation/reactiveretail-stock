@@ -1,6 +1,6 @@
 
 resources:
-  - name: source
+  - name: git-source
     type: git
     source:
       uri: https://github.com/SapInnovation/reactiveretail-stock.git
@@ -21,31 +21,31 @@ jobs:
   - name: build-image
     public: true
     plan:
-    - get: source
+    - get: git-source
       trigger: true
     - put: docker-hub
       params:
-        build: source/stock-exposer
-        tag: source/.git/HEAD
+        build: git-source/stock-exposer
+        tag: git-source/.git/HEAD
         tag_as_latest: true
 
   - name: deploy-image
     public: true
     plan:
-    - get: source
+    - get: git-source
       trigger: true
       passed: [build-image]
     - task: deploy
       config:
         inputs:
-        - name: source
+        - name: git-source
         platform: linux
         image_resource:
           type: docker-image
           source:
             repository: frolvlad/alpine-bash
         run:
-          path: ./source/ci/deploy.sh
+          path: ./git-source/ci/deploy.sh
         params:
             USER_NAME: ((auth-data.DESTINATION_SERVER_USER))
             USER_PASS: ((auth-data.DESTINATION_SERVER_PWD))
