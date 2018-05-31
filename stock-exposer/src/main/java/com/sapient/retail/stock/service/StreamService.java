@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
@@ -58,9 +59,9 @@ public class StreamService<T extends Stock, R extends Response> {
      * @param productId the product ID
      * @return Flux stream of {@link StockResponse} for all updates to requested product
      */
-    public Flux<R> stockStream(final String productId, Class<T> clazz) {
+    public Flux<List<R>> stockStream(final String productId, Class<T> clazz) {
         logger.info("Registering MongoStream for Product: " + productId);
-        return Flux.create(stream -> template.getCollection(collectionName)
+        Flux<List<R>> eventStream = Flux.create(stream -> template.getCollection(collectionName)
                 .watch(Collections.singletonList(
                         Aggregates.match(
                                 and(in("operationType", asList("update", "replace")),
@@ -74,8 +75,10 @@ public class StreamService<T extends Stock, R extends Response> {
                     logger.info("Full Document: " + updates);
                     logger.info("Request ProductId:" + productId +
                             ", Current Event ProductId:" + updates.getProductId());
-                    stream.next(helper.buildFromStock(updates));
+                    stockService.productStock(productId)
+                            .subscribe(stream::next);
                 }));
+        return Flux.concat(stockService.productStock(productId), eventStream);
     }
 
     /**
