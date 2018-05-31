@@ -11,9 +11,9 @@ spring:
         stockdata-out:
           destination: stockdata
           contentType: application/json
-  data: 
-    mongodb: 
-      uri: mongodb://localhost:27017/stock
+  devtools:
+    restart:
+      log-condition-evaluation-delta: false
 
 logging:
   level:
@@ -28,9 +28,6 @@ custom:
 ---
 spring:
   profiles: test
-  data:
-    mongodb:
-      database: test
   cloud:
     stream:
       kafka:

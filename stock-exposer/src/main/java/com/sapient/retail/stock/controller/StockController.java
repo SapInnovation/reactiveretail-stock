@@ -19,7 +19,9 @@ public class StockController {
     private final StockService<RetailStock, StockResponse> stockService;
 
     /**
-     * @param stockService
+     * Dependency injection based constructor.
+     *
+     * @param stockService service
      */
     public StockController(final StockService<RetailStock, StockResponse> stockService) {
         super();
@@ -50,5 +52,11 @@ public class StockController {
     public Mono<List<StockResponse>> stockForLocation(@Valid @PathVariable final String productId,
                                                       @Valid @PathVariable final Long locationId) {
         return stockService.productStockForLocation(productId, locationId);
+    }
+
+    @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public Mono<String> home() {
+        return Mono.just("Reactive Retail - Stock Service");
     }
 }

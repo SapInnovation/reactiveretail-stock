@@ -39,7 +39,7 @@ public class StockService<T extends Stock, R extends Response> {
      */
     public Mono<List<R>> productStock(final String productId) {
         LOGGER.debug("Fetching stock information for product: " + productId);
-        return repository.findStocksByProductIdOrderByUpc(productId)
+        return repository.findByProductIdOrderByUpc(productId)
                 .switchIfEmpty(helperService.stockNotFound())
                 .map(helperService::buildFromStock)
                 .collectList();
@@ -53,7 +53,8 @@ public class StockService<T extends Stock, R extends Response> {
      */
     public Mono<R> skuStock(final Long upc) {
         LOGGER.debug("Fetching stock information for UPC: " + upc);
-        return repository.findStocksByUpc(upc)
+        return repository.findByUpc(upc)
+                .log()
                 .switchIfEmpty(helperService.stockNotFound())
                 .map(helperService::buildFromStock);
     }
@@ -67,7 +68,7 @@ public class StockService<T extends Stock, R extends Response> {
      */
     public Mono<List<R>> productStockForLocation(final String productId, final Long locationId) {
         LOGGER.debug("Fetching stock information for Product: " + productId + " & location: " + locationId);
-        return repository.findStocksByProductIdOrderByUpc(productId)
+        return repository.findByProductIdOrderByUpc(productId)
                 .switchIfEmpty(helperService.stockNotFound())
                 .map(stock -> helperService.buildFromStock(stock, locationId))
                 .collectList();
@@ -82,7 +83,7 @@ public class StockService<T extends Stock, R extends Response> {
      */
     public Mono<R> skuStockForLocation(final Long upc, final Long locationId) {
         LOGGER.debug("Fetching stock information for UPC: " + upc + " & location: " + locationId);
-        return repository.findStocksByUpc(upc)
+        return repository.findByUpc(upc)
                 .switchIfEmpty(helperService.stockNotFound())
                 .map(stock -> helperService.buildFromStock(stock, locationId));
     }
