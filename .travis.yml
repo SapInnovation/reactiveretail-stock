@@ -9,18 +9,18 @@ jdk:
   - openjdk8
 
 install: ./gradlew clean assemble
-script: 
+script:
   - ./gradlew test jacocoTestReport
   - export TAG=`if [[ $TRAVIS_PULL_REQUEST == "false" ]] && [[ $TRAVIS_BRANCH == "master" ]]; then echo "latest"; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi`
   - export REPO=raghavarora12/retailreactive
   - docker build -f DockerFileTravis ./stock-exposer/
 
-after_success: 
+after_success:
   - bash <(curl -s https://codecov.io/bash)
   - docker ps -a
   - docker login -u $DOCKER_USER -p $DOCKER_PASS
   - if [[ $TRAVIS_PULL_REQUEST == "false" ]] && [[ $TRAVIS_BRANCH == "master" ]]; then
   docker tag $REPO:$TAG $REPO:$TRAVIS_BUILD_NUMBER;
   docker push $REPO:$TRAVIS_BUILD_NUMBER;
-  fi 
+  fi
   - docker push $REPO:$TAG
