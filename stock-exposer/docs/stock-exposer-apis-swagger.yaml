@@ -5,7 +5,7 @@ info:
   description: "Provides stock information on a per product/UPC or per store basis"
   contact:
     email: rarora9@sapient.com
-    
+
 host: localhost:8080
 #basePath: /stock
 schemes:

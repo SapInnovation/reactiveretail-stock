@@ -1,8 +1,0 @@
-version: '3.3'
-
-services:
-  stock-exposer:
-    image: stock-exposer
-    build: .
-    ports:
-      - 8080:8080

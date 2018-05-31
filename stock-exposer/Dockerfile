@@ -2,8 +2,7 @@
 FROM openjdk:8-jdk-alpine AS base_alpine_jdk8
 
 # build jar
-RUN  apk update && \
-     apk add git
+RUN  apk add --no-cache git
 RUN  git clone https://github.com/SapInnovation/reactiveretail-stock.git
 RUN  cd reactiveretail-stock && ./gradlew :stock-exposer:assemble --no-daemon
 
