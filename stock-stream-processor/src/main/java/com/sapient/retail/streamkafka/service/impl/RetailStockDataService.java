@@ -18,11 +18,6 @@ public class RetailStockDataService extends StockDataService<RetailStock> {
     private String supplyInfoProvider;
 
     /* (non-Javadoc)
-     * @see com.sapient.retail.streamkafka.service.StockDataService#sendStockDataToKafkaTopic(com.sapient.retail.stock.common.model.Stock)
-     */
-
-
-    /* (non-Javadoc)
      * @see com.sapient.retail.streamkafka.service.StockDataService#compareAndMergeStock(
      * com.sapient.retail.stock.common.model.Stock, com.sapient.retail.stock.common.model.Stock)
      */

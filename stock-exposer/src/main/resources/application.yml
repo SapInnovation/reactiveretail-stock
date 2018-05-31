@@ -11,6 +11,7 @@ logging:
 custom:
   default-location: 10001
   collectionName: stock
+  streamDuration: 2
 ---
 spring:
   profiles: tests
