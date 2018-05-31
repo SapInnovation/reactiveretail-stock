@@ -6,12 +6,10 @@ import com.sapient.retail.stock.common.model.impl.StockResponse;
 import com.sapient.retail.stock.service.StreamService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 
+@CrossOrigin(origins = "*")
 @RestController
 public class StreamController {
     private final StreamService<RetailStock, StockResponse> streamService;
@@ -38,5 +36,4 @@ public class StreamController {
     public Flux<Stock> stockStream() {
         return streamService.allStockStream(RetailStock.class);
     }
-
 }

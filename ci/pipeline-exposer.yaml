@@ -26,6 +26,8 @@ jobs:
     - put: docker-hub
       params:
         build: source/stock-exposer
+        tag: source/.git/HEAD
+        tag_as_latest: true
 
   - name: deploy-image
     public: true
