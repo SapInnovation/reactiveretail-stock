@@ -1,19 +1,16 @@
 spring:
   data: 
     mongodb: 
-      uri: mongodb://del2vmplcireative03.sapient.com:27017/stock
+      uri: mongodb://localhost:27017/stock
 logging:
   level:
-    org.springframework.web: ERROR
     com.sapient.retail.stock.service: DEBUG
     org.springframework.data.mongodb.core.MongoTemplate: DEBUB
   pattern:
     #console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
 custom:
   default-location: 10001
-  
-server:
-  port: 8080
+  collectionName: stock
 ---
 spring:
   profiles: tests
