@@ -33,6 +33,8 @@ public class StreamService<T extends Stock, R extends Response> {
     private final MongoTemplate template;
     private final HelperService<T, R> helper;
 
+    private final StockService<T, R> stockService;
+
     @Value(value = "${custom.collectionName}")
     private String collectionName;
 
@@ -43,9 +45,11 @@ public class StreamService<T extends Stock, R extends Response> {
      * @param helper   instance of the {@link RetailHelperService}
      */
     public StreamService(final MongoTemplate template,
-                         final HelperService<T, R> helper) {
+                         final HelperService<T, R> helper,
+                         final StockService<T, R> stockService) {
         this.template = template;
         this.helper = helper;
+        this.stockService = stockService;
     }
 
     /**
@@ -82,7 +86,7 @@ public class StreamService<T extends Stock, R extends Response> {
      */
     public Flux<R> skuStockStream(final Long upc, Class<T> clazz) {
         logger.info("Registering MongoStream for UPC: " + upc);
-        return Flux.create(stream -> template.getCollection(collectionName)
+        Flux<R> eventStream = Flux.create(stream -> template.getCollection(collectionName)
                 .watch(Collections.singletonList(
                         Aggregates.match(
                                 and(in("operationType", asList("update", "replace")),
@@ -98,6 +102,7 @@ public class StreamService<T extends Stock, R extends Response> {
                             ", Current Event UPC:" + updates.getUpc());
                     stream.next(helper.buildFromStock(updates));
                 }));
+        return Flux.concat(stockService.skuStock(upc), eventStream);
     }
 
     /**
