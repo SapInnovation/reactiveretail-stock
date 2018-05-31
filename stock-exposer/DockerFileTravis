@@ -1,7 +1,7 @@
 # Stage 1
 FROM openjdk:8-jdk-alpine AS base_alpine_jdk8
 ENV EXPOSER_FILE stock-exposer-latest.jar
-ENV EXPOSER_HOME /stock-exposer-1/build/libs
+ENV EXPOSER_HOME /stock-exposer/build/libs
 
 # Copy jar from previous stage
 ADD stock-exposer /stock-exposer
