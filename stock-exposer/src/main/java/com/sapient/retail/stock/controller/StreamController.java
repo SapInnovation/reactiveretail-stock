@@ -9,6 +9,8 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 
+import java.util.List;
+
 @CrossOrigin(origins = "*")
 @RestController
 public class StreamController {
@@ -21,7 +23,7 @@ public class StreamController {
 
     @GetMapping(value = "/stream/stock/product/{productId}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public Flux<StockResponse> stockStream(@PathVariable final String productId) {
+    public Flux<List<StockResponse>> stockStream(@PathVariable final String productId) {
         return streamService.stockStream(productId, RetailStock.class);
     }
 
