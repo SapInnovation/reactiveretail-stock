@@ -3,15 +3,11 @@ FROM openjdk:8-jdk-alpine AS base_alpine_jdk8
 ENV EXPOSER_FILE stock-exposer-latest.jar
 ENV EXPOSER_HOME /reactiveretail-stock/stock-exposer/build/libs
 
-RUN ls /home/travis/build/SapInnovation/reactiveretail-stock/stock-exposer
-RUN ls /home/travis/build/SapInnovation/reactiveretail-stock/
-RUN ls /home/travis/build/SapInnovation/
-RUN ls /reactiveretail-stock/
-RUN ls $EXPOSER_HOME
-RUN $EXPOSER_FILE
-
 # Copy jar from previous stage
-ADD $EXPOSER_HOME/$EXPOSER_FILE $EXPOSER_FILE
+ADD reactiveretail-stock /reactiveretail-stock
+
+RUN ls reactiveretail-stock
+RUN ls /reactiveretail-stock
 
 #EXPOSE 8080
 
