@@ -19,7 +19,7 @@ import reactor.core.publisher.Mono;
 @Service
 public class RetailHelperService implements HelperService<RetailStock, StockResponse> {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Value(value = "${custom.default-location}")
     private long defaultLocationId;
@@ -64,9 +64,10 @@ public class RetailHelperService implements HelperService<RetailStock, StockResp
         }
 
         StockInfo stockInfo = new StockInfo();
+        logger.debug("Stock Response getting built from Stock for UPC: "
+                + stock.getUpc() + " & Product: " + stock.getProductId()
+                + " & location: " + locationId);
         if (stock.getStock().containsKey(locationId)) {
-            LOGGER.debug("Stock Response getting built from Stock for UPC: ",
-                    stock.getUpc(), " & Product: ", stock.getProductId(), " & location: ", locationId);
             stockInfo = stock.getStock().get(locationId);
         }
         return GenericBuilder.of(StockResponse::new)

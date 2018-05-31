@@ -1,12 +1,10 @@
 package com.sapient.retail.stock.common.model;
 
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * Bean with fields mapped to MongoDB collection and its fields as mentioned.
@@ -15,17 +13,13 @@ import org.springframework.data.mongodb.core.index.Indexed;
  */
 public abstract class Stock {
     @NotNull
-    //@Size(min = 10, message = "UPC id cannot be so low")
     @Id
-    @Min(value=10L, message = "UPC id cannot be so low")
-    private Long upc;
+    protected Long upc;
 
     @NotNull
-    @Size(min = 3, max = 20, message = "Partnumber should be between 3 and 20 characters")
     private String partNumber;
 
     @NotNull
-    @Size(min = 3, max = 20, message = "Product id should be between 3 and 20 characters")
     @Indexed
     private String productId;
 

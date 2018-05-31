@@ -25,7 +25,7 @@ class ApplicationTests {
     private WebTestClient webTestClient;
 
     @Autowired
-    private StockRepository stockRepository;
+    private StockRepository<RetailStock> stockRepository;
 
     @BeforeEach
     void cleanDB() {
@@ -278,7 +278,7 @@ class ApplicationTests {
                                final int length) {
         List<RetailStock> stock = new ArrayList<>();
         for (int i = 0; i < length; i++)
-            stock.add((RetailStock)getStock(upc + i, productId));
+            stock.add((RetailStock) getStock(upc + i, productId));
         stockRepository.saveAll(stock).count().block();
     }
 
