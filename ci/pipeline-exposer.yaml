@@ -5,6 +5,10 @@ resources:
     source:
       uri: https://github.com/SapInnovation/reactiveretail-stock.git
       branch: master
+      path:
+        - ci/**
+        - stock-common/**
+        - stock-exposer/**
   - name: docker-hub
     type: docker-image
     source:

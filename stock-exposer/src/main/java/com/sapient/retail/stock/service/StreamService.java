@@ -1,21 +1,18 @@
 package com.sapient.retail.stock.service;
 
-import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Aggregates;
 import com.mongodb.client.model.changestream.ChangeStreamDocument;
 import com.mongodb.client.model.changestream.FullDocument;
 import com.sapient.retail.stock.common.model.Response;
 import com.sapient.retail.stock.common.model.Stock;
-import com.sapient.retail.stock.common.model.impl.RetailStock;
 import com.sapient.retail.stock.common.model.impl.StockResponse;
-
 import com.sapient.retail.stock.service.impl.RetailHelperService;
 import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
-
 import reactor.core.publisher.Flux;
 
 import java.util.Collections;
@@ -31,11 +28,13 @@ import static java.util.Arrays.asList;
  */
 @Service
 public class StreamService<T extends Stock, R extends Response> {
-    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final MongoTemplate template;
-    private final MongoCollection<Document> streams;
     private final HelperService<T, R> helper;
+
+    @Value(value = "${custom.collectionName}")
+    private String collectionName;
 
     /**
      * Constructor for dependency injection.
@@ -47,10 +46,6 @@ public class StreamService<T extends Stock, R extends Response> {
                          final HelperService<T, R> helper) {
         this.template = template;
         this.helper = helper;
-        String collectionName = RetailStock.class.getName().toLowerCase();
-        streams = this.template.collectionExists(collectionName)
-                ? this.template.getCollection(collectionName)
-                : this.template.createCollection(collectionName);
     }
 
     /**
@@ -60,8 +55,8 @@ public class StreamService<T extends Stock, R extends Response> {
      * @return Flux stream of {@link StockResponse} for all updates to requested product
      */
     public Flux<R> stockStream(final String productId, Class<T> clazz) {
-        LOGGER.info("Registering MongoStream for Product: " + productId);
-        return Flux.create(stream -> streams
+        logger.info("Registering MongoStream for Product: " + productId);
+        return Flux.create(stream -> template.getCollection(collectionName)
                 .watch(Collections.singletonList(
                         Aggregates.match(
                                 and(in("operationType", asList("update", "replace")),
@@ -69,11 +64,11 @@ public class StreamService<T extends Stock, R extends Response> {
                 .fullDocument(FullDocument.UPDATE_LOOKUP)
                 .maxAwaitTime(10, TimeUnit.MINUTES)
                 .forEach((Consumer<ChangeStreamDocument<Document>>) document -> {
-                    LOGGER.debug("Operation Type: " + document.getOperationType());
+                    logger.info("Operation Type: " + document.getOperationType());
                     T updates = template.getConverter().read(clazz,
                             document.getFullDocument());
-                    LOGGER.debug("Full Document: " + updates);
-                    LOGGER.debug("Request ProductId:" + productId +
+                    logger.info("Full Document: " + updates);
+                    logger.info("Request ProductId:" + productId +
                             ", Current Event ProductId:" + updates.getProductId());
                     stream.next(helper.buildFromStock(updates));
                 }));
@@ -86,8 +81,8 @@ public class StreamService<T extends Stock, R extends Response> {
      * @return Flux stream of {@link StockResponse} for all updates to requested UPC
      */
     public Flux<R> skuStockStream(final Long upc, Class<T> clazz) {
-        LOGGER.info("Registering MongoStream for UPC: " + upc);
-        return Flux.create(stream -> streams
+        logger.info("Registering MongoStream for UPC: " + upc);
+        return Flux.create(stream -> template.getCollection(collectionName)
                 .watch(Collections.singletonList(
                         Aggregates.match(
                                 and(in("operationType", asList("update", "replace")),
@@ -95,11 +90,11 @@ public class StreamService<T extends Stock, R extends Response> {
                 .fullDocument(FullDocument.UPDATE_LOOKUP)
                 .maxAwaitTime(10, TimeUnit.MINUTES)
                 .forEach((Consumer<ChangeStreamDocument<Document>>) document -> {
-                    LOGGER.debug("Operation Type: " + document.getOperationType());
+                    logger.info("Operation Type: " + document.getOperationType());
                     T updates = template.getConverter().read(clazz,
                             document.getFullDocument());
-                    LOGGER.debug("Full Document: " + updates);
-                    LOGGER.debug("Request UPC:" + upc +
+                    logger.info("Full Document: " + updates);
+                    logger.info("Request UPC:" + upc +
                             ", Current Event UPC:" + updates.getUpc());
                     stream.next(helper.buildFromStock(updates));
                 }));
@@ -111,19 +106,19 @@ public class StreamService<T extends Stock, R extends Response> {
      * @return Flux<Stock> for all available products in DB collection
      */
     public Flux<Stock> allStockStream(Class<T> clazz) {
-        LOGGER.info("Registering MongoStream for All products");
-        return Flux.create(stream -> streams
+        logger.info("Registering MongoStream for All products");
+        return Flux.create(stream -> template.getCollection(collectionName)
                 .watch(Collections.singletonList(
                         Aggregates.match(
                                 and(in("operationType", asList("update", "replace"))))))
                 .fullDocument(FullDocument.UPDATE_LOOKUP)
                 .maxAwaitTime(10, TimeUnit.MINUTES)
                 .forEach((Consumer<ChangeStreamDocument<Document>>) document -> {
-                    LOGGER.debug("Operation Type: " + document.getOperationType());
+                    logger.debug("Operation Type: " + document.getOperationType());
                     Stock updates = template.getConverter().read(clazz,
                             document.getFullDocument());
-                    LOGGER.debug("Full Document: " + updates);
-                    LOGGER.debug("Current Event ProductId:" + updates.getProductId());
+                    logger.debug("Full Document: " + updates);
+                    logger.debug("Current Event ProductId:" + updates.getProductId());
                     stream.next(updates);
                 }));
     }

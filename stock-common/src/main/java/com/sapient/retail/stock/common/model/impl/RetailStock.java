@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.sapient.retail.stock.common.model.impl;
 
 import java.util.Map;
@@ -13,15 +10,10 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import com.sapient.retail.stock.common.model.Stock;
 import com.sapient.retail.stock.common.model.StockInfo;
 
-/**
- * @author neeagarw
- *
- */
 @Document(collection = "stock")
 public class RetailStock extends Stock {
 
 	@NotNull
-    @Size(min = 3, max = 20, message = "Information Source should be between 3 and 20 characters")
     private String informationSource;
 
     @NotNull

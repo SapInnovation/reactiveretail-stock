@@ -30,11 +30,17 @@ repositories {
     mavenCentral()
 }
 
+configurations {
+    compile.exclude module: 'spring-boot-starter-tomcat'
+}
+
 dependencies {
-    compile 'org.springframework.boot:spring-boot-starter-web'
+    compile 'org.springframework.boot:spring-boot-starter-webflux'
     compile 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
     compile 'org.springframework.boot:spring-boot-starter-actuator'
     compile 'org.springframework.boot:spring-boot-devtools'
+    compile 'org.springframework.boot:spring-boot-starter-integration'
+    compile 'org.springframework.integration:spring-integration-java-dsl:1.2.3.RELEASE'
 
     compile 'org.springframework.cloud:spring-cloud-stream:2.0.0.RELEASE'
     compile 'org.springframework.cloud:spring-cloud-starter-stream-kafka:2.0.0.RELEASE'

@@ -4,12 +4,13 @@ spring:
       uri: mongodb://localhost:27017/stock
 logging:
   level:
-    #org.springframework.web: ERROR
     com.sapient.retail.stock.service: DEBUG
+    org.springframework.data.mongodb.core.MongoTemplate: DEBUB
   pattern:
     #console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
 custom:
   default-location: 10001
+  collectionName: stock
 ---
 spring:
   profiles: tests

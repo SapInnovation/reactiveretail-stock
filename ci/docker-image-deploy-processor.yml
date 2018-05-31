@@ -2,9 +2,12 @@ version: '3.3'
 
 services:
   reactiveretail-stock-processor:
-    image: reactiveretail/stock-processor
+    image: reactiveretail/stock-stream-processor
     build: .
     ports:
       - 8383:8080
     deploy:
       replicas: 2
+    environment:
+      KAFKA_HOST: $KAFKA_HOST
+      DB_HOST: $DB_HOST
