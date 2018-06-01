@@ -15,7 +15,7 @@ script:
   - export REPO_I="raghavarora12"
   - export REPO_N="retailreactive"
   - export REPO=$REPO_I/$REPO_N
-  - docker build -t $REPO_N:$TAG -f stock-exposer/DockerFileTravis .
+  - docker build -t "raghavarora12/retailreactive:latest" -f stock-exposer/DockerFileTravis .
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
