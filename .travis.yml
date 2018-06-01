@@ -15,10 +15,12 @@ script:
   - if [[ $TRAVIS_PULL_REQUEST == "false" ]] && [[ $TRAVIS_BRANCH == "master" ]]; then
     export TAG="latest";
     export REPO="raghavarora12/retailreactive";
+    echo $TAG $REPO
     docker build -t "$REPO:$TAG" -f stock-exposer/DockerFileTravis . ;
     else
     export TAG="$TRAVIS_PULL_REQUEST_BRANCH";
     export REPO="raghavarora12/retailreactive";
+    echo $TAG $REPO
     docker build -t "$REPO:$TAG" -f stock-exposer/DockerFileTravis . ;
     fi
   #- export TAG=`if [[ $TRAVIS_PULL_REQUEST == "false" ]] && [[ $TRAVIS_BRANCH == "master" ]]; then echo "latest"; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi`
