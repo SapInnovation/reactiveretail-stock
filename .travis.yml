@@ -25,5 +25,6 @@ after_success:
     docker tag $REPO:$TAG $REPO:$TRAVIS_COMMIT;
     docker push $REPO:$TRAVIS_COMMIT;
     fi
+  - docker images
   - docker push "raghavarora12/retailreactive":"latest"
   - docker push "$REPO:$TAG"
