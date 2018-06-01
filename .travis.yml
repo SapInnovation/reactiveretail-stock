@@ -15,7 +15,8 @@ script:
   - if [[ $TRAVIS_PULL_REQUEST == "false" ]] && [[ $TRAVIS_BRANCH == "master" ]]; then
     export TAG="latest";
     export REPO="raghavarora12/retailreactive";
-    echo $TAG $REPO
+    echo $TAG;
+    echo $REPO;
     docker build -t "$REPO:$TAG" -f stock-exposer/DockerFileTravis . ;
     else
     export TAG="$TRAVIS_PULL_REQUEST_BRANCH";
