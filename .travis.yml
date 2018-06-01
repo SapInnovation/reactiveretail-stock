@@ -14,7 +14,7 @@ script:
   - export TAG=`if [[ $TRAVIS_PULL_REQUEST == "false" ]] && [[ $TRAVIS_BRANCH == "master" ]]; then echo "latest"; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi`
   - echo $TAG
   - export REPO="raghavarora12/retailreactive"
-  - docker build -t "$REPO:$TAG" -f stock-exposer/DockerFileTravis .
+  - docker build -t "$REPO":"$TAG" -f stock-exposer/DockerFileTravis .
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
