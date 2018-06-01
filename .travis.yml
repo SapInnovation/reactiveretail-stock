@@ -11,6 +11,7 @@ jdk:
 install: ./gradlew clean assemble
 script:
   - ./gradlew test jacocoTestReport
+  - echo $TRAVIS_PULL_REQUEST_BRANCH
   - export TAG=`if [[ $TRAVIS_PULL_REQUEST == "false" ]] && [[ $TRAVIS_BRANCH == "master" ]]; then echo "latest"; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi`
   - echo $TAG
   - export REPO="raghavarora12/retailreactive"
