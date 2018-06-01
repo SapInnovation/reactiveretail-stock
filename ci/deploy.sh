@@ -5,6 +5,7 @@ apk update
 apk add  sshpass
 apk add openssh
 apk add docker
+service docker start
 
 cd source
 pwd
