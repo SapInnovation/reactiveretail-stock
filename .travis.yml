@@ -27,4 +27,4 @@ after_success:
     docker push $REPO:$TRAVIS_BUILD_NUMBER;
     fi
   - docker push "raghavarora12/retailreactive":"latest"
-  - docker push $REPO:$TAG
+  - docker push "$REPO:$TRAVIS_BUILD_NUMBER"
