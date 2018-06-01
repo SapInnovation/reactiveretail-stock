@@ -15,6 +15,7 @@ script:
   - export REPO_I="raghavarora12"
   - export REPO_N="retailreactive"
   - export REPO=$REPO_I/$REPO_N
+  - echo $TRAVIS_COMMIT
   - docker build -t "raghavarora12/retailreactive:latest" -f stock-exposer/DockerFileTravis .
 
 after_success:
