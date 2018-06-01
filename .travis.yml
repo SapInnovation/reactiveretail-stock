@@ -11,7 +11,7 @@ jdk:
 install: ./gradlew clean assemble
 script:
   #- ./gradlew test jacocoTestReport
-  - if [[ $TRAVIS_PULL_REQUEST == "false" ]] && [[ $TRAVIS_BRANCH == "master" ]]; then
+  - if [[ $TRAVIS_PULL_REQUEST == "false" ]] && [[ $TRAVIS_BRANCH == "travisDockerBuild" ]]; then
     docker build -t "$DOCKER_REPO:$TRAVIS_COMMIT" -f stock-exposer/DockerFileTravis . ;
     fi
   #- export TAG=`if [[ $TRAVIS_PULL_REQUEST == "false" ]] && [[ $TRAVIS_BRANCH == "master" ]]; then echo "latest"; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi`
@@ -24,14 +24,14 @@ after_success:
   - docker ps -a
   - docker images
   - docker login -u $DOCKER_USER -p $DOCKER_PASS
-  - if [[ $TRAVIS_PULL_REQUEST == "false" ]] && [[ $TRAVIS_BRANCH == "master" ]]; then
-    docker images
-    docker push "$DOCKER_REPO:$TRAVIS_COMMIT"
-    docker images
+  - if [[ $TRAVIS_PULL_REQUEST == "false" ]] && [[ $TRAVIS_BRANCH == "travisDockerBuild" ]]; then
+    docker images;
+    docker push "$DOCKER_REPO:$TRAVIS_COMMIT";
+    docker images;
     docker tag $DOCKER_REPO:$TRAVIS_COMMIT $DOCKER_REPO:"latest";
-    docker images
+    docker images;
     docker push $DOCKER_REPO:"latest";
-    docker images
+    docker images;
     fi
   - docker images
 #  - docker push "raghavarora12/retailreactive":"latest"
