@@ -12,10 +12,19 @@ install: ./gradlew clean assemble
 script:
   - ./gradlew test jacocoTestReport
   - echo $TRAVIS_PULL_REQUEST_BRANCH
-  - export TAG=`if [[ $TRAVIS_PULL_REQUEST == "false" ]] && [[ $TRAVIS_BRANCH == "master" ]]; then echo "latest"; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi`
-  - echo $TAG
-  - export REPO="raghavarora12/retailreactive"
-  - docker build -t "raghavarora12/retailreactive:latest" -f stock-exposer/DockerFileTravis .
+  - if [[ $TRAVIS_PULL_REQUEST == "false" ]] && [[ $TRAVIS_BRANCH == "master" ]]; then
+    export TAG="latest"
+    export REPO="raghavarora12/retailreactive"
+    docker build -t "raghavarora12/retailreactive:latest" -f stock-exposer/DockerFileTravis .
+    else
+    export TAG="$TRAVIS_PULL_REQUEST_BRANCH"
+    export REPO="raghavarora12/retailreactive"
+    docker build -t "raghavarora12/retailreactive:latest" -f stock-exposer/DockerFileTravis .
+    fi
+  #- export TAG=`if [[ $TRAVIS_PULL_REQUEST == "false" ]] && [[ $TRAVIS_BRANCH == "master" ]]; then echo "latest"; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi`
+  #- echo $TAG
+  #- export REPO="raghavarora12/retailreactive"
+  #- docker build -t "raghavarora12/retailreactive:latest" -f stock-exposer/DockerFileTravis .
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
