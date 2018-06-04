@@ -1,18 +1,13 @@
 # Stage 0
 FROM openjdk:8-jdk-alpine AS base_alpine_jdk8
-
-# build jar
-RUN apk add --no-cache git
-RUN git clone https://github.com/SapInnovation/reactiveretail-stock.git
-RUN cd reactiveretail-stock && ./gradlew :stock-stream-processor:assemble --no-daemon
-
-# Stage 1
-FROM openjdk:8-jdk-alpine
 ENV PROCESSOR_FILE stock-stream-processor-latest.jar
-ENV PROCESSOR_HOME /reactiveretail-stock/stock-stream-processor/build/libs
+ENV PROCESSOR_HOME /stock-stream-processor/build/libs
 
 # Copy jar from previous stage
-COPY --from=base_alpine_jdk8 $PROCESSOR_HOME/$PROCESSOR_FILE $PROCESSOR_FILE
+#COPY --from=base_alpine_jdk8 $PROCESSOR_HOME/$PROCESSOR_FILE $PROCESSOR_FILE
+ADD stock-stream-processor /stock-stream-processor
+
+RUN ls $PROCESSOR_HOME/$PROCESSOR_FILE
 
 EXPOSE 8080
 
