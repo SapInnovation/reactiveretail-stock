@@ -23,6 +23,7 @@ jobs:
     plan:
     - get: docker-hub
       trigger: true
+    - get: source
     - task: deploy
       config:
         inputs:
