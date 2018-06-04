@@ -31,7 +31,7 @@ jobs:
         image_resource:
           type: docker-image
           source:
-            repository: reactiveretail/stock-exposer
+            repository: reactiveretail/stock-stream-processor
         run:
           path: ./source/ci/deploy.sh
         params:
