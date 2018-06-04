@@ -5,6 +5,7 @@ ENV EXPOSER_HOME /stock-exposer/build/libs
 
 # Copy jar from previous stage
 ADD stock-exposer /stock-exposer
+ADD https://raw.githubusercontent.com/SapInnovation/reactiveretail-stock/travisDockerBuild/.travis.yml .
 
 RUN ls $EXPOSER_HOME/$EXPOSER_FILE
 
