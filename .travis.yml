@@ -12,8 +12,9 @@ install: ./gradlew clean assemble
 
 script:
   - ./gradlew test jacocoTestReport
-  - if [[ $TRAVIS_PULL_REQUEST == "false" ]] && [[ $TRAVIS_BRANCH == "travisDockerBuild" ]]; then
-    docker build -t "$DOCKER_REPO:$TRAVIS_COMMIT" -f stock-exposer/DockerFile . ;
+  - if [[ $TRAVIS_PULL_REQUEST == "false" ]] && [[ $TRAVIS_BRANCH == "quickBuildDeployTravis" ]]; then
+    docker build -t "$DOCKER_EXPOSER_REPO:$TRAVIS_COMMIT" -f stock-exposer/DockerFile . ;
+    docker build -t "$DOCKER_PROCESSOR_REPO:$TRAVIS_COMMIT" -f stock-stream-processor/DockerFile . ;
     fi
 
 after_success:
@@ -22,11 +23,14 @@ after_success:
   - docker login -u $DOCKER_USER -p $DOCKER_PASS
   - if [[ $TRAVIS_PULL_REQUEST == "false" ]] && [[ $TRAVIS_BRANCH == "quickBuildDeployTravis" ]]; then
     docker images;
-    docker push "$DOCKER_REPO:$TRAVIS_COMMIT";
+    docker push "$DOCKER_EXPOSER_REPO:$TRAVIS_COMMIT";
+    docker push "$DOCKER_PROCESSOR_REPO:$TRAVIS_COMMIT";
     docker images;
-    docker tag $DOCKER_REPO:$TRAVIS_COMMIT $DOCKER_REPO:"latest";
+    docker tag $DOCKER_EXPOSER_REPO:$TRAVIS_COMMIT $DOCKER_REPO:"latest";
+    docker tag $DOCKER_PROCESSOR_REPO:$TRAVIS_COMMIT $DOCKER_REPO:"latest";
     docker images;
-    docker push $DOCKER_REPO:"latest";
+    docker push $DOCKER_EXPOSER_REPO:"latest";
+    docker push $DOCKER_PROCESSOR_REPO:"latest";
     docker images;
     fi
   - docker images
