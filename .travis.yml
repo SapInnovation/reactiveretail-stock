@@ -1,6 +1,32 @@
 language: java
+
+sudo: required
+
+services:
+  - docker
+
 jdk:
   - openjdk8
+
 install: ./gradlew clean assemble
-script: ./gradlew test jacocoTestReport
-after_success: bash <(curl -s https://codecov.io/bash)
+
+script:
+  - ./gradlew test jacocoTestReport
+  - if [[ $TRAVIS_PULL_REQUEST == "false" ]] && [[ $TRAVIS_BRANCH == "travisDockerBuild" ]]; then
+  docker build -t "$DOCKER_REPO:$TRAVIS_COMMIT" -f stock-exposer/DockerFileTravis . ;
+  fi
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
+  - docker ps -a
+  - docker login -u $DOCKER_USER -p $DOCKER_PASS
+  - if [[ $TRAVIS_PULL_REQUEST == "false" ]] && [[ $TRAVIS_BRANCH == "quickBuildDeployTravis" ]]; then
+    docker images;
+    docker push "$DOCKER_REPO:$TRAVIS_COMMIT";
+    docker images;
+    docker tag $DOCKER_REPO:$TRAVIS_COMMIT $DOCKER_REPO:"latest";
+    docker images;
+    docker push $DOCKER_REPO:"latest";
+    docker images;
+    fi
+  - docker images
