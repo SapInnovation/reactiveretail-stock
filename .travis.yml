@@ -13,7 +13,7 @@ install: ./gradlew clean assemble
 script:
   - ./gradlew test jacocoTestReport
   - if [[ $TRAVIS_PULL_REQUEST == "false" ]] && [[ $TRAVIS_BRANCH == "travisDockerBuild" ]]; then
-  docker build -t "$DOCKER_REPO:$TRAVIS_COMMIT" -f stock-exposer/DockerFileTravis . ;
+  docker build -t "$DOCKER_REPO:$TRAVIS_COMMIT" -f stock-exposer/DockerFile . ;
   fi
 
 after_success:
