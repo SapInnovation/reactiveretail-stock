@@ -18,21 +18,12 @@ resources:
       repository: reactiveretail/stock-stream-processor
 
 jobs:
-  - name: build-image
-    public: true
-    plan:
-    - get: source
-      trigger: true
-    - put: docker-hub
-      params:
-        build: source/stock-stream-processor
-
   - name: deploy-image
     public: true
     plan:
-    - get: source
+    - get: docker-hub
       trigger: true
-      passed: [build-image]
+    - get: source
     - task: deploy
       config:
         inputs:
@@ -41,7 +32,7 @@ jobs:
         image_resource:
           type: docker-image
           source:
-            repository: frolvlad/alpine-bash
+            repository: reactiveretail/stock-stream-processor
         run:
           path: ./source/ci/deploy.sh
         params:

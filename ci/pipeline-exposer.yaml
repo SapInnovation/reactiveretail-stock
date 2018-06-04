@@ -1,54 +1,46 @@
-
+groups: []
 resources:
-  - name: git-source
-    type: git
-    source:
-      uri: https://github.com/SapInnovation/reactiveretail-stock.git
-      branch: master
-      path:
-        - ci/**
-        - stock-common/**
-        - stock-exposer/**
-  - name: docker-hub
-    type: docker-image
-    source:
-      email: ((auth-data.DOCKER_REPO_EMAIL))
-      username: ((auth-data.DOCKER_REPO_USER))
-      password: ((auth-data.DOCKER_REPO_PWD))
-      repository: reactiveretail/stock-exposer
-
+- name: source
+  type: git
+  source:
+    branch: master
+    path:
+    - ci/**
+    - stock-common/**
+    - stock-exposer/**
+    uri: https://github.com/SapInnovation/reactiveretail-stock.git
+- name: docker-hub
+  type: docker-image
+  source:
+    email: ((auth-data.DOCKER_REPO_EMAIL))
+    username: ((auth-data.DOCKER_REPO_USER))
+    password: ((auth-data.DOCKER_REPO_PWD))
+    repository: reactiveretail/stock-exposer
+resource_types: []
 jobs:
-  - name: build-image
-    public: true
-    plan:
-    - get: git-source
-      trigger: true
-    - put: docker-hub
+- name: deploy-image
+  public: true
+  plan:
+  - get: docker-hub
+    trigger: true
+  - get: source
+  - task: deploy
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          email: ((auth-data.DOCKER_REPO_EMAIL))
+          username: ((auth-data.DOCKER_REPO_USER))
+          password: ((auth-data.DOCKER_REPO_PWD))
+          repository: reactiveretail/stock-exposer
       params:
-        build: git-source/stock-exposer
-        tag: git-source/.git/HEAD
-        tag_as_latest: true
-
-  - name: deploy-image
-    public: true
-    plan:
-    - get: git-source
-      trigger: true
-      passed: [build-image]
-    - task: deploy
-      config:
-        inputs:
-        - name: git-source
-        platform: linux
-        image_resource:
-          type: docker-image
-          source:
-            repository: frolvlad/alpine-bash
-        run:
-          path: ./git-source/ci/deploy.sh
-        params:
-            USER_NAME: ((auth-data.DESTINATION_SERVER_USER))
-            USER_PASS: ((auth-data.DESTINATION_SERVER_PWD))
-            HOST_NAME: ((auth-data.DESTINATION_SERVER_HOST))
-            SERVICE: exposer
-            DB_HOST: ((auth-data.DB_HOST))
+        USER_NAME: ((auth-data.DESTINATION_SERVER_USER))
+        USER_PASS: ((auth-data.DESTINATION_SERVER_PWD))
+        HOST_NAME: ((auth-data.DESTINATION_SERVER_HOST))
+        SERVICE: exposer
+        DB_HOST: ((auth-data.DB_HOST))
+      run:
+        path: source/ci/deploy.sh
+      inputs:
+      - name: source
