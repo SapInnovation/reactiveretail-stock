@@ -11,8 +11,8 @@ jdk:
 install: ./gradlew clean assemble
 
 script:
-#  - ./gradlew test jacocoTestReport
-  - if [[ $TRAVIS_PULL_REQUEST == "false" ]] && [[ $TRAVIS_BRANCH == "quickBuildDeployTravis" ]]; then
+  - ./gradlew test jacocoTestReport
+  - if [[ $TRAVIS_PULL_REQUEST == "false" ]] && [[ $TRAVIS_BRANCH == "master" ]]; then
     docker build -t "$DOCKER_EXPOSER_REPO:$TRAVIS_COMMIT" -f stock-exposer/Dockerfile . ;
     docker build -t "$DOCKER_PROCESSOR_REPO:$TRAVIS_COMMIT" -f stock-stream-processor/Dockerfile . ;
     fi
@@ -21,7 +21,7 @@ after_success:
   - bash <(curl -s https://codecov.io/bash)
   - docker ps -a
   - docker login -u $DOCKER_USER -p $DOCKER_PASS
-  - if [[ $TRAVIS_PULL_REQUEST == "false" ]] && [[ $TRAVIS_BRANCH == "quickBuildDeployTravis" ]]; then
+  - if [[ $TRAVIS_PULL_REQUEST == "false" ]] && [[ $TRAVIS_BRANCH == "master" ]]; then
     docker images;
     docker push "$DOCKER_EXPOSER_REPO:$TRAVIS_COMMIT";
     docker push "$DOCKER_PROCESSOR_REPO:$TRAVIS_COMMIT";
