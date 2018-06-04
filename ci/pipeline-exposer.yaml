@@ -3,7 +3,7 @@ resources:
 - name: source
   type: git
   source:
-    branch: quickBuildDeployTravis
+    branch: master
     path:
     - ci/**
     - stock-common/**
