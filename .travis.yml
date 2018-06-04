@@ -11,7 +11,7 @@ jdk:
 install: ./gradlew clean assemble
 
 script:
-  - ./gradlew test jacocoTestReport
+#  - ./gradlew test jacocoTestReport
   - if [[ $TRAVIS_PULL_REQUEST == "false" ]] && [[ $TRAVIS_BRANCH == "quickBuildDeployTravis" ]]; then
     docker build -t "$DOCKER_EXPOSER_REPO:$TRAVIS_COMMIT" -f ./stock-exposer/DockerFile . ;
     docker build -t "$DOCKER_PROCESSOR_REPO:$TRAVIS_COMMIT" -f ./stock-stream-processor/DockerFile . ;
